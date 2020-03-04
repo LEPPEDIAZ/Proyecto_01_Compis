@@ -1,15 +1,19 @@
-digraph AFN{
+digraph AFN_AnaLucia{
 rankdir=LR; 
- node[shape = circle];
-nodeI [shape=point];
-node1 [name="1"];
-node2 [name="2"];
-node3 [name="3"];
-node4 [name="4"];
-node4 [name="4" shape = "doublecircle"];
-nodeI -> node1 [label = "I"];
-node2 -> node3 [label = "a"];
-node1 -> node2 [label = "epsilon"];
-node3 -> node2 [label = "epsilon"];
-node3 -> node4 [label = "epsilon"];
+ q[shape = circle];
+qI [shape=point];
+q1 [name="1"];
+q2 [name="2"];
+q3 [name="3"];
+q4 [name="4"];
+q5 [name="5"];
+q6 [name="6"];
+q6 [name="6" shape = "doublecircle"];
+qI -> q1 [label = "q0"];
+q2 -> q3 [label = "a"];
+q4 -> q5 [label = "b"];
+q1 -> q2 [label = "E"];
+q1 -> q4 [label = "E"];
+q3 -> q6 [label = "E"];
+q5 -> q6 [label = "E"];
 }

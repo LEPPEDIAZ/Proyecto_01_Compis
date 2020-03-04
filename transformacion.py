@@ -1,7 +1,7 @@
 class Transformacion(object):
-	def __init__(self, nodeFrom,nodeTo,symbol):
-		self.nodeFrom = nodeFrom
-		self.nodeTo = nodeTo
+	def __init__(self, qFrom,qTo,symbol):
+		self.qFrom = qFrom
+		self.qTo = qTo
 		self.symbol = symbol
 	def __str__(self):
-		return "node"+str(self.nodeFrom) + " -> " + "node" + str(self.nodeTo) + " [label = \"" + self.symbol + "\"];"
+		return "q"+str(self.qFrom) + " -> " + "q" + str(self.qTo) + " [label = \"" + self.symbol + "\"];"

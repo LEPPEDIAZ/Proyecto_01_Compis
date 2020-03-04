@@ -15,7 +15,7 @@ def infix_a_postfix(expresion_infix):
     postfix = []
 
     for token in expresion_infix:
-        if token in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" or token in "abcdefghijklmnopqrstuvwyz" or token in "0123456789":
+        if token in "ABCDEFGHIJKLMNOPqRSTUVWXYZ" or token in "abcdefghijklmnopqrstuvwyz" or token in "0123456789":
             postfix.append(token)
         elif token == '(':
             opStack.push(token)
