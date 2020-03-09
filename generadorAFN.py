@@ -13,7 +13,7 @@ class afn(object):
 	
 	def concatenar(self,s):
 		numero_of_Cambio_de_Estado = self.estado_final() 
-		nuevo_Transformaciones = [] #
+		nuevo_Cambio_de_Estado = [] #
 		for t in self.Cambio_de_Estado:
 			nuevo_Cambio_de_Estado.append(t) 
 		for t in s.Cambio_de_Estado:
