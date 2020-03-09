@@ -7,7 +7,7 @@ from generadorAFN import *
 
 if __name__ == '__main__':
 	print("Generador de AFN")
-	expresion_regular = input("Ingrese la expresion regular 1: ")
+	expresion_regular = input("Ingrese la expresion regular: ")
 	keypass = open("expresion_regular.txt", "w")
 	keypass.write(expresion_regular)
 	keypass.close()

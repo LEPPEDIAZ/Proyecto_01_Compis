@@ -1,5 +1,4 @@
 from copy import deepcopy
-from errorhandlers import *
 from expresion_regular import *
 
 
@@ -217,25 +216,6 @@ class ArbolitoER:
         
         return generador_AFD(Lista_de_Estados,automata_alfabeto,funcion_delta,Lista_de_Estados.index(inicio),estado_final)
 
-
-
-
-def preprocesamiento(expresion_regular):
-    expresion_regular = variable_kleene_limpia(expresion_regular)
-    expresion_regular = expresion_regular.replace(' ','')
-    expresion_regular = '(' + expresion_regular + ')' + '#'
-    while '()' in expresion_regular:
-        expresion_regular = expresion_regular.replace('()','')
-    return expresion_regular
-
-def variable_kleene_limpia(expresion_regular):
-    for i in range(0, len(expresion_regular) - 1):
-        while i < len(expresion_regular) - 1 and expresion_regular[i + 1] == expresion_regular[i] and expresion_regular[i] == '*':
-            expresion_regular = expresion_regular[:i] + expresion_regular[i + 1:]
-    return expresion_regular
-
-def todo_el_alfabeto(expresion_regular):
-    return set(expresion_regular) - set('()|*')
 
 
 DEBUG = False

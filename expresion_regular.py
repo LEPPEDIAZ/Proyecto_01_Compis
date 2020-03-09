@@ -7,7 +7,39 @@ DEBUG = False
 rama = False
 simbolo = '_'
 alfabeto = None
+def regularexp_valido(expresion_regular):
+    return brackets_validos(expresion_regular) 
 
+def preprocesamiento(expresion_regular):
+    expresion_regular = variable_kleene_limpia(expresion_regular)
+    expresion_regular = expresion_regular.replace(' ','')
+    expresion_regular = '(' + expresion_regular + ')' + '#'
+    while '()' in expresion_regular:
+        expresion_regular = expresion_regular.replace('()','')
+    return expresion_regular
+
+def variable_kleene_limpia(expresion_regular):
+    for i in range(0, len(expresion_regular) - 1):
+        while i < len(expresion_regular) - 1 and expresion_regular[i + 1] == expresion_regular[i] and expresion_regular[i] == '*':
+            expresion_regular = expresion_regular[:i] + expresion_regular[i + 1:]
+    return expresion_regular
+
+def todo_el_alfabeto(expresion_regular):
+    return set(expresion_regular) - set('()|*')
+
+def brackets_validos(expresion_regular):
+    brackets_abiertos = 0
+    for c in expresion_regular:
+        if c == '(':
+            brackets_abiertos += 1
+        if c == ')':
+            brackets_abiertos -= 1
+        if brackets_abiertos < 0:
+            print('falta un bracket')
+            return False
+    if brackets_abiertos == 0:
+        return True
+    return False
 #infix:Cuando un operador se encuentra entre cada par de operandos.
 #postfix: la expresión de la forma a b op. Cuando se sigue a un operador para cada par de operandos
 def infix_a_postfix(expresion_infix): 
