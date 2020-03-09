@@ -97,3 +97,16 @@ class afn(object):
 			f.write(str(t) + "\n")
 		f.write("}\n")
 
+	def imprimir_texto(self):
+		f= open("afn_transform.txt","w+")
+		for i in range(self.finalState):
+			f.write("s"+str(i+1)+"s"+str(i+1)+"\n")
+			if (i+1) == self.finalState:
+				f.write("s"+str(i+1)+"s"+str(i+1))
+			i+=1
+		#f.write("qI -> q1 [label = \"q0\"];\n")
+		for t in self.Cambio_de_Estado:
+			f.write(str(t) + "\n")
+		f.write("\n")
+
+
