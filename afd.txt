@@ -1,0 +1,4 @@
+digraph AFN_AnaLucia{
+rankdir=LR; 
+ q[shape = circle];
+qI [shape=point];

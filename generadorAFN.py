@@ -1,6 +1,6 @@
 from transformacion import Transformacion 
 class afn(object):
-	op = ["(","*","+","|","."]
+	op = ["(","*","+","|",".","?"]
 
 	def __init__(self, initialState,finalState,Cambio_de_Estado):
 		self.initialState = initialState 
@@ -66,6 +66,8 @@ class afn(object):
 		nuevo_afn = afn(1,self.finalState+2,nuevo_Cambio_de_Estado) 
 		return nuevo_afn
 
+
+
 	def cerradura_positiva(self):
 		nuevo_Cambio_de_Estado = []
 		for t in self.Cambio_de_Estado:
@@ -82,7 +84,7 @@ class afn(object):
 		return nuevo_afn
 
 	def imprimir_Transformaciones(self):
-
+		
 		f= open("afn.txt","w+")
 		f.write("digraph AFN_AnaLucia{\n")
 		f.write("rankdir=LR; \n q[shape = circle];\n")

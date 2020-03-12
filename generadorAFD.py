@@ -35,6 +35,21 @@ class generador_AFD:
     def escribir(self):
         for i in range(len(self.Estados_Marcados)):
             print(i,self.funcion_delta[i],'final' if i in self.final else '')
+    def imprimir_Transformaciones(self):
+            f= open("afd.txt","w+")
+            f.write("digraph AFN_AnaLucia{\n")
+            f.write("rankdir=LR; \n q[shape = circle];\n")
+            f.write("qI [shape=point];\n")
+            #for i in range(self.final):
+            #    f.write("q"+str(i+1)+" [name=\""+str(i+1)+"\"];\n")
+            #    if (i+1) == self.final:
+            #        f.write("q"+str(i+1)+" [name=\""+str(i+1)+"\" shape = \"doublecircle\"];\n")
+            #    i+=1
+            #f.write("qI -> q1 [label = \"q0\"];\n")
+            #for t in self.siguiente_posicion:
+            #    f.write(str(t) + "\n")
+            #f.write("}\n")
+		
 class NodoExpresionRegular:
     @staticmethod
     def validar_brackets(expresion_regular):
@@ -161,6 +176,10 @@ class NodoExpresionRegular:
         for child in self.hijos:
             child.escribir_nivel(nivel+1)
 
+   
+		
+		
+
 class ArbolitoER:
 
     def __init__(self, expresion_regular):
@@ -170,7 +189,7 @@ class ArbolitoER:
     
     def escribir(self):
         self.inicioderaiz.escribir_nivel(0)
-
+    
     def funciones(self):
         posicions = self.inicioderaiz.calcular_funciones(0, self.siguiente_posicion)   
         if DEBUG == True:
@@ -239,6 +258,7 @@ message = input("Ingrese la cadena w: ")
 #message = 'babbaaaaa'
 print('Automata AFD : \n')
 generador_AFD.escribir()
+generador_AFD.imprimir_Transformaciones()
 print('\nPertenece o no a L(r): "'+message+'" : ')
 generador_AFD.L(message)
 		

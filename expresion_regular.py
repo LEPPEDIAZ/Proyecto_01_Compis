@@ -40,12 +40,83 @@ def brackets_validos(expresion_regular):
     if brackets_abiertos == 0:
         return True
     return False
+
+def lista_a_string(expresion_regular):
+    expreg1 = ''
+    for i in range(0, len(expresion_regular)):
+        expreg1 = expreg1 + str(expresion_regular[i])
+    return expreg1
+
+def string_a_lista(expresion_regular):
+    i = 0
+    expreg1 = []
+    while i< len(expresion_regular):
+        expreg1.append(expresion_regular[i])
+        i+= 1
+    return expreg1
+
+def una_instancia(expresion_regular):
+    expreg1 = []
+    expreg2 = []
+    inicio = 0
+    for n in expresion_regular:
+        if n != "?" and n != "+":
+            expreg1.append(n)
+        if n == "?" or n == "+":
+            inicio +=1
+            if (n == "?" and expreg1[-1] != ")") or (n == "+" and expreg1[-1] != ")"):
+                inicio +=1
+                x = True
+                z = len(expreg1)-1
+                while x == True and z != -1:
+                    if expreg1[z] == ")" or expreg1[z] == ".": 
+                        expreg1.pop()
+                        x = False
+                    else:
+                        expreg2.append(expreg1[z])
+                        expreg1.pop()
+                    z-=1
+                if n == "?":
+                    inicio +=1
+                    expreg1.append(str("("+lista_a_string(expreg2[::-1])+"|e)"))
+                elif n == "+":
+                    inicio +=1
+                    expreg1.append(str("("+lista_a_string(expreg2[::-1])+").("+lista_a_string(expreg2[::-1])+"*)"))
+                expreg2 = []
+            else: 
+                v = len(expreg1)-1
+                z = True
+                while z == True:
+                    if expreg1[v] == "(" :
+                        expreg2.append("(")
+                        expreg1.pop()
+                        z = False
+                    else:
+                        expreg2.append(expreg1[v])
+                        expreg1.pop()
+                    v-=1
+                if n == "?":
+                    inicio +=1
+                    expreg1.append(str("("+lista_a_string(expreg2[::-1])+"|e)"))
+                elif n == "+":
+                    inicio +=1
+                    expreg1.append(str("("+lista_a_string(expreg2[::-1])+").("+lista_a_string(expreg2[::-1])+"*)"))
+                expreg2 = []
+    
+    print(expreg1)
+    i = 0
+    respuesta = string_a_lista(expreg1)
+    if respuesta[0] == ".":
+        respuesta.pop(0)
+    
+    return lista_a_string(respuesta)
 #infix:Cuando un operador se encuentra entre cada par de operandos.
 #postfix: la expresión de la forma a b op. Cuando se sigue a un operador para cada par de operandos
 def infix_a_postfix(expresion_infix): 
     expresion = {}
     expresion["*"] = 4
     expresion["+"] = 4
+    expresion["?"] = 4
     expresion["."] = 3
     expresion["|"] = 2
     expresion["("] = 1
@@ -116,7 +187,12 @@ class Thompson(object):
 	def expresionregular_a_AFN(self):
 		stack = []  
 		postfix = infix_a_postfix(self.infix)
+		test = postfix.find('?')
+		if (test == 1):
+			postfix = infix_a_postfix(una_instancia(self.infix))
+		print("postfix",postfix)
 		for s in postfix:
+			print(s)
 			if s == '*':
 				automata = stack.pop() 
 				stack.append(automata.variable_kleene()) 
