@@ -245,14 +245,19 @@ alfabeto = None
 expresion_regular= open("expresion_regular.txt", "r+")
 expresion_regular = expresion_regular.read()
 p_expresion_regular = preprocesamiento(expresion_regular)
+print(p_expresion_regular)
 alfabeto = todo_el_alfabeto(p_expresion_regular)
+print(alfabeto)
 extra = ''
 alfabeto = alfabeto.union(set(extra))
+print(alfabeto)
 
 arbol = ArbolitoER(p_expresion_regular)
+print(arbol)
 if DEBUG:
     arbol.escribir()
 generador_AFD = arbol.Convertir_a_AFD()
+print(generador_AFD)
 
 message = input("Ingrese la cadena w: ")
 #message = 'babbaaaaa'
