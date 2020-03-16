@@ -1,6 +1,7 @@
 from pythonds.basic.stack import Stack
 from transformacion import Transformacion 
 from generadorAFN import *
+from operator import itemgetter
 import queue
 import json 
 DEBUG = False
@@ -40,6 +41,21 @@ def brackets_validos(expresion_regular):
     if brackets_abiertos == 0:
         return True
     return False
+
+##nos devuelve las transiciones sin tanto parentesis
+def flat(l, a):
+    x = []
+    for i in l:
+        if isinstance(i, list):
+            flat(i, a)
+        else:
+            a.append(i)
+    
+    for i in range(0,len(a),3):
+        if i != len(a):
+            x.append([a[i],a[i+1],a[i+2]])
+    
+    return x
 
 def lista_a_string(expresion_regular):
     expreg1 = ''
@@ -114,8 +130,8 @@ def una_instancia(expresion_regular):
 #postfix: la expresión de la forma a b op. Cuando se sigue a un operador para cada par de operandos
 def infix_a_postfix(expresion_infix): 
     expresion = {}
-    expresion["*"] = 4
-    expresion["+"] = 4
+    expresion["*"] = 6
+    expresion["+"] = 5
     expresion["?"] = 4
     expresion["."] = 3
     expresion["|"] = 2
@@ -185,7 +201,8 @@ class Thompson(object):
 		self.postfix = infix_a_postfix(regexp)
 
 	def expresionregular_a_AFN(self):
-		stack = []  
+		stack = []
+		print("init",stack)
 		postfix = infix_a_postfix(self.infix)
 		test = postfix.find('?')
 		if (test == 1):
@@ -195,7 +212,7 @@ class Thompson(object):
 			print(s)
 			if s == '*':
 				automata = stack.pop() 
-				stack.append(automata.variable_kleene()) 
+				stack.append(automata.variable_kleene())
 			elif s == '+':
 				automata = stack.pop() 
 				stack.append(automata.cerradura_positiva()) 
@@ -203,6 +220,7 @@ class Thompson(object):
 				derecha = stack.pop() 
 				izquierda = stack.pop() 
 				stack.append(izquierda.union(derecha)) 
+				
 			elif s == '.':
 				derecha = stack.pop() 
 				izquierda = stack.pop() 
@@ -212,7 +230,7 @@ class Thompson(object):
 				inicializacion_de_Transformaciones.append(Transformacion(1,2,s)) 
 				afn_generado = afn(1,2,inicializacion_de_Transformaciones) 
 				stack.append(afn_generado) 
-		#print((str(stack)))
+		
 		return stack.pop() 
 
 	

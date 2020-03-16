@@ -1,4 +1,17 @@
 from transformacion import Transformacion 
+from graphviz import Digraph
+
+def graficadora(resultado, infin):
+    f = Digraph('finite_state_machine', filename='./afd')
+    f.attr(rankdir='LR', size='8,5')
+    f.attr('node', shape='doublecircle')
+    for i in range(len(infin)):
+        f.node(str(infin[i][1]))
+    f.attr('node', shape='circle')
+    for i in range(len(resultado)):
+        f.edge(str(resultado[i][0]), str(resultado[i][2]), label= str(resultado[i][1]))
+
+    f.view()
 class afn(object):
 	op = ["(","*","+","|",".","?"]
 
@@ -12,6 +25,7 @@ class afn(object):
 		return self.finalState
 	
 	def concatenar(self,s):
+		
 		numero_of_Cambio_de_Estado = self.estado_final() 
 		nuevo_Cambio_de_Estado = [] #
 		for t in self.Cambio_de_Estado:
@@ -20,10 +34,12 @@ class afn(object):
 			t.qFrom += numero_of_Cambio_de_Estado -1
 			t.qTo += numero_of_Cambio_de_Estado -1
 			nuevo_Cambio_de_Estado.append(t) 
+			print("concatenar", t)
 		nuevo_afn = afn(self.initialState,s.finalState+numero_of_Cambio_de_Estado- 1,nuevo_Cambio_de_Estado) 
 		return nuevo_afn
 
 	def union(self,s):
+		
 		nuevo_Cambio_de_Estado = [] 
 		numero_of_Cambio_de_Estado = self.estado_final() 
 	
@@ -37,6 +53,7 @@ class afn(object):
 			t.qFrom += numero_of_Cambio_de_Estado+1
 			t.qTo += numero_of_Cambio_de_Estado+1
 			nuevo_Cambio_de_Estado.append(t) 
+			print("union", t)
 		nuevo_Transformacion1 = Transformacion(1,2,"E") 
 		nuevo_Transformacion2 = Transformacion(1,s.initialState+numero_of_Cambio_de_Estado+1,"E") 
 		nuevo_Transformacion3 = Transformacion(self.finalState+1,finalState,"E") 
@@ -55,6 +72,7 @@ class afn(object):
 			t.qFrom += 1
 			t.qTo += 1
 			nuevo_Cambio_de_Estado.append(t) 
+			print("variable kleene", t)
 		nuevo_Transformacion1 = Transformacion(1,2,"E") 
 		nuevo_Transformacion2 = Transformacion(1,self.finalState+2,"E") 
 		nuevo_Transformacion3 = Transformacion(self.finalState+1,self.initialState+1, "E") 
@@ -74,6 +92,7 @@ class afn(object):
 			t.qFrom += 1
 			t.qTo += 1
 			nuevo_Cambio_de_Estado.append(t) 
+			print("cerradura positiva", t )
 		nuevo_Transformacion1 = Transformacion(1,2,"E") 
 		nuevo_Transformacion3 = Transformacion(self.finalState+1,self.initialState+1, "E")
 		nuevo_Transformacion4 = Transformacion(self.finalState+1,self.finalState+2,"E") 
@@ -82,6 +101,32 @@ class afn(object):
 		nuevo_Cambio_de_Estado.append(nuevo_Transformacion4) 
 		nuevo_afn = afn(1,self.finalState+2,nuevo_Cambio_de_Estado) 
 		return nuevo_afn
+
+
+	def imprimir_texto(self):
+		def chunks(l, n):
+			for i in range(0, len(l), n):
+				yield l[i:i+n]
+		arreglo = []
+		arreglo2 = []
+		for t in self.Cambio_de_Estado:
+			print(t)
+			t = str(t)
+			one= t.split()
+			variable0 = one[0]
+			variable0 = variable0.replace('q', '')
+			arreglo.append(int(variable0))
+			variable= one[5]
+			variable1 = variable[1]
+			arreglo.append(variable1)
+			variable2 = one[2]
+			variable2 = variable2.replace('q', '')
+			arreglo.append(int(variable2))
+			arreglo2 = list(chunks(arreglo, 3))
+			print("next", arreglo2)
+		return arreglo2
+	
+	
 
 	def imprimir_Transformaciones(self):
 		
@@ -99,16 +144,11 @@ class afn(object):
 			f.write(str(t) + "\n")
 		f.write("}\n")
 
-	def imprimir_texto(self):
-		f= open("afn_transform.txt","w+")
-		for i in range(self.finalState):
-			f.write("s"+str(i+1)+"s"+str(i+1)+"\n")
-			if (i+1) == self.finalState:
-				f.write("s"+str(i+1)+"s"+str(i+1))
-			i+=1
-		#f.write("qI -> q1 [label = \"q0\"];\n")
-		for t in self.Cambio_de_Estado:
-			f.write(str(t) + "\n")
-		f.write("\n")
+	
+	def inicio_final(self):
+		arreglo = []
+		arreglo.append(self.initialState)
+		arreglo.append(self.finalState)
+		return arreglo
 
 
