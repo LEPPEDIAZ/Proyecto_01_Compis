@@ -1,17 +1,28 @@
 from transformacion import Transformacion 
 from graphviz import Digraph
 
-def graficadora(resultado, infin):
+def graficar_AFD(resultado, inicial_final):
     f = Digraph('finite_state_machine', filename='./afd')
     f.attr(rankdir='LR', size='8,5')
     f.attr('node', shape='doublecircle')
-    for i in range(len(infin)):
-        f.node(str(infin[i][1]))
+    for i in range(len(inicial_final)):
+        f.node(str(inicial_final[i][1]))
     f.attr('node', shape='circle')
     for i in range(len(resultado)):
         f.edge(str(resultado[i][0]), str(resultado[i][2]), label= str(resultado[i][1]))
-
     f.view()
+
+def graficar_AFN(resultado, inicial_final):
+    f = Digraph('finite_state_machine', filename='./afn')
+    f.attr(rankdir='LR', size='8,5')
+    f.attr('node', shape='doublecircle')
+    for i in range(len(inicial_final)):
+        f.node(str(inicial_final[i][1]))
+    f.attr('node', shape='circle')
+    for i in range(len(resultado)):
+        f.edge(str(resultado[i][0]), str(resultado[i][2]), label= str(resultado[i][1]))
+    f.view()
+
 class afn(object):
 	op = ["(","*","+","|",".","?"]
 

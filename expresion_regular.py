@@ -1,7 +1,6 @@
 from pythonds.basic.stack import Stack
 from transformacion import Transformacion 
 from generadorAFN import *
-from operator import itemgetter
 import queue
 import json 
 DEBUG = False
@@ -41,21 +40,6 @@ def brackets_validos(expresion_regular):
     if brackets_abiertos == 0:
         return True
     return False
-
-##nos devuelve las transiciones sin tanto parentesis
-def flat(l, a):
-    x = []
-    for i in l:
-        if isinstance(i, list):
-            flat(i, a)
-        else:
-            a.append(i)
-    
-    for i in range(0,len(a),3):
-        if i != len(a):
-            x.append([a[i],a[i+1],a[i+2]])
-    
-    return x
 
 def lista_a_string(expresion_regular):
     expreg1 = ''
