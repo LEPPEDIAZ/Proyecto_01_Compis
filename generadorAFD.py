@@ -51,24 +51,37 @@ class generador_AFD:
             print('Cadena L(r) no aceptada')
 
     def escribir(self):
+        write_direct_afd = []
         print("escribir",self.Estados_Marcados)
         for i in range(len(self.Estados_Marcados)):
             print(i,self.funcion_delta[i],'final' if i in self.final else '')
-    
-    def escribir_02(self):
-        alfabeto =["A","B","C","D","E","F","G","H","I","J"]
-        print("escribir 02",self.Estados_Marcados)
-        write_direct_afd = []
-        for i in range(len(self.Estados_Marcados)):
-            print("!!!!!!!!!!!!!!!!!!!!!!!!")
-            print("estado", i)
-            print("funcion delta", self.funcion_delta[i])
-            print("final", 'final' if i in self.final else '')
-            print("!!!!!!!!!!!!!!!!!!!!!!!!")
             for key,value in self.funcion_delta[i].items():
                 temp = [i,key,value]
                 write_direct_afd.append(temp)
-            return write_direct_afd
+                print("TESTING", write_direct_afd)
+        return write_direct_afd
+    
+    def escribir_02(self):
+        #print("escribir 02",self.Estados_Marcados)
+        write_direct_afd = []
+        for i in range(len(self.Estados_Marcados)):
+            print(i,self.funcion_delta[i],'final' if i in self.final else '')
+            print("!!!!!!!!!!!!!!!!!!!!!!!!")
+            print("final", 'final' if i in self.final else '')
+            print("!!!!!!!!!!!!!!!!!!!!!!!!")
+            for key,value in self.funcion_delta[i].items():
+                temp = [i,key,(value)]
+                write_direct_afd.append(temp)
+                print("TESTING", write_direct_afd)
+        lenght_matrix = len(write_direct_afd)
+        last_array = write_direct_afd[lenght_matrix - 1]
+        write_direct_afd.pop()
+        lenght_array = len(last_array)
+        last_value = last_array[lenght_array - 1]
+        last_array.pop()
+        last_array.append(last_value +1)
+        write_direct_afd.append(last_array)
+        return write_direct_afd
 
 		
 class NodoExpresionRegular:
@@ -281,8 +294,10 @@ message = input("Ingrese la cadena w: ")
 #message = 'babbaaaaa'
 print('Automata AFD : \n')
 generador_AFD.escribir()
+print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 transformacion_resultados = generador_AFD.escribir_02()
 print("transformacion", transformacion_resultados)
+print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 #generador_AFD.imprimir_Transformaciones()
 init_end = generador_AFD.inicio_final()
 print("inicio final",init_end)
