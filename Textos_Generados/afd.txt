@@ -1,0 +1,8 @@
+AFD
+ESTADOS: ['A', 'a', 'b', 'B']
+SIMBOLOS: ['B', 'C']
+INICIO: A
+INICIO: A
+ACEPTACION: C
+ACEPTACION: C
+TRANSICION: [['A', 'a', 'B'], ['A', 'b', 'C'], ['B', 'a', 'B'], ['B', 'b', 'C']]

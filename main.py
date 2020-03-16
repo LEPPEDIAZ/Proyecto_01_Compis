@@ -27,10 +27,13 @@ if __name__ == '__main__':
 	arreglo.append(inicio_final)
 	print("inicio y final", arreglo)
 	graficar_AFN(imprimir, arreglo)
+	generacion_de_archivo(imprimir, arreglo)
 	imprimir_2, inicio_final_nuevo = afd_generado_de_afn(imprimir, arreglo)
 	print("imprimir_2 AFD de AFN", imprimir_2)
 	print("inicio final AFD de AFN", inicio_final_nuevo)
 	graficar_AFD(imprimir_2, inicio_final_nuevo)
+	generacion_de_archivo_afd(imprimir_2, inicio_final_nuevo)
+	#generacion_de_archivo(imprimir_2, inicio_final_nuevo)
 	from generadorAFD import *
 	p_expresion_regular = preprocesamiento(expresion_regular)
 	alfabeto = todo_el_alfabeto(p_expresion_regular)
