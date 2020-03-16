@@ -2,7 +2,7 @@ from transformacion import Transformacion
 from graphviz import Digraph
 
 def graficar_AFD(resultado, inicial_final):
-    f = Digraph('finite_state_machine', filename='./afd')
+    f = Digraph('finite_state_machine', filename='./afn_to_afd')
     f.attr(rankdir='LR', size='8,5')
     f.attr('node', shape='doublecircle')
     for i in range(len(inicial_final)):

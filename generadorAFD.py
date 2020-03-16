@@ -1,6 +1,16 @@
 from copy import deepcopy
 from expresion_regular import *
-
+from graphviz import Digraph
+def graficar_AFD_generado(resultado, inicial_final):
+    f = Digraph('finite_state_machine', filename='./generador_afd')
+    f.attr(rankdir='LR', size='8,5')
+    f.attr('node', shape='doublecircle')
+    for i in range(len(inicial_final)):
+        f.node(str(inicial_final[i][1]))
+    f.attr('node', shape='circle')
+    for i in range(len(resultado)):
+        f.edge(str(resultado[i][0]), str(resultado[i][2]), label= str(resultado[i][1]))
+    f.view()
 
 class generador_AFD:
     def __init__(self,Estados_Marcados,Lista_de_Estados,funcion_delta,inicial,final):
@@ -9,6 +19,14 @@ class generador_AFD:
         self.funcion_delta = funcion_delta
         self.inicial = inicial
         self.final = final
+
+    def inicio_final(self):
+        arreglo = []
+        arreglo_final = []
+        arreglo.append(self.inicial)
+        arreglo.append(self.final[0])
+        arreglo_final.append(arreglo)
+        return arreglo_final
 
     def L(self, r):
         if len(set(r) - self.Lista_de_Estados) != 0:
@@ -33,22 +51,25 @@ class generador_AFD:
             print('Cadena L(r) no aceptada')
 
     def escribir(self):
+        print("escribir",self.Estados_Marcados)
         for i in range(len(self.Estados_Marcados)):
             print(i,self.funcion_delta[i],'final' if i in self.final else '')
-    def imprimir_Transformaciones(self):
-            f= open("afd.txt","w+")
-            f.write("digraph AFN_AnaLucia{\n")
-            f.write("rankdir=LR; \n q[shape = circle];\n")
-            f.write("qI [shape=point];\n")
-            #for i in range(self.final):
-            #    f.write("q"+str(i+1)+" [name=\""+str(i+1)+"\"];\n")
-            #    if (i+1) == self.final:
-            #        f.write("q"+str(i+1)+" [name=\""+str(i+1)+"\" shape = \"doublecircle\"];\n")
-            #    i+=1
-            #f.write("qI -> q1 [label = \"q0\"];\n")
-            #for t in self.siguiente_posicion:
-            #    f.write(str(t) + "\n")
-            #f.write("}\n")
+    
+    def escribir_02(self):
+        alfabeto =["A","B","C","D","E","F","G","H","I","J"]
+        print("escribir 02",self.Estados_Marcados)
+        write_direct_afd = []
+        for i in range(len(self.Estados_Marcados)):
+            print("!!!!!!!!!!!!!!!!!!!!!!!!")
+            print("estado", i)
+            print("funcion delta", self.funcion_delta[i])
+            print("final", 'final' if i in self.final else '')
+            print("!!!!!!!!!!!!!!!!!!!!!!!!")
+            for key,value in self.funcion_delta[i].items():
+                temp = [i,key,value]
+                write_direct_afd.append(temp)
+            return write_direct_afd
+
 		
 class NodoExpresionRegular:
     @staticmethod
@@ -176,9 +197,6 @@ class NodoExpresionRegular:
         for child in self.hijos:
             child.escribir_nivel(nivel+1)
 
-   
-		
-		
 
 class ArbolitoER:
 
@@ -236,7 +254,7 @@ class ArbolitoER:
         return generador_AFD(Lista_de_Estados,automata_alfabeto,funcion_delta,Lista_de_Estados.index(inicio),estado_final)
 
 
-
+print("---------------------------------------------------")
 DEBUG = False
 rama = False
 simbolo = '_'
@@ -263,7 +281,12 @@ message = input("Ingrese la cadena w: ")
 #message = 'babbaaaaa'
 print('Automata AFD : \n')
 generador_AFD.escribir()
-generador_AFD.imprimir_Transformaciones()
+transformacion_resultados = generador_AFD.escribir_02()
+print("transformacion", transformacion_resultados)
+#generador_AFD.imprimir_Transformaciones()
+init_end = generador_AFD.inicio_final()
+print("inicio final",init_end)
+graficar_AFD_generado(transformacion_resultados, init_end)
 print('\nPertenece o no a L(r): "'+message+'" : ')
 generador_AFD.L(message)
 		
