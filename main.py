@@ -8,6 +8,7 @@ from AFD_por_AFN import *
 if __name__ == '__main__':
 	print("Generador de AFN")
 	expresion_regular = input("Ingrese la expresion regular: ")
+	expresion_regular.replace('ε', 'e')
 	keypass = open("expresion_regular.txt", "w")
 	keypass.write(expresion_regular)
 	keypass.close()

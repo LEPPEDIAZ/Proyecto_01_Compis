@@ -25,7 +25,7 @@ def variable_kleene_limpia(expresion_regular):
     return expresion_regular
 
 def todo_el_alfabeto(expresion_regular):
-    return set(expresion_regular) - set('()|*')
+    return set(expresion_regular) - set('()|*+')
 
 def brackets_validos(expresion_regular):
     brackets_abiertos = 0
@@ -120,6 +120,7 @@ def infix_a_postfix(expresion_infix):
     expresion["."] = 3
     expresion["|"] = 2
     expresion["("] = 1
+    expresion[")"] = 1
     opStack = Stack()
     postfix = []
 

@@ -1,8 +1,31 @@
 from copy import deepcopy
 from expresion_regular import *
 from graphviz import Digraph
+
+def generacion_de_archivo(transformacion_final, inicial_final):
+    stdos = []
+    simb = []
+    for i in range(len(transformacion_final)):
+        if transformacion_final[i][0] not in stdos:
+            stdos.append(transformacion_final[i][0])
+                
+        if transformacion_final[i][1] not in stdos:
+            stdos.append(transformacion_final[i][1])
+                
+        if transformacion_final[i][2] not in simb:
+            simb.append(transformacion_final[i][2])
+    f= open("Textos_Generados/afd_generado.txt","w+")
+    f.write("AFN\n") 
+    f.write("ESTADOS: " + str(stdos) +  "\n")
+    f.write("SIMBOLOS: " + str(simb) + "\n")    
+    for i in range(len(inicial_final)):
+        f.write("INICIO: " + str(inicial_final[i][0]) + "\n")
+    for i in range(len(inicial_final)):
+        f.write("ACEPTACION: " + str(inicial_final[i][1]) + "\n")
+    f.write("TRANSICION: " + str(transformacion_final) + "\n") 	
+
 def graficar_AFD_generado(resultado, inicial_final):
-    f = Digraph('finite_state_machine', filename='./generador_afd')
+    f = Digraph('finite_state_machine', filename='./Automatas_Graficados/generador_afd')
     f.attr(rankdir='LR', size='8,5')
     f.attr('node', shape='doublecircle')
     for i in range(len(inicial_final)):
@@ -52,9 +75,8 @@ class generador_AFD:
 
     def escribir(self):
         write_direct_afd = []
-        print("escribir",self.Estados_Marcados)
         for i in range(len(self.Estados_Marcados)):
-            print(i,self.funcion_delta[i],'final' if i in self.final else '')
+            print("funcion escribir",i,self.funcion_delta[i],'final' if i in self.final else '')
             for key,value in self.funcion_delta[i].items():
                 temp = [i,key,value]
                 write_direct_afd.append(temp)
@@ -107,8 +129,7 @@ class NodoExpresionRegular:
         self.posicion = None
         self.hijos = []
 
-        if DEBUG:
-            print('Actual : '+expresion_regular)
+     
       
         if len(expresion_regular) == 1 and self.letra_recibida(expresion_regular):
             self.elemento = expresion_regular
@@ -123,6 +144,7 @@ class NodoExpresionRegular:
         variable_kleene = -1
         operador_or = -1
         concatenacion = -1
+        cerradura_positiva = -1 
         i = 0   
         while i < len(expresion_regular):
             if expresion_regular[i] == '(':
@@ -147,11 +169,17 @@ class NodoExpresionRegular:
                 if variable_kleene == -1:
                     variable_kleene = i
                 continue
+            if expresion_regular[i] == '+':
+                if cerradura_positiva == -1:
+                    cerradura_positiva = i
+                continue
             if expresion_regular[i] == '|':
                 if operador_or == -1:
                     operador_or = i
-        
-        if operador_or != -1:
+        if cerradura_positiva != -1:
+            self.elemento = '+'
+            self.hijos.append(NodoExpresionRegular(self.validar_brackets(expresion_regular[:cerradura_positiva])))
+        elif operador_or != -1:
             self.elemento = '|'
             self.hijos.append(NodoExpresionRegular(self.validar_brackets(expresion_regular[:operador_or])))
             self.hijos.append(NodoExpresionRegular(self.validar_brackets(expresion_regular[(operador_or+1):])))
@@ -162,6 +190,7 @@ class NodoExpresionRegular:
         elif variable_kleene != -1:
             self.elemento = '*'
             self.hijos.append(NodoExpresionRegular(self.validar_brackets(expresion_regular[:variable_kleene])))
+        
 
     def calcular_funciones(self, posicion, siguiente_posicion):
         if self.letra_recibida(self.elemento):
@@ -172,7 +201,6 @@ class NodoExpresionRegular:
             return posicion+1
         for child in self.hijos:
             posicion = child.calcular_funciones(posicion, siguiente_posicion)
-    
 
         if self.elemento == '.':
             if self.hijos[0].anulable:
@@ -202,6 +230,15 @@ class NodoExpresionRegular:
                 for j in self.hijos[0].primera_posicion:
                     if j not in siguiente_posicion[i][1]:
                         siguiente_posicion[i][1] = sorted(siguiente_posicion[i][1] + [j])
+        
+        elif self.elemento == '+':
+            self.primera_posicion = deepcopy(self.hijos[0].primera_posicion)
+            self.ultima_posicion = deepcopy(self.hijos[0].ultima_posicion)
+            self.anulable = True
+            for i in self.hijos[0].ultima_posicion:
+                for j in self.hijos[0].primera_posicion:
+                    if j not in siguiente_posicion[i][1]:
+                        siguiente_posicion[i][1] = sorted(siguiente_posicion[i][1] + [j])
 
         return posicion
 
@@ -223,8 +260,7 @@ class ArbolitoER:
     
     def funciones(self):
         posicions = self.inicioderaiz.calcular_funciones(0, self.siguiente_posicion)   
-        if DEBUG == True:
-            print(self.siguiente_posicion)
+        
 
     
     def Convertir_a_AFD(self):
@@ -268,7 +304,7 @@ class ArbolitoER:
 
 
 print("---------------------------------------------------")
-DEBUG = False
+
 rama = False
 simbolo = '_'
 alfabeto = None
@@ -285,25 +321,27 @@ print(alfabeto)
 
 arbol = ArbolitoER(p_expresion_regular)
 print(arbol)
-if DEBUG:
-    arbol.escribir()
+
 generador_AFD = arbol.Convertir_a_AFD()
 print(generador_AFD)
 
-message = input("Ingrese la cadena w: ")
 #message = 'babbaaaaa'
+print("-----------------------------------------------")
 print('Automata AFD : \n')
 generador_AFD.escribir()
-print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 transformacion_resultados = generador_AFD.escribir_02()
 print("transformacion", transformacion_resultados)
-print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 #generador_AFD.imprimir_Transformaciones()
 init_end = generador_AFD.inicio_final()
 print("inicio final",init_end)
 graficar_AFD_generado(transformacion_resultados, init_end)
+generacion_de_archivo(transformacion_resultados, init_end)
+print("**************************************************")
+print("**************************************************")
+message = input("Ingrese la cadena w: ")
 print('\nPertenece o no a L(r): "'+message+'" : ')
 generador_AFD.L(message)
-		
+print("**************************************************")
+print("**************************************************")
 	
 

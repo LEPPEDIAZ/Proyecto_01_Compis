@@ -2,7 +2,7 @@ from transformacion import Transformacion
 from graphviz import Digraph
 
 def graficar_AFD(transformacion_final, inicial_final):
-    f = Digraph('finite_state_machine', filename='./afn_to_afd')
+    f = Digraph('finite_state_machine', filename='./Automatas_Graficados/afn_to_afd')
     f.attr(rankdir='LR', size='8,5')
     f.attr('node', shape='doublecircle')
     for i in range(len(inicial_final)):
@@ -13,7 +13,7 @@ def graficar_AFD(transformacion_final, inicial_final):
     f.view()
 
 def graficar_AFN(transformacion_final, inicial_final):
-    f = Digraph('finite_state_machine', filename='./afn')
+    f = Digraph('finite_state_machine', filename='./Automatas_Graficados/afn')
     f.attr(rankdir='LR', size='8,5')
     f.attr('node', shape='doublecircle')
     for i in range(len(inicial_final)):
@@ -57,18 +57,18 @@ def generacion_de_archivo_afd(transformacion_final, inicial_final):
         if transformacion_final[i][2] not in simb:
             simb.append(transformacion_final[i][2])
     f= open("Textos_Generados/afd.txt","w+")
-    f.write("AFD\n") 
+    f.write("AFN\n") 
     f.write("ESTADOS: " + str(stdos) +  "\n")
     f.write("SIMBOLOS: " + str(simb) + "\n")    
     for i in range(len(inicial_final)):
         f.write("INICIO: " + str(inicial_final[i][0]) + "\n")
     for i in range(len(inicial_final)):
         f.write("ACEPTACION: " + str(inicial_final[i][1]) + "\n")
-    f.write("TRANSICION: " + str(transformacion_final) + "\n") 	
+    f.write("TRANSICION: " + str(transformacion_final) + "\n")
 
 
 class afn(object):
-	op = ["(","*","+","|",".","?"]
+	op = ["(","*","+","|",".","?", ")"]
 
 	def __init__(self, initialState,finalState,Cambio_de_Estado):
 		self.initialState = initialState 

@@ -1,4 +1,4 @@
-AFD
+AFN
 ESTADOS: ['A', 'a', 'b']
 SIMBOLOS: ['B', 'C']
 INICIO: A
