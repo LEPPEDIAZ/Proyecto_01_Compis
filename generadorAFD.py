@@ -110,26 +110,49 @@ class generador_AFD:
     def escribir_02(self):
         #print("escribir 02",self.Estados_Marcados)
         write_direct_afd = []
+        temp_final_states = []
         for i in range(len(self.Estados_Marcados)):
             print(i,self.funcion_delta[i],'final' if i in self.final else '')
             print("!!!!!!!!!!!!!!!!!!!!!!!!")
             print("final", 'final' if i in self.final else '')
             print("!!!!!!!!!!!!!!!!!!!!!!!!")
-            for key,value in self.funcion_delta[i].items():
-                temp = [i,key,(value)]
-                write_direct_afd.append(temp)
-                print("TESTING", write_direct_afd)
-        lenght_matrix = len(write_direct_afd)
-        last_array = write_direct_afd[lenght_matrix - 1]
-        write_direct_afd.pop()
-        lenght_array = len(last_array)
-        last_value = last_array[lenght_array - 1]
-        last_array.pop()
-        ultimo = last_value +1
-        last_array.append(ultimo )
-        print("ULTIMO VALOR",last_value +1 )
-        write_direct_afd.append(last_array)
-        return write_direct_afd, ultimo
+            valor = self.funcion_delta[0]
+            valor = str(valor)
+            valor = valor.replace('{', '')
+            valor = valor.replace('}', '')
+            valor = valor.replace(':', '')
+            chars = "0123456789"
+            check_string = valor
+            for char in chars:
+                count = check_string.count(char)
+                if count > 1:
+                    print ("caracter FINAL",char, "contar FINAL",count)
+                    for key,value in self.funcion_delta[i].items():
+                        temp = [i,key,(value)]
+                        write_direct_afd.append(temp)
+
+                    print("TESTING SIN ESTADOS FINALES", write_direct_afd)
+                    
+                    for iter_count in range(count - 1):
+                        lenght_matrix = len(write_direct_afd)
+                        last_array = write_direct_afd[lenght_matrix - 1]
+                        write_direct_afd.pop()
+                        lenght_array = len(last_array)
+                        last_value = last_array[lenght_array - 1]
+                        last_array.pop()
+                        ultimo = last_value + (lenght_matrix - 1)
+                        last_array.append(ultimo)
+                        temp_final_states.append(last_array)
+
+                    lenght_final_states = len(temp_final_states)
+
+                    for iter_final_states in range(lenght_final_states):
+                        last_final_state_array = temp_final_states[iter_final_states - 1]    
+                        write_direct_afd.append(last_final_state_array)
+                    
+                    print("TESTING CON ESTADOS FINALES", write_direct_afd)
+
+            return write_direct_afd
 
 		
 class NodoExpresionRegular:
@@ -354,8 +377,8 @@ print(generador_AFD)
 #message = 'babbaaaaa'
 print("-----------------------------------------------")
 print('Automata AFD : \n')
-generador_AFD.escribir()
-transformacion_resultados ,ultimo = generador_AFD.escribir_02()
+#generador_AFD.escribir()
+transformacion_resultados = generador_AFD.escribir_02()
 print("transformacion", transformacion_resultados)
 #generador_AFD.imprimir_Transformaciones()
 init_end = generador_AFD.inicio_final()
