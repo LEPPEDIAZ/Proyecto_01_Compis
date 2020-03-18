@@ -18,7 +18,7 @@ if __name__ == '__main__':
 
 	#print(thompson)
 	thompson.imprimir_Transformaciones()
-	os.system("dot -Tgif afn.txt > afn.png")
+	os.system("dot -Tgif afn.txt > Automatas_Graficados/afn.png")
 	print("observa las imagenes afn.txt y afn.png")
 	#test = thompson.imprimir_texto()
 	imprimir = thompson.imprimir_texto()

@@ -46,9 +46,32 @@ class generador_AFD:
     def inicio_final(self):
         arreglo = []
         arreglo_final = []
+        print("FINAL",self.final)
+        print("FINAL2",self.final[0])
+        print("delta1", self.funcion_delta)
+        print("delta", self.funcion_delta[0])
+        valor = self.funcion_delta[0]
+        valor = str(valor)
+        valor = valor.replace('{', '')
+        valor = valor.replace('}', '')
+        valor = valor.replace(':', '')
         arreglo.append(self.inicial)
         arreglo.append(self.final[0])
         arreglo_final.append(arreglo)
+        chars = "0123456789"
+        check_string = valor
+        for char in chars:
+            count = check_string.count(char)
+            if count > 1:
+                print ("caracter",char, "contar",count)
+                if (count>1):
+                    arrayclean1 = []
+                    arrayclean1.append(self.inicial)
+                    valor = int(char)
+                    valor = valor + 1
+                    arrayclean1.append(valor)
+                    arreglo_final.append(arrayclean1)
+        print("ARREGLO FINAL", arreglo_final)   
         return arreglo_final
 
     def L(self, r):
@@ -77,6 +100,7 @@ class generador_AFD:
         write_direct_afd = []
         for i in range(len(self.Estados_Marcados)):
             print("funcion escribir",i,self.funcion_delta[i],'final' if i in self.final else '')
+            print(self.funcion_delta)
             for key,value in self.funcion_delta[i].items():
                 temp = [i,key,value]
                 write_direct_afd.append(temp)
@@ -101,9 +125,11 @@ class generador_AFD:
         lenght_array = len(last_array)
         last_value = last_array[lenght_array - 1]
         last_array.pop()
-        last_array.append(last_value +1)
+        ultimo = last_value +1
+        last_array.append(ultimo )
+        print("ULTIMO VALOR",last_value +1 )
         write_direct_afd.append(last_array)
-        return write_direct_afd
+        return write_direct_afd, ultimo
 
 		
 class NodoExpresionRegular:
@@ -329,11 +355,13 @@ print(generador_AFD)
 print("-----------------------------------------------")
 print('Automata AFD : \n')
 generador_AFD.escribir()
-transformacion_resultados = generador_AFD.escribir_02()
+transformacion_resultados ,ultimo = generador_AFD.escribir_02()
 print("transformacion", transformacion_resultados)
 #generador_AFD.imprimir_Transformaciones()
 init_end = generador_AFD.inicio_final()
 print("inicio final",init_end)
+#init_end = [[0,1],[0,2]]
+
 graficar_AFD_generado(transformacion_resultados, init_end)
 generacion_de_archivo(transformacion_resultados, init_end)
 print("**************************************************")

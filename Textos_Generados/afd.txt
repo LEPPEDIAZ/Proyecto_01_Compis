@@ -1,8 +1,6 @@
 AFN
-ESTADOS: ['A', 'a', 'b']
-SIMBOLOS: ['B', 'C']
-INICIO: A
-INICIO: A
-ACEPTACION: B
-ACEPTACION: C
-TRANSICION: [['A', 'a', 'B'], ['A', 'b', 'C']]
+ESTADOS: [1, 'a', 'b', 'c']
+SIMBOLOS: [2, 3, 4]
+INICIO: ['1']
+ACEPTACION: ['2', '3', '4']
+TRANSICION: [[1, 'a', 2], [1, 'b', 3], [1, 'c', 4]]

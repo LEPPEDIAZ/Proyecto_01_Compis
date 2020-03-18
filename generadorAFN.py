@@ -1,5 +1,7 @@
 from transformacion import Transformacion 
 from graphviz import Digraph
+global array_last
+
 
 def graficar_AFD(transformacion_final, inicial_final):
     f = Digraph('finite_state_machine', filename='./Automatas_Graficados/afn_to_afd')
@@ -61,11 +63,56 @@ def generacion_de_archivo_afd(transformacion_final, inicial_final):
     f.write("ESTADOS: " + str(stdos) +  "\n")
     f.write("SIMBOLOS: " + str(simb) + "\n")    
     for i in range(len(inicial_final)):
-        f.write("INICIO: " + str(inicial_final[i][0]) + "\n")
+	    array_init = []
+	    array_init.append(str(inicial_final[i][0]))
+    f.write("INICIO: " + str(array_init) + "\n")
+    array_last = []
     for i in range(len(inicial_final)):
-        f.write("ACEPTACION: " + str(inicial_final[i][1]) + "\n")
+	    array_last.append(str(inicial_final[i][1]))
+	    print(str(array_last))
+    f.write("ACEPTACION: " + str(array_last) + "\n")
     f.write("TRANSICION: " + str(transformacion_final) + "\n")
 
+def generacion_de_archivo_afd_test(transformacion_final, inicial_final):
+    stdos = []
+    simb = []
+    for i in range(len(transformacion_final)):
+        if transformacion_final[i][0] not in stdos:
+            stdos.append(transformacion_final[i][0])
+                
+        if transformacion_final[i][1] not in stdos:
+            stdos.append(transformacion_final[i][1])
+                
+        if transformacion_final[i][2] not in simb:
+            simb.append(transformacion_final[i][2])
+    f= open("Textos_Generados/afd.txt","w+")
+    stdos = str(stdos)
+    stdos = stdos.replace('[', '')
+    stdos = stdos.replace(']', '')
+    f.write("states," + str(stdos) +  "\n")
+    simb = str(simb)
+    simb = simb.replace('[', '')
+    simb = simb.replace(']', '')
+    f.write("alpha," + str(simb) + "\n")    
+    for i in range(len(inicial_final)):
+	    array_init = []
+	    array_init.append(str(inicial_final[i][0]))
+    array_init = ','.join(array_init)
+    f.write("start, " + str(array_init) + "\n")
+    array_last = []
+    for i in range(len(inicial_final)):
+	    array_last.append(str(inicial_final[i][1]))
+	    print(str(array_last))
+    array_last = ','.join(array_last)
+    f.write("final, " + str(array_last) + "\n")
+    #transformacion_final = ','.join(str(transformacion_final[0]))
+    transformacion_final2 = str(transformacion_final)
+    transformacion_final2 = transformacion_final2.replace('[', '')
+    transformacion_final2 = transformacion_final2.replace(']', '')
+	#transformacion_final2 = transformacion_final2.replace("'", "")
+    print("FINAL", transformacion_final2)
+    print("FINAL2", str(transformacion_final2))
+    f.write("trans-func, " + str(transformacion_final2) + "\n")
 
 class afn(object):
 	op = ["(","*","+","|",".","?", ")"]
