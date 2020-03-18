@@ -200,9 +200,9 @@ class NodoExpresionRegular:
                 self.anulable = False
             return
         variable_kleene = -1
+        cerradura_positiva = -1 
         operador_or = -1
         concatenacion = -1
-        cerradura_positiva = -1 
         una_instancia = -1
         i = 0   
         while i < len(expresion_regular):
@@ -231,7 +231,6 @@ class NodoExpresionRegular:
             if expresion_regular[i] == '+':
                 if cerradura_positiva == -1:
                     cerradura_positiva = i
-                continue
             if expresion_regular[i] == '|':
                 if operador_or == -1:
                     operador_or = i
@@ -241,6 +240,10 @@ class NodoExpresionRegular:
         if cerradura_positiva != -1:
             self.elemento = '+'
             self.hijos.append(NodoExpresionRegular(self.validar_brackets(expresion_regular[:cerradura_positiva])))
+            #self.hijos.append(NodoExpresionRegular(self.validar_brackets(expresion_regular[:(cerradura_positiva)])))
+            self.hijos.append(NodoExpresionRegular(self.validar_brackets(expresion_regular[(cerradura_positiva+1):])))
+            self.hijos.append(NodoExpresionRegular(self.validar_brackets(expresion_regular[(cerradura_positiva):])))
+            self.hijos.append(NodoExpresionRegular(self.validar_brackets(expresion_regular[(cerradura_positiva)::])))
         elif operador_or != -1:
             self.elemento = '|'
             self.hijos.append(NodoExpresionRegular(self.validar_brackets(expresion_regular[:operador_or])))
@@ -297,18 +300,18 @@ class NodoExpresionRegular:
                     if j not in siguiente_posicion[i][1]:
                         siguiente_posicion[i][1] = sorted(siguiente_posicion[i][1] + [j])
         
+        elif self.elemento == '?':
+            self.primera_posicion = sorted(list(set(self.hijos[0].primera_posicion )))
+            self.ultima_posicion = sorted(list(set(self.hijos[0].primera_posicion + self.hijos[0].ultima_posicion + self.hijos[1].ultima_posicion)))
+            self.anulable = self.hijos[0].anulable or self.hijos[1].anulable
         elif self.elemento == '+':
-            self.primera_posicion = deepcopy(self.hijos[0].primera_posicion)
-            self.ultima_posicion = deepcopy(self.hijos[0].ultima_posicion)
+            self.primera_posicion = sorted(list(set(self.hijos[0].primera_posicion + self.hijos[1].primera_posicion)))
+            self.ultima_posicion = sorted(list(set(self.hijos[0].ultima_posicion + self.hijos[1].ultima_posicion)))
             self.anulable = True
             for i in self.hijos[0].ultima_posicion:
                 for j in self.hijos[0].primera_posicion:
                     if j not in siguiente_posicion[i][1]:
-                        siguiente_posicion[i][1] = sorted(siguiente_posicion[i][1])
-        elif self.elemento == '?':
-            self.primera_posicion = sorted(list(set(self.hijos[0].primera_posicion + self.hijos[1].primera_posicion)))
-            self.ultima_posicion = sorted(list(set(self.hijos[0].ultima_posicion + self.hijos[1].ultima_posicion)))
-            self.anulable = self.hijos[0].anulable or self.hijos[1].anulable
+                        siguiente_posicion[i][1] = sorted(siguiente_posicion[i][1] + [j])
         return posicion
 
     def escribir_nivel(self, nivel):
@@ -380,8 +383,9 @@ alfabeto = None
 #expresion_regular = '(b|b)*abb(a|b)*'
 expresion_regular= open("expresion_regular.txt", "r+")
 expresion_regular = expresion_regular.read()
+expresion_regular = expresion_regular.replace('?', '|e')
 p_expresion_regular = preprocesamiento(expresion_regular)
-print(p_expresion_regular)
+print("Expresion REGULAR",p_expresion_regular)
 alfabeto = todo_el_alfabeto(p_expresion_regular)
 print(alfabeto)
 extra = ''
