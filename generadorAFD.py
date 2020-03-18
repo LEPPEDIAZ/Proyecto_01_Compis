@@ -1,6 +1,7 @@
 from copy import deepcopy
 from expresion_regular import *
 from graphviz import Digraph
+import numpy as np
 
 def generacion_de_archivo(transformacion_final, inicial_final):
     stdos = []
@@ -46,10 +47,10 @@ class generador_AFD:
     def inicio_final(self):
         arreglo = []
         arreglo_final = []
-        print("FINAL",self.final)
-        print("FINAL2",self.final[0])
-        print("delta1", self.funcion_delta)
-        print("delta", self.funcion_delta[0])
+        #print("FINAL",self.final)
+        #print("FINAL2",self.final[0])
+        #print("delta1", self.funcion_delta)
+        #print("delta", self.funcion_delta[0])
         valor = self.funcion_delta[0]
         valor = str(valor)
         valor = valor.replace('{', '')
@@ -96,22 +97,23 @@ class generador_AFD:
         else:
             print('Cadena L(r) no aceptada')
 
-    def escribir(self):
-        write_direct_afd = []
-        for i in range(len(self.Estados_Marcados)):
-            print("funcion escribir",i,self.funcion_delta[i],'final' if i in self.final else '')
-            print(self.funcion_delta)
-            for key,value in self.funcion_delta[i].items():
-                temp = [i,key,value]
-                write_direct_afd.append(temp)
-                print("TESTING", write_direct_afd)
-        return write_direct_afd
+           
     
-    def escribir_02(self):
+    def transformacion(self):
         #print("escribir 02",self.Estados_Marcados)
         write_direct_afd = []
         temp_final_states = []
-        for i in range(len(self.Estados_Marcados)):
+        print("ESTADOS", self.funcion_delta)
+        clean_delta = self.funcion_delta
+        len_clean_delta = len(clean_delta)
+        arr_delta = clean_delta[len_clean_delta - 1]
+
+        try:
+            arr_delta_pos = arr_delta[0]
+        except:
+            clean_delta.pop()
+
+        for i in range(len(clean_delta)):
             print(i,self.funcion_delta[i],'final' if i in self.final else '')
             print("!!!!!!!!!!!!!!!!!!!!!!!!")
             print("final", 'final' if i in self.final else '')
@@ -125,13 +127,13 @@ class generador_AFD:
             check_string = valor
             for char in chars:
                 count = check_string.count(char)
-                if count > 1:
+                print("Count", count)
+                if count > 0:
                     print ("caracter FINAL",char, "contar FINAL",count)
                     for key,value in self.funcion_delta[i].items():
                         temp = [i,key,(value)]
                         write_direct_afd.append(temp)
-
-                    print("TESTING SIN ESTADOS FINALES", write_direct_afd)
+                        print("TESTING SIN ESTADOS FINALES ALL", write_direct_afd)
                     
                     for iter_count in range(count - 1):
                         lenght_matrix = len(write_direct_afd)
@@ -149,10 +151,17 @@ class generador_AFD:
                     for iter_final_states in range(lenght_final_states):
                         last_final_state_array = temp_final_states[iter_final_states - 1]    
                         write_direct_afd.append(last_final_state_array)
-                    
-                    print("TESTING CON ESTADOS FINALES", write_direct_afd)
-
-            return write_direct_afd
+                        print("TESTING CON ESTADOS FINALES", write_direct_afd)
+            
+            #test = []
+            #for key,value in self.funcion_delta[i].items():
+            #    temp2 = [i,key,value]
+            #    test.append(temp2)
+            #print("TEST TEST", test)
+            
+            #test = write_direct_afd.append(temp)
+            #print("PROBAAAAAAAAAAAAAAAAAAAR:", str(test))
+        return write_direct_afd
 
 		
 class NodoExpresionRegular:
@@ -194,6 +203,7 @@ class NodoExpresionRegular:
         operador_or = -1
         concatenacion = -1
         cerradura_positiva = -1 
+        una_instancia = -1
         i = 0   
         while i < len(expresion_regular):
             if expresion_regular[i] == '(':
@@ -225,6 +235,9 @@ class NodoExpresionRegular:
             if expresion_regular[i] == '|':
                 if operador_or == -1:
                     operador_or = i
+            if expresion_regular[i] == '?':
+                if una_instancia == -1:
+                    una_instancia = i
         if cerradura_positiva != -1:
             self.elemento = '+'
             self.hijos.append(NodoExpresionRegular(self.validar_brackets(expresion_regular[:cerradura_positiva])))
@@ -239,6 +252,10 @@ class NodoExpresionRegular:
         elif variable_kleene != -1:
             self.elemento = '*'
             self.hijos.append(NodoExpresionRegular(self.validar_brackets(expresion_regular[:variable_kleene])))
+        elif variable_kleene != -1:
+            self.elemento = '?'
+            self.hijos.append(NodoExpresionRegular(self.validar_brackets(expresion_regular[:operador_or])))
+            self.hijos.append(NodoExpresionRegular(self.validar_brackets(expresion_regular[(operador_or+1):])))
         
 
     def calcular_funciones(self, posicion, siguiente_posicion):
@@ -287,8 +304,11 @@ class NodoExpresionRegular:
             for i in self.hijos[0].ultima_posicion:
                 for j in self.hijos[0].primera_posicion:
                     if j not in siguiente_posicion[i][1]:
-                        siguiente_posicion[i][1] = sorted(siguiente_posicion[i][1] + [j])
-
+                        siguiente_posicion[i][1] = sorted(siguiente_posicion[i][1])
+        elif self.elemento == '?':
+            self.primera_posicion = sorted(list(set(self.hijos[0].primera_posicion + self.hijos[1].primera_posicion)))
+            self.ultima_posicion = sorted(list(set(self.hijos[0].ultima_posicion + self.hijos[1].ultima_posicion)))
+            self.anulable = self.hijos[0].anulable or self.hijos[1].anulable
         return posicion
 
     def escribir_nivel(self, nivel):
@@ -377,8 +397,9 @@ print(generador_AFD)
 #message = 'babbaaaaa'
 print("-----------------------------------------------")
 print('Automata AFD : \n')
-#generador_AFD.escribir()
-transformacion_resultados = generador_AFD.escribir_02()
+
+print("------- \n")
+transformacion_resultados = generador_AFD.transformacion()
 print("transformacion", transformacion_resultados)
 #generador_AFD.imprimir_Transformaciones()
 init_end = generador_AFD.inicio_final()
