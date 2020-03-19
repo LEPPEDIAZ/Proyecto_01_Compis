@@ -354,8 +354,32 @@ class AFN_ESTADO:
         for estado_anterior, nuevo_estados in self.transiciones.items():
             for estado in nuevo_estados:
                 re_construir.Agregar_Transicion(translations[estado_anterior], translations[estado], nuevo_estados[estado])
-        print("newbuild", [re_construir, ninicio] )
         return [re_construir, ninicio]
+	
+    def ObtenerEpsilonCl(self, findestado):
+	    todos_los_estados = set()
+	    estados = [findestado]
+	    while len(estados):
+		    estado = estados.pop()
+		    todos_los_estados.add(estado)
+		    if estado in self.transiciones:
+			    for i in self.transiciones[estado]:
+				    if epsilon in self.transiciones[estado][i] and \
+                        i not in todos_los_estados:
+					    estados.append(i)
+	    return todos_los_estados
+
+    def RealizarMovida(self, estado, charllave):
+        if isinstance(estado, int):
+            estado = [estado]
+        movida = set()
+        for j in estado:
+            if j in self.transiciones:
+                for tns in self.transiciones[j]:
+                    if charllave in self.transiciones[j][tns]:
+                        movida.add(tns)
+        print("movida", movida)
+        return movida
 
 
 class Exp_AFNVS2:
@@ -365,10 +389,10 @@ class Exp_AFNVS2:
         self.ConstruirSecAFN()
 
     def InEnd(self):
-        variable = self.nfa.inicio_final()
+        variable = self.afn.inicio_final()
         return variable
     def FunctionsNFA(self):
-        variable = self.nfa.transformacion_vs2()
+        variable = self.afn.transformacion_vs2()
         return variable
     
     def tomar_prioridad(op):
@@ -484,5 +508,5 @@ class Exp_AFNVS2:
             elif token == '*':
                 a = self.automata.pop()
                 self.automata.append(Exp_AFNVS2.variable_kleene(a))
-        self.nfa = self.automata.pop()
-        self.nfa.simbolo = simbolo
+        self.afn = self.automata.pop()
+        self.afn.simbolo = simbolo
