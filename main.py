@@ -3,7 +3,7 @@ import os
 from expresion_regular import *
 from generadorAFN import *
 from AFD_por_AFN import *
-
+from AFD import *
 
 if __name__ == '__main__':
 	print("Generador de AFN")
@@ -16,9 +16,13 @@ if __name__ == '__main__':
 	sacar_variable2 = a.InEnd()
 	print("sacar_variable2", sacar_variable2)
 	graficar_AFNVS2(sacar_variable,sacar_variable2)
+	b = afn2afd(a.afn)
+	sacar_variable =b.TransposicionFinalAFD()
+	sacar_variable2 = b.InEndAFD()
+	graficar_AFDVS2(sacar_variable,sacar_variable2)
 	#generacion_de_archivo(sacar_variable,sacar_variable2)
-	imprimir_3, inicio_final_nuevo3 = afd_generado_de_afn(sacar_variable,sacar_variable2)
-	graficar_AFDVS2(imprimir_3, inicio_final_nuevo3)
+	#imprimir_3, inicio_final_nuevo3 = afd_generado_de_afn(sacar_variable,sacar_variable2)
+	#graficar_AFDVS2(imprimir_3, inicio_final_nuevo3)
 	#generacion_de_archivo_afd(imprimir_2, inicio_final_nuevo)
 	#graficar_AFDVS2
 	expresion_regular = expresion_regular.replace('ε', 'e')
