@@ -1,6 +1,6 @@
 from generadorAFN import *
 
-class afn2afd:
+class Conversion_AFN_AFD:
     def __init__(self, afn):
         self.AFD_ConsFix(afn)
 
@@ -10,6 +10,14 @@ class afn2afd:
 
     def InEndAFD(self):
         variable = self.afd.inicio_final()
+        return variable
+    
+    def TransposicionFinalMIN(self):
+        variable = self.minafd.transformacion_vs2()
+        return variable
+
+    def InEndMIN(self):
+        variable = self.minafd.inicio_final()
         return variable
 
     def AFD_ConsFix(self, afn):   
@@ -44,7 +52,80 @@ class afn2afd:
                 if afn.estado_final[0] in estado:
                     afd.Agregar_Final(caracter)
             self.afd = afd
-  
 
+    def minimizador(self): 
+        estados = list(self.afd.estados)
+        estado_destino = dict(set())
+        interseccion = dict()
+        carac = dict() 
+        interseccion = {1: set(), 2: set()}
+        sin_revisar = []
+        numero_subsets = 3 
+        for i in estados:
+            for j in self.afd.simbolo:
+                if i in estado_destino:
+                    if j in estado_destino[i]:
+                        estado_destino[i][j] = estado_destino[i][j].union(self.afd.RealizarMovida(i, j))
+                    else:
+                        estado_destino[i][j] = self.afd.RealizarMovida(i, j)
+                else:
+                    estado_destino[i] = {j : self.afd.RealizarMovida(i, j)}
+                if len(estado_destino[i][j]):
+                    estado_destino[i][j] = estado_destino[i][j].pop()
+                else:
+                    estado_destino[i][j] = 0
+        for i in estados:
+            if i not in self.afd.estado_final:
+                interseccion[1] = interseccion[1].union(set([i]))
+                carac[i] = 1
+        for k in self.afd.estado_final:
+            interseccion[2] = interseccion[2].union(set([k]))
+            carac[k] = 2
+        sin_revisar.extend([[interseccion[1], 1], [interseccion[2], 2]])
+        while len(sin_revisar):
+            [estados_iguales, id] = sin_revisar.pop()
+            for j in self.afd.simbolo:
+                diferencial = dict()
+                for i in estados_iguales:
+                    if estado_destino[i][j] == 0:
+                        if 0 in diferencial:
+                            diferencial[0].add(i)
+                        else:
+                            diferencial[0] = set([i])
+                    else:
+                        if carac[estado_destino[i][j]] in diferencial:
+                            diferencial[carac[estado_destino[i][j]]].add(i)
+                        else:
+                            diferencial[carac[estado_destino[i][j]]] = set([i])
+                if len(diferencial) > 1:
+                    for k, v in diferencial.items():
+                        if k:
+                            for i in v:
+                                interseccion[id].remove(i)
+                                if numero_subsets in interseccion:
+                                    interseccion[numero_subsets] = interseccion[numero_subsets].union(set([i]))
+                                else:
+                                    interseccion[numero_subsets] = set([i])
+                            if len(interseccion[id]) == 0:
+                                interseccion.pop(id)
+                            for i in v:
+                                carac[i] = numero_subsets
+                            sin_revisar.append([interseccion[numero_subsets], numero_subsets])
+                            numero_subsets += 1
+                    break
+        if len(interseccion) == len(estados):
+            self.minafd = self.afd
+        else:
+            Conversion_AFN_AFD.retorno_de_numeros(estados, carac)
+            self.minafd = self.afd.Cambio_de_estados_despues_de_Merge(interseccion, carac)
+  
+    def retorno_de_numeros(estados, sets):  
+        numero_subsets = 1
+        cambios = dict()
+        for i in estados:
+            if sets[i] not in cambios:
+                cambios[sets[i]] = numero_subsets
+                numero_subsets += 1
+            sets[i] = cambios[sets[i]]
                 
     

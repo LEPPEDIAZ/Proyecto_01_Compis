@@ -27,6 +27,16 @@ def graficar_AFDVS2(transformacion_final, inicial_final):
     for i in range(len(transformacion_final)):
         f.edge(str(transformacion_final[i][0]), str(transformacion_final[i][2]), label= str(transformacion_final[i][1]))
     f.view()
+def graficar_MIN(transformacion_final, inicial_final):
+    f = Digraph('finite_state_machine', filename='./Automatas_Graficados/min')
+    f.attr(rankdir='LR', size='8,5')
+    f.attr('node', shape='doublecircle')
+    for i in range(len(inicial_final)):
+        f.node(str(inicial_final[i][1]))
+    f.attr('node', shape='circle')
+    for i in range(len(transformacion_final)):
+        f.edge(str(transformacion_final[i][0]), str(transformacion_final[i][2]), label= str(transformacion_final[i][1]))
+    f.view()
 def graficar_AFN(transformacion_final, inicial_final):
     f = Digraph('finite_state_machine', filename='./Automatas_Graficados/afn')
     f.attr(rankdir='LR', size='8,5')
@@ -380,7 +390,17 @@ class AFN_ESTADO:
                         movida.add(tns)
         print("movida", movida)
         return movida
-
+	
+    def Cambio_de_estados_despues_de_Merge(self, interseccion, carac):
+        reconstruir = AFN_ESTADO(self.simbolo)
+        for estadodestino, estado_destinos in self.transiciones.items():
+            for estado in estado_destinos:
+                reconstruir.Agregar_Transicion(carac[estadodestino], carac[estado], estado_destinos[estado])
+        reconstruir.Marcar_Inicio(carac[self.init_estado])
+        for i in self.estado_final:
+            reconstruir.Agregar_Final(carac[i])
+    
+        return reconstruir
 
 class Exp_AFNVS2:
 
