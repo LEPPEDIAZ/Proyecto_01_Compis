@@ -479,6 +479,21 @@ class Exp_AFNVS2:
         Kleene.Agregar_Transicion(a.estado_final[0], a.init_estado, epsilon)
         Kleene.Agregar_Transicion_dict(a.transiciones)
         return Kleene
+    
+    def cerradura_positiva(a):  
+        [a, sec] = a.Construir_Por_Num(2)
+        estado1 = 1
+        estado2 = sec
+        CerraduraPositiva = AFN_ESTADO(a.simbolo)
+        CerraduraPositiva.Marcar_Inicio(estado1)
+        CerraduraPositiva.Agregar_Final(estado2)
+        CerraduraPositiva.Agregar_Transicion(CerraduraPositiva.init_estado, a.init_estado , epsilon)
+        CerraduraPositiva.Agregar_Transicion(CerraduraPositiva.init_estado + 2 , CerraduraPositiva.estado_final[0] , epsilon)
+        #CerraduraPositiva.Agregar_Transicion(a.estado_final[0], CerraduraPositiva.estado_final[0], epsilon)
+        CerraduraPositiva.Agregar_Transicion(a.estado_final[0], a.init_estado, epsilon)
+        CerraduraPositiva.Agregar_Transicion_dict(a.transiciones)
+        return CerraduraPositiva
+
 
     def ConstruirSecAFN(self):
         caracter = ''
@@ -528,5 +543,8 @@ class Exp_AFNVS2:
             elif token == '*':
                 a = self.automata.pop()
                 self.automata.append(Exp_AFNVS2.variable_kleene(a))
+            elif token == '+':
+                a = self.automata.pop()
+                self.automata.append(Exp_AFNVS2.cerradura_positiva(a))
         self.afn = self.automata.pop()
         self.afn.simbolo = simbolo
