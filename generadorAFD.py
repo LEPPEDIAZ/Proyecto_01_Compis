@@ -47,10 +47,6 @@ class generador_AFD:
     def inicio_final(self):
         arreglo = []
         arreglo_final = []
-        #print("FINAL",self.final)
-        #print("FINAL2",self.final[0])
-        #print("delta1", self.funcion_delta)
-        #print("delta", self.funcion_delta[0])
         valor = self.funcion_delta[0]
         valor = str(valor)
         valor = valor.replace('{', '')
@@ -127,7 +123,7 @@ class generador_AFD:
             check_string = valor
             for char in chars:
                 count = check_string.count(char)
-                print("Count", count)
+               
                 if count > 0:
                     print ("caracter FINAL",char, "contar FINAL",count)
                     for key,value in self.funcion_delta[i].items():
@@ -405,7 +401,6 @@ print('Automata AFD : \n')
 print("------- \n")
 transformacion_resultados = generador_AFD.transformacion()
 print("transformacion", transformacion_resultados)
-#generador_AFD.imprimir_Transformaciones()
 init_end = generador_AFD.inicio_final()
 print("inicio final",init_end)
 #init_end = [[0,1],[0,2]]

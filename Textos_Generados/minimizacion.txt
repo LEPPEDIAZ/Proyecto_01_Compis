@@ -1,0 +1,6 @@
+AFD
+ESTADOS: [1, 'a|b|c']
+SIMBOLOS: [2]
+INICIO: ['1']
+ACEPTACION: ['2']
+TRANSICION: [[1, 'a|b|c', 2]]

@@ -4,5 +4,6 @@ digraph finite_state_machine {
 	2
 	node [shape=circle]
 	1 -> 2 [label=a]
-	2 -> False [label=a]
+	1 -> 3 [label=b]
+	1 -> 4 [label=c]
 }

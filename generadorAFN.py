@@ -2,10 +2,11 @@ from transformacion import Transformacion
 from collections import defaultdict
 from graphviz import Digraph , render
 global array_last
-alphabet = [chr(i) for i in range(ord('A'), ord('Z') + 1)] + \
+
+alfabeto = [chr(i) for i in range(ord('A'), ord('Z') + 1)] + \
     [chr(i) for i in range(ord('a'), ord('z') + 1)] + \
     [chr(i) for i in range(ord('0'), ord('9') + 1)]
-epsilon = 'ε'
+
 
 def graficar_AFD(transformacion_final, inicial_final):
     f = Digraph('finite_state_machine', filename='./Automatas_Graficados/afn_to_afd')
@@ -79,6 +80,28 @@ def generacion_de_archivo(transformacion_final, inicial_final):
         f.write("ACEPTACION: " + str(inicial_final[i][1]) + "\n")
     f.write("TRANSICION: " + str(transformacion_final) + "\n") 	
 
+def generacion_de_archivo_AFN(transformacion_final, inicial_final):
+    stdos = []
+    simb = []
+    for i in range(len(transformacion_final)):
+        if transformacion_final[i][0] not in stdos:
+            stdos.append(transformacion_final[i][0])
+                
+        if transformacion_final[i][1] not in stdos:
+            stdos.append(transformacion_final[i][1])
+                
+        if transformacion_final[i][2] not in simb:
+            simb.append(transformacion_final[i][2])
+    f= open("Textos_Generados/afn_long.txt","w+")
+    f.write("AFN\n") 
+    f.write("ESTADOS: " + str(stdos) +  "\n")
+    f.write("SIMBOLOS: " + str(simb) + "\n")    
+    for i in range(len(inicial_final)):
+        f.write("INICIO: " + str(inicial_final[i][0]) + "\n")
+    for i in range(len(inicial_final)):
+        f.write("ACEPTACION: " + str(inicial_final[i][1]) + "\n")
+    f.write("TRANSICION: " + str(transformacion_final) + "\n") 
+
 def generacion_de_archivo_afd(transformacion_final, inicial_final):
     stdos = []
     simb = []
@@ -91,8 +114,8 @@ def generacion_de_archivo_afd(transformacion_final, inicial_final):
                 
         if transformacion_final[i][2] not in simb:
             simb.append(transformacion_final[i][2])
-    f= open("Textos_Generados/afd.txt","w+")
-    f.write("AFN\n") 
+    f= open("Textos_Generados/afd_Long.txt","w+")
+    f.write("AFD\n") 
     f.write("ESTADOS: " + str(stdos) +  "\n")
     f.write("SIMBOLOS: " + str(simb) + "\n")    
     for i in range(len(inicial_final)):
@@ -102,7 +125,6 @@ def generacion_de_archivo_afd(transformacion_final, inicial_final):
     array_last = []
     for i in range(len(inicial_final)):
 	    array_last.append(str(inicial_final[i][1]))
-	    print(str(array_last))
     f.write("ACEPTACION: " + str(array_last) + "\n")
     f.write("TRANSICION: " + str(transformacion_final) + "\n")
 
@@ -118,34 +140,47 @@ def generacion_de_archivo_afd_test(transformacion_final, inicial_final):
                 
         if transformacion_final[i][2] not in simb:
             simb.append(transformacion_final[i][2])
-    f= open("Textos_Generados/afd.txt","w+")
-    stdos = str(stdos)
-    stdos = stdos.replace('[', '')
-    stdos = stdos.replace(']', '')
-    f.write("states," + str(stdos) +  "\n")
-    simb = str(simb)
-    simb = simb.replace('[', '')
-    simb = simb.replace(']', '')
-    f.write("alpha," + str(simb) + "\n")    
+    f= open("Textos_Generados/afd_Long.txt","w+")
+    f.write("AFD\n") 
+    f.write("ESTADOS: " + str(stdos) +  "\n")
+    f.write("SIMBOLOS: " + str(simb) + "\n")    
     for i in range(len(inicial_final)):
 	    array_init = []
 	    array_init.append(str(inicial_final[i][0]))
-    array_init = ','.join(array_init)
-    f.write("start, " + str(array_init) + "\n")
+    f.write("INICIO: " + str(array_init) + "\n")
+    array_last = []
+    for i in range(len(inicial_final)):
+	    array_last.append(str(inicial_final[i][1]))
+    f.write("ACEPTACION: " + str(array_last) + "\n")
+    f.write("TRANSICION: " + str(transformacion_final) + "\n")
+
+
+def generacion_de_archivo_min(transformacion_final, inicial_final):
+    stdos = []
+    simb = []
+    for i in range(len(transformacion_final)):
+        if transformacion_final[i][0] not in stdos:
+            stdos.append(transformacion_final[i][0])
+                
+        if transformacion_final[i][1] not in stdos:
+            stdos.append(transformacion_final[i][1])
+                
+        if transformacion_final[i][2] not in simb:
+            simb.append(transformacion_final[i][2])
+    f= open("Textos_Generados/minimizacion.txt","w+")
+    f.write("AFD\n") 
+    f.write("ESTADOS: " + str(stdos) +  "\n")
+    f.write("SIMBOLOS: " + str(simb) + "\n")    
+    for i in range(len(inicial_final)):
+	    array_init = []
+	    array_init.append(str(inicial_final[i][0]))
+    f.write("INICIO: " + str(array_init) + "\n")
     array_last = []
     for i in range(len(inicial_final)):
 	    array_last.append(str(inicial_final[i][1]))
 	    print(str(array_last))
-    array_last = ','.join(array_last)
-    f.write("final, " + str(array_last) + "\n")
-    #transformacion_final = ','.join(str(transformacion_final[0]))
-    transformacion_final2 = str(transformacion_final)
-    transformacion_final2 = transformacion_final2.replace('[', '')
-    transformacion_final2 = transformacion_final2.replace(']', '')
-	#transformacion_final2 = transformacion_final2.replace("'", "")
-    print("FINAL", transformacion_final2)
-    print("FINAL2", str(transformacion_final2))
-    f.write("trans-func, " + str(transformacion_final2) + "\n")
+    f.write("ACEPTACION: " + str(array_last) + "\n")
+    f.write("TRANSICION: " + str(transformacion_final) + "\n")
 
 class afn(object):
 	op = ["(","*","+","|",".","?", ")"]
@@ -262,24 +297,6 @@ class afn(object):
 		return arreglo2
 	
 	
-
-	def imprimir_Transformaciones(self):
-		
-		f= open("afn.txt","w+")
-		f.write("digraph AFN_AnaLucia{\n")
-		f.write("rankdir=LR; \n q[shape = circle];\n")
-		f.write("qI [shape=point];\n")
-		for i in range(self.finalState):
-			f.write("q"+str(i+1)+" [name=\""+str(i+1)+"\"];\n")
-			if (i+1) == self.finalState:
-				f.write("q"+str(i+1)+" [name=\""+str(i+1)+"\" shape = \"doublecircle\"];\n")
-			i+=1
-		f.write("qI -> q1 [label = \"q0\"];\n")
-		for t in self.Cambio_de_Estado:
-			f.write(str(t) + "\n")
-		f.write("}\n")
-
-	
 	def inicio_final(self):
 		arreglo = []
 		arreglo.append(self.initialState)
@@ -313,7 +330,6 @@ class AFN_ESTADO:
                     variable_pasada += s + '|'
                     #arreglofinal.append(subarray)
                     #('s' + str(estado_anterior), 's' + str(estado), label = variable_pasada[:-1])
-                print("Resultado02", str(estado_anterior) + "," + variable_pasada[:-1] + ","+ str(estado))
                 array = []
                 array.append(estado_anterior)
                 array.append(variable_pasada[:-1])
@@ -349,7 +365,7 @@ class AFN_ESTADO:
         for estado_anterior, nuevo_estados in transiciones.items():
             for estado in nuevo_estados:
                 self.Agregar_Transicion(estado_anterior, estado, nuevo_estados[estado])
-                print("mostrar transicion", str(self.Agregar_Transicion(estado_anterior, estado, nuevo_estados[estado])) )
+               
 
     def Construir_Por_Num(self, ninicio):
    
@@ -374,7 +390,7 @@ class AFN_ESTADO:
 		    todos_los_estados.add(estado)
 		    if estado in self.transiciones:
 			    for i in self.transiciones[estado]:
-				    if epsilon in self.transiciones[estado][i] and \
+				    if 'E' in self.transiciones[estado][i] and \
                         i not in todos_los_estados:
 					    estados.append(i)
 	    return todos_los_estados
@@ -388,7 +404,7 @@ class AFN_ESTADO:
                 for tns in self.transiciones[j]:
                     if charllave in self.transiciones[j][tns]:
                         movida.add(tns)
-        print("movida", movida)
+       
         return movida
 	
     def Cambio_de_estados_despues_de_Merge(self, interseccion, carac):
@@ -402,11 +418,11 @@ class AFN_ESTADO:
     
         return reconstruir
 
-class Exp_AFNVS2:
+class ThompsonAFNLong:
 
     def __init__(self, expreg):
         self.expreg = expreg
-        self.ConstruirSecAFN()
+        self.infixpost()
 
     def InEnd(self):
         variable = self.afn.inicio_final()
@@ -415,18 +431,19 @@ class Exp_AFNVS2:
         variable = self.afn.transformacion_vs2()
         return variable
     
-    def tomar_prioridad(op):
-        if op == '|':
+    def tomar_prioridad(x):
+        if x == '|':
             return 1
-        elif op == '·':
+        elif x == '·':
             return 2
-        elif op == '*':
+        elif x == '*':
             return 3
         else:       
             return 0
 
     
     def unico_caracter(expresion):   
+        print(".")
         estado1 = 1
         estado2 = 2
         estructura = AFN_ESTADO(set([expresion]))
@@ -436,6 +453,7 @@ class Exp_AFNVS2:
         return estructura
 
     def union(a, b):  
+        print("union")
         [a, sec] = a.Construir_Por_Num(2)
         [b, sec2] = b.Construir_Por_Num(sec)
         estado1 = 1
@@ -443,16 +461,17 @@ class Exp_AFNVS2:
         unionAFN = AFN_ESTADO(a.simbolo.union(b.simbolo))
         unionAFN.Marcar_Inicio(estado1)
         unionAFN.Agregar_Final(estado2)
-        unionAFN.Agregar_Transicion(unionAFN.init_estado, a.init_estado, epsilon)
-        unionAFN.Agregar_Transicion(unionAFN.init_estado, b.init_estado, epsilon)
-        unionAFN.Agregar_Transicion(a.estado_final[0], unionAFN.estado_final[0], epsilon)
-        unionAFN.Agregar_Transicion(b.estado_final[0], unionAFN.estado_final[0], epsilon)
+        unionAFN.Agregar_Transicion(unionAFN.init_estado, a.init_estado, 'E')
+        unionAFN.Agregar_Transicion(unionAFN.init_estado, b.init_estado, 'E')
+        unionAFN.Agregar_Transicion(a.estado_final[0], unionAFN.estado_final[0], 'E')
+        unionAFN.Agregar_Transicion(b.estado_final[0], unionAFN.estado_final[0], 'E')
         unionAFN.Agregar_Transicion_dict(a.transiciones)
         unionAFN.Agregar_Transicion_dict(b.transiciones)
         return unionAFN
 
   
     def concatenar(a, b):   
+        print("concatenar")
         [a, sec] = a.Construir_Por_Num(1)
         [b, sec2] = b.Construir_Por_Num(sec)
         estado1 = 1
@@ -460,50 +479,51 @@ class Exp_AFNVS2:
         concatenarAFN = AFN_ESTADO(a.simbolo.union(b.simbolo))
         concatenarAFN.Marcar_Inicio(estado1)
         concatenarAFN.Agregar_Final(estado2)
-        concatenarAFN.Agregar_Transicion(a.estado_final[0], b.init_estado, epsilon)
+        concatenarAFN.Agregar_Transicion(a.estado_final[0], b.init_estado, 'E')
         concatenarAFN.Agregar_Transicion_dict(a.transiciones)
         concatenarAFN.Agregar_Transicion_dict(b.transiciones)
         return concatenarAFN
 
   
     def variable_kleene(a):  
+        print("kleene")
         [a, sec] = a.Construir_Por_Num(2)
         estado1 = 1
         estado2 = sec
         Kleene = AFN_ESTADO(a.simbolo)
         Kleene.Marcar_Inicio(estado1)
         Kleene.Agregar_Final(estado2)
-        Kleene.Agregar_Transicion(Kleene.init_estado, a.init_estado, epsilon)
-        Kleene.Agregar_Transicion(Kleene.init_estado, Kleene.estado_final[0], epsilon)
-        Kleene.Agregar_Transicion(a.estado_final[0], Kleene.estado_final[0], epsilon)
-        Kleene.Agregar_Transicion(a.estado_final[0], a.init_estado, epsilon)
+        Kleene.Agregar_Transicion(Kleene.init_estado, a.init_estado, 'E')
+        Kleene.Agregar_Transicion(Kleene.init_estado, Kleene.estado_final[0],'E')
+        Kleene.Agregar_Transicion(a.estado_final[0], Kleene.estado_final[0], 'E')
+        Kleene.Agregar_Transicion(a.estado_final[0], a.init_estado, 'E')
         Kleene.Agregar_Transicion_dict(a.transiciones)
         return Kleene
     
-    def cerradura_positiva(a):  
+    def cerradura_positiva(a): 
+        print("cerradura +") 
         [a, sec] = a.Construir_Por_Num(2)
         estado1 = 1
         estado2 = sec
         CerraduraPositiva = AFN_ESTADO(a.simbolo)
         CerraduraPositiva.Marcar_Inicio(estado1)
         CerraduraPositiva.Agregar_Final(estado2)
-        CerraduraPositiva.Agregar_Transicion(CerraduraPositiva.init_estado, a.init_estado , epsilon)
-        CerraduraPositiva.Agregar_Transicion(CerraduraPositiva.init_estado + 2 , CerraduraPositiva.estado_final[0] , epsilon)
-        #CerraduraPositiva.Agregar_Transicion(a.estado_final[0], CerraduraPositiva.estado_final[0], epsilon)
-        CerraduraPositiva.Agregar_Transicion(a.estado_final[0], a.init_estado, epsilon)
+        CerraduraPositiva.Agregar_Transicion(CerraduraPositiva.init_estado, a.init_estado , 'E')
+        CerraduraPositiva.Agregar_Transicion(CerraduraPositiva.init_estado + 2 , CerraduraPositiva.estado_final[0] , 'E')
+        CerraduraPositiva.Agregar_Transicion(a.estado_final[0], a.init_estado, 'E')
         CerraduraPositiva.Agregar_Transicion_dict(a.transiciones)
         return CerraduraPositiva
 
 
-    def ConstruirSecAFN(self):
+    def infixpost(self):
         caracter = ''
         exp1 = ''
         simbolo = set()
         for token in self.expreg:
-            if token in alphabet:
+            if token in alfabeto:
                 simbolo.add(token)
-            if token in alphabet or token == '(':
-                if exp1 != '·' and (exp1 in alphabet or exp1 in ['*', ')']):
+            if token in alfabeto or token == '(':
+                if exp1 != '·' and (exp1 in alfabeto or exp1 in ['*', ')']):
                     caracter += '·'
             caracter += token
             exp1 = token
@@ -511,7 +531,7 @@ class Exp_AFNVS2:
         caracter = ''
         final_array = []
         for token in self.expreg:
-            if token in alphabet:
+            if token in alfabeto:
                 caracter += token
             elif token == '(':
                 final_array.append(token)
@@ -521,7 +541,7 @@ class Exp_AFNVS2:
                     final_array.pop()
                 final_array.pop()    
             else:
-                while(len(final_array) and Exp_AFNVS2.tomar_prioridad(final_array[-1]) >= Exp_AFNVS2.tomar_prioridad(token)):
+                while(len(final_array) and ThompsonAFNLong.tomar_prioridad(final_array[-1]) >= ThompsonAFNLong.tomar_prioridad(token)):
                     caracter += final_array[-1]
                     final_array.pop()
                 final_array.append(token)
@@ -530,21 +550,21 @@ class Exp_AFNVS2:
         self.expreg = caracter
         self.automata = []
         for token in self.expreg:
-            if token in alphabet:
-                self.automata.append(Exp_AFNVS2.unico_caracter(token))
+            if token in alfabeto:
+                self.automata.append(ThompsonAFNLong.unico_caracter(token))
             elif token == '|':
                 b = self.automata.pop()
                 a = self.automata.pop()
-                self.automata.append(Exp_AFNVS2.union(a, b))
+                self.automata.append(ThompsonAFNLong.union(a, b))
             elif token == '·':
                 b = self.automata.pop()
                 a = self.automata.pop()
-                self.automata.append(Exp_AFNVS2.concatenar(a, b))
+                self.automata.append(ThompsonAFNLong.concatenar(a, b))
             elif token == '*':
                 a = self.automata.pop()
-                self.automata.append(Exp_AFNVS2.variable_kleene(a))
+                self.automata.append(ThompsonAFNLong.variable_kleene(a))
             elif token == '+':
                 a = self.automata.pop()
-                self.automata.append(Exp_AFNVS2.cerradura_positiva(a))
+                self.automata.append(ThompsonAFNLong.cerradura_positiva(a))
         self.afn = self.automata.pop()
         self.afn.simbolo = simbolo
