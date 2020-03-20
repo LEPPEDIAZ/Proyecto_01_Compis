@@ -1,11 +1,19 @@
 from generadorAFN import *
 
-class Conversion_AFN_AFD:
+class Subconjunto:
     def __init__(self, afn):
         self.AFD_ConsFix(afn)
+    
+    def displayDFA(self):
+        self.afd.display('dfa.gv', 'deterministic_finite_state_machine')
+
+    def displayminDFA(self):
+        self.minafd.display('mindfa.gv', 'min_deterministic_finite_state_machine')
+
 
     def TransposicionFinalAFD(self):
         variable = self.afd.transformacion_vs2()
+        print("variable",variable)
         return variable
 
     def InEndAFD(self):
@@ -21,16 +29,25 @@ class Conversion_AFN_AFD:
         return variable
 
     def AFD_ConsFix(self, afn):   
-        todos_los_estados = dict()  
+        todos_los_estados = dict()
+        print(todos_los_estados)  
         closure = dict()   
+        print(closure)
         primer_estado = afn.ObtenerEpsilonCl(afn.init_estado)
+        print(primer_estado)
         closure[afn.init_estado] = primer_estado
+        print(closure[afn.init_estado])
         numero_subsets = 1
         afd = AFN_ESTADO(afn.simbolo)
+        print(afd)
         afd.Marcar_Inicio(numero_subsets)
+        print(afd.Marcar_Inicio(numero_subsets))
         estados = [[primer_estado, afd.init_estado]] 
+        print(estados)
         todos_los_estados[numero_subsets] = primer_estado
+        print(todos_los_estados)
         numero_subsets += 1
+        print(numero_subsets)
         while len(estados):
             [estado, index_de_origen] = estados.pop()
             for x in afd.simbolo:
@@ -39,6 +56,7 @@ class Conversion_AFN_AFD:
                     if i not in closure:
                         closure[i] = afn.ObtenerEpsilonCl(i)
                     movida = movida.union(closure[i])
+                    print(movida)
                 if len(movida):
                     if movida not in todos_los_estados.values():
                         estados.append([movida, numero_subsets])
@@ -46,7 +64,7 @@ class Conversion_AFN_AFD:
                         index_destino = numero_subsets
                         numero_subsets += 1
                     else:
-                        index_destino = [movida == j for j, u in todos_los_estados.items() if u ][0]
+                        index_destino = [ j for j, u in todos_los_estados.items() if u == movida][0]
                     afd.Agregar_Transicion(index_de_origen, index_destino, x)
             for caracter, estado in todos_los_estados.items():
                 if afn.estado_final[0] in estado:
@@ -127,7 +145,6 @@ class Conversion_AFN_AFD:
         else:
             retorno_de_numeros(estados, carac)
             self.minafd = self.afd.Cambio_de_estados_despues_de_Merge(interseccion, carac)
-  
-    
-                
+
+   
     

@@ -6,6 +6,14 @@ global array_last
 alfabeto = [chr(i) for i in range(ord('A'), ord('Z') + 1)] + \
     [chr(i) for i in range(ord('a'), ord('z') + 1)] + \
     [chr(i) for i in range(ord('0'), ord('9') + 1)]
+star = '*'
+line = '|'
+dot = '·'
+leftBracket, rightBracket = '(', ')'
+alphabet = [chr(i) for i in range(ord('A'), ord('Z') + 1)] + \
+    [chr(i) for i in range(ord('a'), ord('z') + 1)] + \
+    [chr(i) for i in range(ord('0'), ord('9') + 1)]
+epsilon = 'ε'
 
 
 def graficar_AFD(transformacion_final, inicial_final):
@@ -319,7 +327,7 @@ class AFN_ESTADO:
         arreglo_final2.append(arreglo)
         print(arreglo_final2)
         return arreglo_final2
-
+    
     def transformacion_vs2(self):
         arreglofinal = []
         for estado_anterior, nuevo_estados in self.transiciones.items():
