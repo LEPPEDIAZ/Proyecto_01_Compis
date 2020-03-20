@@ -14,6 +14,10 @@ if __name__ == '__main__':
 	print('First character : ', first_char)
 	if first_char in "()":
 		print("|------------Thompson--------------|")
+		if "?" in expresion_regular:
+			expresion_regular.replace("?", "|e")
+		if "ε" in expresion_regular:
+			expresion_regular.replace("ε", "@")
 		a = Thmp(expresion_regular)
 		sacar_variable =a.FunctionsNFA()
 		sacar_variable2 = a.InEnd()

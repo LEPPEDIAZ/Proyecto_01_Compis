@@ -3,12 +3,6 @@ from generadorAFN import *
 class Subconjunto:
     def __init__(self, afn):
         self.AFD_ConsFix(afn)
-    
-    def displayDFA(self):
-        self.afd.display('dfa.gv', 'deterministic_finite_state_machine')
-
-    def displayminDFA(self):
-        self.minafd.display('mindfa.gv', 'min_deterministic_finite_state_machine')
 
 
     def TransposicionFinalAFD(self):
