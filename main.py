@@ -3,7 +3,7 @@ import os
 from expresion_regular import *
 from generadorAFN import *
 from AFD_por_AFN import *
-from AFD import *
+
 
 if __name__ == '__main__':
 	print("Generador de AFN")

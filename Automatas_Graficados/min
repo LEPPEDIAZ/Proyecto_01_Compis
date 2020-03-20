@@ -1,8 +1,7 @@
 digraph finite_state_machine {
 	rankdir=LR size="8,5"
 	node [shape=doublecircle]
-	1
+	2
 	node [shape=circle]
-	1 -> 2 [label="0|e"]
-	2 -> 2 [label="0|e|1"]
+	1 -> 2 [label="b|a"]
 }
