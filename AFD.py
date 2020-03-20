@@ -54,6 +54,15 @@ class Conversion_AFN_AFD:
             self.afd = afd
 
     def minimizador(self): 
+        def retorno_de_numeros(estados, sets):
+            numero_subsets = 1
+            cambios = dict()
+            for i in estados:
+                if sets[i] not in cambios:
+                    cambios[sets[i]] = numero_subsets
+                    numero_subsets += 1
+                sets[i] = cambios[sets[i]]
+
         estados = list(self.afd.estados)
         estado_destino = dict(set())
         interseccion = dict()
@@ -116,16 +125,9 @@ class Conversion_AFN_AFD:
         if len(interseccion) == len(estados):
             self.minafd = self.afd
         else:
-            Conversion_AFN_AFD.retorno_de_numeros(estados, carac)
+            retorno_de_numeros(estados, carac)
             self.minafd = self.afd.Cambio_de_estados_despues_de_Merge(interseccion, carac)
   
-    def retorno_de_numeros(estados, sets):  
-        numero_subsets = 1
-        cambios = dict()
-        for i in estados:
-            if sets[i] not in cambios:
-                cambios[sets[i]] = numero_subsets
-                numero_subsets += 1
-            sets[i] = cambios[sets[i]]
+    
                 
     

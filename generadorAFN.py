@@ -415,10 +415,9 @@ class AFN_ESTADO:
         reconstruir.Marcar_Inicio(carac[self.init_estado])
         for i in self.estado_final:
             reconstruir.Agregar_Final(carac[i])
-    
         return reconstruir
 
-class ThompsonAFNLong:
+class Thmp:
 
     def __init__(self, expreg):
         self.expreg = expreg
@@ -541,7 +540,7 @@ class ThompsonAFNLong:
                     final_array.pop()
                 final_array.pop()    
             else:
-                while(len(final_array) and ThompsonAFNLong.tomar_prioridad(final_array[-1]) >= ThompsonAFNLong.tomar_prioridad(token)):
+                while(len(final_array) and Thmp.tomar_prioridad(final_array[-1]) >= Thmp.tomar_prioridad(token)):
                     caracter += final_array[-1]
                     final_array.pop()
                 final_array.append(token)
@@ -551,20 +550,20 @@ class ThompsonAFNLong:
         self.automata = []
         for token in self.expreg:
             if token in alfabeto:
-                self.automata.append(ThompsonAFNLong.unico_caracter(token))
+                self.automata.append(Thmp.unico_caracter(token))
             elif token == '|':
                 b = self.automata.pop()
                 a = self.automata.pop()
-                self.automata.append(ThompsonAFNLong.union(a, b))
+                self.automata.append(Thmp.union(a, b))
             elif token == '·':
                 b = self.automata.pop()
                 a = self.automata.pop()
-                self.automata.append(ThompsonAFNLong.concatenar(a, b))
+                self.automata.append(Thmp.concatenar(a, b))
             elif token == '*':
                 a = self.automata.pop()
-                self.automata.append(ThompsonAFNLong.variable_kleene(a))
+                self.automata.append(Thmp.variable_kleene(a))
             elif token == '+':
                 a = self.automata.pop()
-                self.automata.append(ThompsonAFNLong.cerradura_positiva(a))
+                self.automata.append(Thmp.cerradura_positiva(a))
         self.afn = self.automata.pop()
         self.afn.simbolo = simbolo
