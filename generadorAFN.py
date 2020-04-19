@@ -450,7 +450,7 @@ class Thmp:
 
     
     def unico_caracter(expresion):   
-        print(".")
+        print("UNICO CARACTER")
         estado1 = 1
         estado2 = 2
         estructura = AFN_ESTADO(set([expresion]))
@@ -559,6 +559,7 @@ class Thmp:
         for token in self.expreg:
             if token in alfabeto:
                 self.automata.append(Thmp.unico_caracter(token))
+                
             elif token == '|':
                 b = self.automata.pop()
                 a = self.automata.pop()

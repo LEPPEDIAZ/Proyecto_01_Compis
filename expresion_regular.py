@@ -193,6 +193,45 @@ class Thompson(object):
 		if (test == 1):
 			postfix = infix_a_postfix(una_instancia(self.infix))
 		print("postfix",postfix)
+		valor = postfix.split(".")
+		print(valor)
+		array2 = []
+		result = any(len(elem) == 2 for elem in valor)
+		print("CHECKEAR BOOLEANO", result)
+		if (result == True):
+                    print("ENTRO")
+                    for elem in valor:
+                        if (len(elem)==2 or elem=="|"):
+                            print(elem[0])
+                            array2.append(elem[0])
+                        if "*" in elem:
+                            print("SI SE ENCONTRO *")
+                            last_pos = array2[-1]
+                            array2.remove(array2[-1])
+                            print("ultima posicion",last_pos)
+                            array2.append("*")
+                            array2.append(last_pos)
+                            array2.append(".")
+                        if "+" in elem:
+                            print("SI SE ENCONTRO +")
+                            last_pos = array2[-1]
+                            array2.remove(array2[-1])
+                            print("ultima posicion",last_pos)
+                            array2.append("+")
+                            array2.append(last_pos)
+                            array2.append(".")
+                            
+                    #pa.s.c.a.l.i.t.o.be.b.e.|
+                    #postfix = "pb|"
+                    print("test02",array2)
+                    resultado = "".join(str(x) for x in array2)
+                    postfix = resultado
+                    print("CAMBIADO", postfix)
+		#postfix = resultado
+
+        #print("test2",postfix)
+        #print(postfix.replace('.', ''))
+        
 		for s in postfix:
 			print(s)
 			if s == '*':

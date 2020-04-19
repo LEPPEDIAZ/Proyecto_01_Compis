@@ -3,5 +3,8 @@ digraph finite_state_machine {
 	node [shape=doublecircle]
 	2
 	node [shape=circle]
-	1 -> 2 [label="b|a"]
+	1 -> 2 [label=b]
+	2 -> 3 [label=e]
+	3 -> 4 [label=b]
+	4 -> 1 [label=e]
 }
