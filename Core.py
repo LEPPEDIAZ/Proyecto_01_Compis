@@ -1,5 +1,66 @@
 from OriginalScanner import *
 
+
+class Tabla_de_Simbolos( object ):
+   terminales     = [ ]    
+   pragmas       = [ ]
+   no_terminales  = [ ]
+   original_token   = 0   # original a|b
+   token_class   = 1   # digit{digit}
+   token_operador      = 2   # operadores while if try
+   clase_literales_tokens = 3   # letter {letter} 
+   def __init__( self, typ, nombre, linea ):
+      assert isinstance( typ, int )
+      assert isinstance( nombre, (str,unicode) )
+      assert isinstance( linea, int )
+      self.n             = 0    
+      self.typ           = 0      
+      self.nombre          = 0     
+      self.graph         = None    
+      self.tipo_token     = 0       
+      self.eliminar     = False   
+      self.primero_listo    = False  
+      self.primero         = None   
+      self.follow        = None    
+      self.nts           = None    
+      self.linea          = 0      
+      self.posicion_atributo       = None    
+      self.posicion_semantica        = None                           
+      self.tipo_output       = ''     
+      self.tipo_atributo        = None   
+      self.symnombre       = None   
+      if len(nombre) == 2 and nombre[0] == '"':
+         nombre = '???'
+      self.typ = typ
+      self.nombre = nombre
+      self.linea = linea
+
+      #if typ == Node.t:
+      #   self.n = len(Symbol.terminales)
+      #   Symbol.terminales.append( self )
+      #elif typ == Node.pr:
+      #   Symbol.pragmas.append( self )
+      #elif typ == Node.nt:
+      #   self.n = len(Symbol.no_terminales)
+      #   Symbol.no_terminales.append( self )
+
+   @staticmethod
+   def Buscar( nombre ):
+      assert isinstance( nombre, ( str, unicode ) )
+
+      for s in Symbol.terminales:
+         if s.nombre == nombre:
+            return s
+
+      for s in Symbol.no_terminales:
+         if s.nombre == nombre:
+            return s
+
+      return None
+
+   def comparar( self, x ):
+      assert isinstance( x, Symbol )
+      return self.nombre.__cmp__( x.nombre )
 archivo_seleccionado = open("seleccionar_archivo.txt", "r+")
 archivo_seleccionado = archivo_seleccionado.read()
 archivo_para_scanner = open(archivo_seleccionado, 'r')
