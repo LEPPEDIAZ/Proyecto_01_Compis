@@ -1,0 +1,38 @@
+ANALIZADOR LEXICO
+_____________________________________________
+_____________________________________________
+CORTE DE CARACTERES
+__________________________________
+letter"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+digit"0123456789"
+hexdigitdigit"ABCDEF"
+----------------------------------
+CONDICIONALES
+__________________________________
+if"if"
+while"while"
+----------------------------------
+TIPOS
+__________________________________
+idletter{letter}
+number  digit{digit}
+hexnumber  hexdigit{hexdigit}"(H)"
+----------------------------------
+NOMBRE
+__________________________________
+id
+number 
+hexnumber 
+----------------------------------
+CONTENIDO
+__________________________________
+abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ* 
+0123456789 0123456789* 
+dAdBdCdDdEdFiAiBiCiDiEiFgAgBgCgDgEgFiAiBiCiDiEiFtAtBtCtDtEtF dAdBdCdDdEdFiAiBiCiDiEiFgAgBgCgDgEgFiAiBiCiDiEiFtAtBtCtDtEtF* (H)
+----------------------------------
+EXCEPCION
+__________________________________
+[]
+[]
+[]
+----------------------------------

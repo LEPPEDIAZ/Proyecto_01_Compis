@@ -1,3 +1,5 @@
+
+import os
 import sys
 import os
 from expresion_regular import *
@@ -7,6 +9,11 @@ from AFD_por_AFN import *
 
 if __name__ == '__main__':
 	print("Generador de AFN")
+	ver_archivo = input("Ingrese el nombre del archivo de COCO/R que quiere observar: ")
+	keypass_01 = open("seleccionar_archivo.txt", "w")
+	keypass_01.write(ver_archivo)
+	keypass_01.close()
+	os.system("python Core.py")
 	expresion_regular = input("Ingrese la expresion regular: ")
 	expresion_regular = expresion_regular.replace('ε', 'e')
 	print("-------------------------------------------------------")

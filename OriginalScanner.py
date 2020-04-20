@@ -1,5 +1,15 @@
 #!inicio
 import sys
+from copy import deepcopy
+with open("Textos_Generados/analizador_lexico.txt", "w") as txt_file:
+         txt_file.write("ANALIZADOR LEXICO\n")
+         txt_file.write("_____________________________________________\n")
+         txt_file.write("_____________________________________________\n")
+class Nodos():
+    def __init__(self):
+        self.nombre = ''
+        self.contenido = []
+        self.excepciones = [] 
 
 class Token( object ):
    def __init__( self ):
@@ -8,8 +18,50 @@ class Token( object ):
       self.columna_token    = 0    
       self.token_linea   = 0    
       self.token_valor    = u''   
-      self.linked_list   = None  
+      self.linked_list   = None 
+      self.caracteres = []
+      self.palabras_clave = {}
+      self.tokens = []
+      self.producciones = []
+      self.tokens_excepto = []
+   def crear_nodo(self):
+        marcar_nodo = Nodos()
+        return marcar_nodo
 
+   def marcar_nodos(self, definir_lista):
+      nombreend = []
+      contenidoend = []
+      excepcionesend = [] 
+      if definir_lista != self.palabras_clave:
+         for index_nodo in definir_lista:
+            lindo = ("----------------------------")
+            nombrefinal = (str(index_nodo.nombre))
+            nombreend.append(nombrefinal)
+            contenidofinal = (str(index_nodo.contenido) )
+            contenidoend.append(contenidofinal)
+            excepcionesfinal = (str(index_nodo.excepciones))
+            excepcionesend.append(excepcionesfinal)
+            lindo2 = ("----------------------------\n")
+            #keypass_01.close()
+      else:
+         print(definir_lista)
+      print("PROBAR ARREGLO")
+      with open("Textos_Generados/analizador_lexico.txt", "a+") as txt_file:
+         txt_file.write("NOMBRE\n")
+         txt_file.write("__________________________________\n")
+         for line in nombreend:
+            txt_file.write("".join(line) + "\n")
+         txt_file.write("----------------------------------\n")
+         txt_file.write("CONTENIDO\n")
+         txt_file.write("__________________________________\n")
+         for line in contenidoend:
+            txt_file.write("".join(line) + "\n") 
+         txt_file.write("----------------------------------\n")
+         txt_file.write("EXCEPCION\n")
+         txt_file.write("__________________________________\n")
+         for line in excepcionesend:
+            txt_file.write("".join(line) + "\n") 
+         txt_file.write("----------------------------------\n")
 
 class Posicion( object ):    
    def __init__( self, buf, inicio, len, col ):
@@ -48,7 +100,7 @@ class Buffer( object ):
       self.posicion_token += numero_bytes
       return result
 
-   def Revision( self ):
+   def Peak( self ):
       if self.posicion_token < self.largo_buffer:
          return self.buf[self.posicion_token]
       else:
@@ -112,7 +164,7 @@ class Escaner(object):
       nodo.next = nodo
       nodo.val  = u'EOF'
       self.t  = self.corriente_de_tokens    
-      self.RevisionDeTokenActual = self.corriente_de_tokens     
+      self.PeakDeTokenActual = self.corriente_de_tokens     
 
    def Siguiente_Caracter( self ):
       if self.AntiguoEols > 0:
@@ -122,7 +174,7 @@ class Escaner(object):
          self.ch = self.buffer.Read( )
          self.posicion_token += 1
       
-         if (self.ch == u'\r') and (self.buffer.Revision() != u'\n'):
+         if (self.ch == u'\r') and (self.buffer.Peak() != u'\n'):
             self.ch = Escaner.EOL
          if self.ch == Escaner.EOL:
             self.token_linea += 1
@@ -164,17 +216,66 @@ class Escaner(object):
 
    def Escanear( self ):
       self.t = self.t.next
-      self.RevisionDeTokenActual = self.t.next
+      self.PeakDeTokenActual = self.t.next
       return self.t
 
-   def Revision( self ):
-      self.RevisionDeTokenActual = self.RevisionDeTokenActual.next
-      while self.RevisionDeTokenActual.kind > self.maxT:
-         self.RevisionDeTokenActual = self.RevisionDeTokenActual.next
+   def Peak( self ):
+      self.PeakDeTokenActual = self.PeakDeTokenActual.next
+      while self.PeakDeTokenActual.kind > self.maxT:
+         self.PeakDeTokenActual = self.PeakDeTokenActual.next
 
-      return self.RevisionDeTokenActual
+      return self.PeakDeTokenActual
 
    def reiniciar( self ):
-      self.RevisionDeTokenActual = self.t
+      self.PeakDeTokenActual = self.t
 
 #!final
+tokenizar = Token()
+
+def procesar_tokens(lista_de_tokens):
+        for sbstring in lista_de_tokens:
+            lista_de_tokens[lista_de_tokens.index(sbstring)] = sbstring.split('=')
+        for sblista in lista_de_tokens:
+                for sbstring in sblista:
+                    if 'EXCEPT' in sbstring:
+                        proceso_inmediato = deepcopy(sbstring)
+                        proceso_inmediato = proceso_inmediato.split()
+                        tokenizar.tokens_excepto.append([sblista[0], proceso_inmediato[proceso_inmediato.index('EXCEPT')+1].lower()])
+                        destruir = deepcopy(proceso_inmediato)
+                        destruir = destruir[:destruir.index('EXCEPT')]
+                        lista_de_tokens[lista_de_tokens.index(sblista)] = [lista_de_tokens[lista_de_tokens.index(sblista)][0], destruir[0]]
+        return lista_de_tokens
+
+def quitar_caracteres_inecesarios(lista):
+    lista = [str.rstrip(x, '\n') for x in lista]
+    lista = [str.rstrip(x, '.') for x in lista]
+
+    return lista
+
+def process_palabras_clave(llave):
+    for sbstring in llave:
+        llave[llave.index(sbstring)] = sbstring.split('=')
+    return llave
+
+def cortar_lista(lista):
+    lista = [i.split('=') for i in lista]
+    for sblista in lista:
+        for indx, texto in enumerate(sblista):
+            if '+' in list(texto):
+                cortar = list(texto)
+                cortar = [cortar[:cortar.index('+')], cortar[cortar.index('+') + 1:]]
+                arreglo1 = []
+                for i in range(len(cortar)):
+                    primer_string = ""
+                    cortar[i] = [i for i in cortar[i] if i != ' ']
+                    cortar[i] = primer_string.join(cortar[i])
+                    arreglo1.append(cortar[i])
+                arreglo1.insert(0, sblista[0])
+                lista[lista.index(sblista)] = arreglo1
+            if ' ' in list(texto):
+                segundo_string = ""
+                espacio_vacio = list(texto)
+                espacio_vacio = [i for i in espacio_vacio if i != ' ']
+                espacio_vacio = segundo_string.join(espacio_vacio)
+                sblista[indx] = espacio_vacio
+    return lista
