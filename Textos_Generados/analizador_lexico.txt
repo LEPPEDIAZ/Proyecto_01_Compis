@@ -12,7 +12,7 @@ __________________________________
 if"if"
 while"while"
 ----------------------------------
-TIPOS
+TOKENS
 __________________________________
 idletter{letter}
 number  digit{digit}

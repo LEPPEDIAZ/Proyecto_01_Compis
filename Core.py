@@ -1,5 +1,9 @@
 from OriginalScanner import *
-
+import sys
+import os
+from expresion_regular import *
+from generadorAFN import *
+from AFD_por_AFN import *
 
 class Tabla_de_Simbolos( object ):
    terminales     = [ ]    
@@ -91,7 +95,7 @@ with open("Textos_Generados/analizador_lexico.txt", "a+") as txt_file:
     for line in corte_de_palabras_clave:
         txt_file.write("".join(line) + "\n")
     txt_file.write("----------------------------------\n")
-    txt_file.write("TIPOS\n")
+    txt_file.write("TOKENS\n")
     txt_file.write("__________________________________\n")
     for line in corte_de_tokens:
         txt_file.write("".join(line) + "\n") 
@@ -175,6 +179,130 @@ for indice, sblista in enumerate(tokenizar.tokens_excepto):
         if nod.nombre == sblista[0]:
             nod.excepciones = sblista[1:]
 
+archivo_seleccionado = open("OriginalScanner.py", "r+")
+archivo_seleccionado = archivo_seleccionado.read()
+print("Inicio de Modificacion del Scanner")
+print(archivo_seleccionado)
+keypass_01 = open("NewScanner.py", "w")
+keypass_01.write(archivo_seleccionado)
+keypass_01.close()
+'''
+    def AbrirGenerador(backUp):
+      assert isinstance(backUp,bool)
+      try:
+         fn = FILE.srcDir + "Scanner.py"   # String
+         if backUp and os.path.exists(fn):
+            if os.path.exists(fn + '.old'):
+               os.remove( fn + '.old' )
+            os.rename( fn, fn + '.old' )
+         FILE.gen = file( fn, 'w' )
+      except:
+         raise RuntimeError("-- Compiler Error: Cannot generate scanner file.")
+
+   @staticmethod
+   def EscribirScanner( AllNombres):
+      assert isinstance(AllNombres,bool)
+      startTab = [ 0 for i in xrange(CharClass.charSetSize) ]
+      fr = FILE.srcDir + "OriginalScanner.py"   # String
+      if not os.path.exists( fr ):
+         if Tab.frameDir is not None:
+            fr = os.path.join( Tab.frameDir.strip(), "OriginalScanner.py" )
+         if not os.path.exists(fr):
+            raise RuntimeError("-- Compiler Error: Cannot find OriginalScanner.py")
+      try:
+         FILE.fram = file( fr, 'r' )
+      except:
+         raise RuntimeError("-- Compiler Error: Cannot open OriginalScanner.py.")
+      FILE.AbrirGenerador(True)
+      if FILE.dirtyFILE:
+         FILE.MakeDeterministic( )
+      FILE.FillStartTab(startTab)
+      FILE.CopyFramePart( "#!inicio" )
+      if not FILE.srcName.lower( ).endswith( 'coco.atg' ):
+         FILE.gen.close()
+         FILE.AbrirGenerador(False)
+
+      FILE.CopyFramePart("#!declaraciones")
+      FILE.gen.write("   charSetSize = " + str(CharClass.charSetSize) + '\n')
+      FILE.gen.write("   maxT = "        + str(len(Symbol.terminals) - 1) + '\n')
+      FILE.gen.write("   noSym = "       + str(Tab.noSym.n) + '\n')
+      if AllNombres:
+         FILE.gen.write("   # terminals\n")
+         for sym in Symbol.terminals:
+            FILE.gen.write("   " + sym.symName + " = " + str(sym.n) + '\n')
+         FILE.gen.write("   # pragmas\n")
+         for sym in Symbol.pragmas:
+            FILE.gen.write("   " + sym.symName + " = " + str(sym.n) + '\n')
+         FILE.gen.write( '\n' )
+      FILE.gen.write("   start = [\n")
+      for i in xrange(0,CharClass.charSetSize / 16):
+         FILE.gen.write("   ")
+         for j in xrange(0,16):
+            FILE.gen.write(Trace.formatString(str(startTab[16*i+j]), 3))
+            FILE.gen.write(",")
+         FILE.gen.write( '\n' )
+      FILE.gen.write("     -1]\n")
+
+      if FILE.ignoreCase:
+         FILE.gen.write("   valCh = u''       # current input character (for token.val)")
+
+      FILE.CopyFramePart("#!inicializacion")
+      j = 0
+      for i in Tab.ignored:
+         FILE.gen.write("      self.ignore.add(" + str(i) + ") \n")
+
+      FILE.CopyFramePart("#!nextcharcas")
+      if FILE.ignoreCase:
+         FILE.gen.write("      valCh = self.ch\n")
+         FILE.gen.write("      if self.ch != Buffer.EOF:\n")
+         FILE.gen.write("         self.ch = self.ch.lower()\n");
+
+      FILE.CopyFramePart("#!comentarios")
+      com = Comment.first   # Comment
+      i = 0
+      while com is not None:
+         FILE.GenComment(com, i)
+         com = com.next
+         i += 1
+
+      FILE.CopyFramePart("#!inicio_literales")
+      FILE.GenLiterals()
+
+      FILE.CopyFramePart("#!scan01")
+      if Comment.first!=None:
+         FILE.gen.write("if (")
+         com = Comment.first
+         i = 0
+         while com is not None:
+            FILE.gen.write(FILE.ChCond(com.start[0]))
+            FILE.gen.write(" and self.Comment" + str(i) + "()")
+            if com.next is not None:
+               FILE.gen.write(" or ")
+            com = com.next
+            i += 1
+         FILE.gen.write("):\n")
+         FILE.gen.write("         return self.NextToken()\n")
+      if FILE.hasCtxMoves:
+         FILE.gen.write('\n')
+         FILE.gen.write("      apx = 0")
+
+      FILE.CopyFramePart("#!scan02")
+      if FILE.ignoreCase:
+         FILE.gen.write("buf += unicode(self.ch)\n")
+         FILE.gen.write("      self.NextCh()\n")
+      else:
+         FILE.gen.write("buf += unicode(self.ch)\n")
+         FILE.gen.write("      self.NextCh()\n")
+
+      FILE.CopyFramePart("#!scan03")
+      state = FILE.firstState.next
+      while state is not None:
+         FILE.gen.write("         elif state == ")
+         FILE.WriteState(state)
+         state = state.next
+      FILE.CopyFramePart("#!final")
+      FILE.gen.close()
+'''
 print("+ analizador lexico generado")
 
 
