@@ -4,7 +4,7 @@ import os
 from expresion_regular import *
 from generadorAFN import *
 from AFD_por_AFN import *
-
+#tokenizar = Token()
 class Tabla_de_Simbolos( object ):
    terminales     = [ ]    
    pragmas       = [ ]
@@ -74,6 +74,7 @@ index_caracteres = lineas.index("CHARACTERS\n") + 1
 index_palabras_clave = lineas.index("KEYWORDS\n")
 index_tokens = lineas.index("TOKENS\n")
 index_producciones = lineas.index("PRODUCTIONS\n")
+
 corte_caracteres = lineas[index_caracteres:index_palabras_clave]
 corte_caracteres = quitar_caracteres_inecesarios(corte_caracteres)
 corte_de_palabras_clave = lineas[index_palabras_clave+1:index_tokens]
@@ -83,23 +84,37 @@ corte_de_tokens = quitar_caracteres_inecesarios(corte_de_tokens)
 corte_caracteres = cortar_lista(corte_caracteres)
 corte_de_palabras_clave = process_palabras_clave(corte_de_palabras_clave)
 corte_de_tokens = procesar_tokens(corte_de_tokens)
+corte_caracteres = [x for x in corte_caracteres if x!= ['']]
+corte_de_palabras_clave = [x for x in corte_de_palabras_clave if x!= ['']]
+corte_de_tokens = [x for x in corte_de_tokens if x!= ['']]
+
+for i, j in enumerate(corte_caracteres):
+   for k, l in enumerate(j):
+      if '+' in l:
+         rehacer = deepcopy(l.split('+'))
+         corte_caracteres[i][k] = rehacer[0]
+         corte_caracteres[i].append(rehacer[1])
 
 with open("Textos_Generados/analizador_lexico.txt", "a+") as txt_file:
     txt_file.write("CORTE DE CARACTERES\n")
     txt_file.write("__________________________________\n")
+    
     for line in corte_caracteres:
         txt_file.write("".join(line) + "\n")
     txt_file.write("----------------------------------\n")
     txt_file.write("CONDICIONALES\n")
     txt_file.write("__________________________________\n")
+    
     for line in corte_de_palabras_clave:
         txt_file.write("".join(line) + "\n")
+    
     txt_file.write("----------------------------------\n")
     txt_file.write("TOKENS\n")
     txt_file.write("__________________________________\n")
     for line in corte_de_tokens:
         txt_file.write("".join(line) + "\n") 
     txt_file.write("----------------------------------\n")
+
 
 
 for elem in range(len(corte_caracteres)):
@@ -114,6 +129,11 @@ for elem in range(len(corte_caracteres)):
             todas_las_listas = [primera_lista+segunda_lista for primera_lista in corte_caracteres[elem][elem2] for segunda_lista in corte_caracteres[elem][elem2+1]]
         marcar_nodo.contenido = deepcopy(todas_las_listas)
         tokenizar.caracteres.append(marcar_nodo)
+    elif len(corte_caracteres[i]) >= 4:
+       marcar_nodo = tokenizar.crear_nodo()
+       marcar_nodo.data = corte_caracteres[i][0]
+       marcar_nodo.contenido = [''.join(corte_caracteres[i][1:])]
+       tokenizar.caracteres.append(marcar_nodo)
 
 for i in range(len(corte_caracteres)):
     if len(corte_caracteres[i]) == 2:
@@ -127,6 +147,7 @@ for i in range(len(corte_caracteres)):
                 if index_nodo.nombre == corte_caracteres[i][j]:
                     corte_caracteres[i][j] = index_nodo.contenido[0]
 
+
 for sblista in corte_de_palabras_clave:
     tokenizar.palabras_clave[corte_de_palabras_clave[corte_de_palabras_clave.index(sblista)][0]] = corte_de_palabras_clave[corte_de_palabras_clave.index(sblista)][1]
     
@@ -134,7 +155,7 @@ for index_nodo in tokenizar.caracteres:
     if len(index_nodo.contenido) ==1:
         dobles = list(index_nodo.contenido[0])
         for elemento in dobles:
-            if elemento == '"':
+            if elemento == '"' or elemento =='.':
                 dobles.remove(elemento)
             if ord(elemento) == 34:
                 dobles.remove(elemento)
@@ -154,8 +175,14 @@ for indice, sblista in enumerate(corte_de_tokens):
     marcar_nodo.nombre = sblista[0]
     for indice2, sbstring in enumerate(sblista):
         if '}' in sbstring:
-            again = sbstring[sbstring.index('{')+1:sbstring.index('}')]
-            sbstring = again + ' ' + again + '* '  + sbstring[sbstring.index('}')+1:]
+            again = deepcopy(sbstring[sbstring.index('{')+1:sbstring.index('}')])
+            sbstring = sbstring[:sbstring.index('{')] + ' ' + again + '* '  + sbstring[sbstring.index('}')+1:]
+            sbstring = sbstring.replace('{', '')
+            sbstring = sbstring.replace('}', '*')
+            sbstring = sbstring.replace('"', '')
+            sbstring = sbstring.replace('.', '')
+            #sbstring = sbstring[:sbstring.index('{')] + '' + again + '*' + sbstring[sbstring.index('}')+1]
+            #sbstring = again + ' ' + again + '* '  + sbstring[sbstring.index('}')+1:]
     marcar_nodo.contenido = sbstring
     tokenizar.tokens.append(marcar_nodo)
 
@@ -167,22 +194,31 @@ for primer_token in tokenizar.tokens:
             if segundo_token.nombre == por_cada_palabra:
                 if len(segundo_token.contenido) == 1:
                     primer_token.contenido = primer_token.contenido.replace(segundo_token.nombre, segundo_token.contenido[0])
+                #elif segundo_token.data in por_cada_palabra:
+                #   if por_cada_palabra[por_cada_palabra.index(segundo_token.data)-1] == '|':
+                #      primer_token.contenido = primer_token.contenido.replace(segundo_token.data, segundo_token.contenido[0])
                 else:
                     crear = ' '.join([str(elem) for elem in segundo_token.contenido])
                     crear = crear.replace(' ', '')
                     primer_token.contenido = primer_token.contenido.replace(segundo_token.nombre, crear)
                     primer_token.contenido = primer_token.contenido.replace('"', '')
-tokenizar.marcar_nodos(tokenizar.tokens)
+            elif segundo_token.nombre in por_cada_palabra:
+               if por_cada_palabra[por_cada_palabra.index(segundo_token.nombre)-1] == '|':
+                  primer_token.contenido = primer_token.contenido.replace(segundo_token.nombre, segundo_token.contenido[0])
+
 
 for indice, sblista in enumerate(tokenizar.tokens_excepto):
     for indice2, nod in enumerate(tokenizar.tokens):
         if nod.nombre == sblista[0]:
             nod.excepciones = sblista[1:]
 
+tokenizar.marcar_nodos(tokenizar.tokens)
+primera_prueba = tokenizar.tokens[0].contenido.strip()
+print("PRUEBA", primera_prueba.split(' '))
 archivo_seleccionado = open("OriginalScanner.py", "r+")
 archivo_seleccionado = archivo_seleccionado.read()
 print("Inicio de Modificacion del Scanner")
-print(archivo_seleccionado)
+#print(archivo_seleccionado)
 keypass_01 = open("NewScanner.py", "w")
 keypass_01.write(archivo_seleccionado)
 keypass_01.close()
