@@ -3,37 +3,35 @@ _____________________________________________
 _____________________________________________
 CORTE DE CARACTERES
 __________________________________
+letter"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".
 digit"0123456789"
-tab\t
-eol\n
-blancoeol\rtab
+tab'\t'
+eol'\n'
 ----------------------------------
 CONDICIONALES
 __________________________________
-while "while"
+while  "while"
 do  "do"
+if  "if"
+switch  "switch"
 ----------------------------------
 TOKENS
 __________________________________
+ident letter{letter|digit}
 number  digit{digit}
-decnumber  digit{digit}"."digit{digit}
-white  blanco{blanco}
 ----------------------------------
 NOMBRE
 __________________________________
+ident 
 number 
-decnumber 
-white 
 ----------------------------------
 CONTENIDO
 __________________________________
+ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz|0123456789* 
  0123456789 0123456789* 
- 0123456789 0123456789* 01234567890123456789*
- blanco blanco* 
 ----------------------------------
 EXCEPCION
 __________________________________
-[]
-[]
+['keywords']
 []
 ----------------------------------

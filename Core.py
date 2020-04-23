@@ -113,6 +113,8 @@ with open("Textos_Generados/analizador_lexico.txt", "a+") as txt_file:
     txt_file.write("__________________________________\n")
     for line in corte_de_tokens:
         txt_file.write("".join(line) + "\n") 
+        final = "".join(line)
+        print("token", final)
     txt_file.write("----------------------------------\n")
 
 
@@ -175,10 +177,12 @@ for indice, sblista in enumerate(corte_de_tokens):
     marcar_nodo.nombre = sblista[0]
     for indice2, sbstring in enumerate(sblista):
         if '}' in sbstring:
+            print("sbstring",sbstring)
             again = deepcopy(sbstring[sbstring.index('{')+1:sbstring.index('}')])
+            print("again", again)
             sbstring = sbstring[:sbstring.index('{')] + ' ' + again + '* '  + sbstring[sbstring.index('}')+1:]
-            sbstring = sbstring.replace('{', '')
-            sbstring = sbstring.replace('}', '*')
+            sbstring = sbstring.replace('{', '(')
+            sbstring = sbstring.replace('}', ')*')
             sbstring = sbstring.replace('"', '')
             sbstring = sbstring.replace('.', '')
             #sbstring = sbstring[:sbstring.index('{')] + '' + again + '*' + sbstring[sbstring.index('}')+1]
@@ -211,10 +215,21 @@ for indice, sblista in enumerate(tokenizar.tokens_excepto):
     for indice2, nod in enumerate(tokenizar.tokens):
         if nod.nombre == sblista[0]:
             nod.excepciones = sblista[1:]
-
+      
+cantidad = len(tokenizar.tokens)
+print("Cantidad de Tokens:", cantidad)
+cantidad = cantidad
 tokenizar.marcar_nodos(tokenizar.tokens)
-primera_prueba = tokenizar.tokens[0].contenido.strip()
-print("PRUEBA", primera_prueba.split(' '))
+for i in range(cantidad):
+    print("i", i )
+    valor = tokenizar.tokens[i].contenido.strip()
+    i = i +1
+    valor = valor.replace(' ', '(')
+    valor = valor.replace("*", ")*")
+    print("VALOR", valor)
+
+
+
 archivo_seleccionado = open("OriginalScanner.py", "r+")
 archivo_seleccionado = archivo_seleccionado.read()
 print("Inicio de Modificacion del Scanner")
