@@ -1,6 +1,6 @@
 AFD
-ESTADOS: [1, '1', 2]
-SIMBOLOS: [2]
+ESTADOS: [1, 'E|H|g|c|h|V|L|T|W|y|K|R|d|U|Y|N|x|n|i|p|e|G|O|X|k|J|P|A|Q|S|s|a|I|l|C|r|o|B|u|b|D|q|t|z|F|M|f|m|j', 'v', 'Z', 2, 'w', 'E', 3, 4, 'a', 5, 6]
+SIMBOLOS: [1, 2, 4, 5, 3, 6]
 INICIO: ['1']
-ACEPTACION: ['2']
-TRANSICION: [[1, '1', 2], [2, '1', 2]]
+ACEPTACION: ['4']
+TRANSICION: [[1, 'E|H|g|c|h|V|L|T|W|y|K|R|d|U|Y|N|x|n|i|p|e|G|O|X|k|J|P|A|Q|S|s|a|I|l|C|r|o|B|u|b|D|q|t|z|F|M|f|m|j', 1], [1, 'v', 2], [1, 'Z', 4], [1, 'Z', 5], [2, 'w', 1], [2, 'E', 3], [3, 'w', 1], [4, 'E', 5], [4, 'a', 1], [5, 'E', 6], [5, 'a', 1], [6, 'a', 1]]

@@ -1,8 +1,18 @@
 digraph finite_state_machine {
 	rankdir=LR size="8,5"
 	node [shape=doublecircle]
-	2
+	4
 	node [shape=circle]
-	1 -> 2 [label=1]
-	2 -> 2 [label=1]
+	1 -> 1 [label="E|H|g|c|h|V|L|T|W|y|K|R|d|U|Y|N|x|n|i|p|e|G|O|X|k|J|P|A|Q|S|s|a|I|l|C|r|o|B|u|b|D|q|t|z|F|M|f|m|j"]
+	1 -> 2 [label=v]
+	1 -> 4 [label=Z]
+	1 -> 5 [label=Z]
+	2 -> 1 [label=w]
+	2 -> 3 [label=E]
+	3 -> 1 [label=w]
+	4 -> 5 [label=E]
+	4 -> 1 [label=a]
+	5 -> 6 [label=E]
+	5 -> 1 [label=a]
+	6 -> 1 [label=a]
 }

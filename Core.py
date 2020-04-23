@@ -226,8 +226,37 @@ for i in range(cantidad):
     i = i +1
     valor = valor.replace(' ', '(')
     valor = valor.replace("*", ")*")
+    valor = valor.replace('0123456789', '(1|1)')
+    valor = valor.replace('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', '(a|b)')
     print("VALOR", valor)
-
+    expresion_regular = valor
+    print("QUE ENTRO", expresion_regular)
+    
+    if "?" in expresion_regular:
+       expresion_regular.replace("?", "|e")
+    if "ε" in expresion_regular:
+       expresion_regular.replace("ε", "@")
+    a = Thmp(expresion_regular)
+    sacar_variable =a.FunctionsNFA()
+    sacar_variable2 = a.InEnd()
+    graficar_AFNVS2(sacar_variable,sacar_variable2)
+    generacion_de_archivo_AFN(sacar_variable,sacar_variable2)
+    print("|------------Subconjuntos--------------|")
+    b = Subconjunto(a.afn)
+    sacar_variable =b.TransposicionFinalAFD()
+    sacar_variable2 = b.InEndAFD()
+    graficar_AFDVS2(sacar_variable,sacar_variable2)
+    generacion_de_archivo_afd_test(sacar_variable,sacar_variable2)
+    print("|------------MINIMIZACION--------------|")
+    b.minimizador()
+    sacar_variable =b.TransposicionFinalMIN()
+    sacar_variable2 = b.InEndMIN()
+    graficar_MIN(sacar_variable,sacar_variable2)
+    generacion_de_archivo_min(sacar_variable,sacar_variable2)
+    keypass = open("expresion_regular.txt", "w")
+    keypass.write(expresion_regular)
+    keypass.close()
+    
 
 
 archivo_seleccionado = open("OriginalScanner.py", "r+")

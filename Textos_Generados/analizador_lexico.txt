@@ -3,35 +3,36 @@ _____________________________________________
 _____________________________________________
 CORTE DE CARACTERES
 __________________________________
-letter"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".
+letter"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 digit"0123456789"
-tab'\t'
-eol'\n'
+hexdigitdigit"ABCDEF"
 ----------------------------------
 CONDICIONALES
 __________________________________
-while  "while"
-do  "do"
-if  "if"
-switch  "switch"
+if"if"
+while"while"
 ----------------------------------
 TOKENS
 __________________________________
-ident letter{letter|digit}
+idletter{letter}
 number  digit{digit}
+hexnumber  hexdigit{hexdigit}"(H)"
 ----------------------------------
 NOMBRE
 __________________________________
-ident 
+id
 number 
+hexnumber 
 ----------------------------------
 CONTENIDO
 __________________________________
-ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz|0123456789* 
+abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ* 
  0123456789 0123456789* 
+ dAdBdCdDdEdFiAiBiCiDiEiFgAgBgCgDgEgFiAiBiCiDiEiFtAtBtCtDtEtF dAdBdCdDdEdFiAiBiCiDiEiFgAgBgCgDgEgFiAiBiCiDiEiFtAtBtCtDtEtF* (H)
 ----------------------------------
 EXCEPCION
 __________________________________
 ['keywords']
+[]
 []
 ----------------------------------
