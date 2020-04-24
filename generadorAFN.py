@@ -36,6 +36,19 @@ def graficar_AFDVS2(transformacion_final, inicial_final):
     for i in range(len(transformacion_final)):
         f.edge(str(transformacion_final[i][0]), str(transformacion_final[i][2]), label= str(transformacion_final[i][1]))
     f.view()
+
+def graficar_AFDFinal(transformacion_final, inicial_final, valor):
+    filename_final = "./Automatas_Graficados/afn_to_afd2" + valor 
+    f = Digraph('finite_state_machine', filename=filename_final)
+    f.attr(rankdir='LR', size='8,5')
+    f.attr('node', shape='doublecircle')
+    for i in range(len(inicial_final)):
+        f.node(str(inicial_final[i][1]))
+    f.attr('node', shape='circle')
+    for i in range(len(transformacion_final)):
+        f.edge(str(transformacion_final[i][0]), str(transformacion_final[i][2]), label= str(transformacion_final[i][1]))
+    f.view()
+
 def graficar_MIN(transformacion_final, inicial_final):
     f = Digraph('finite_state_machine', filename='./Automatas_Graficados/min')
     f.attr(rankdir='LR', size='8,5')
@@ -46,6 +59,20 @@ def graficar_MIN(transformacion_final, inicial_final):
     for i in range(len(transformacion_final)):
         f.edge(str(transformacion_final[i][0]), str(transformacion_final[i][2]), label= str(transformacion_final[i][1]))
     f.view()
+
+def graficar_MINVS2(transformacion_final, inicial_final, valor):
+    filename_final = "./Automatas_Graficados/min" + valor 
+    print("FILENAME" + filename_final)
+    f = Digraph('finite_state_machine', filename=filename_final)
+    f.attr(rankdir='LR', size='8,5')
+    f.attr('node', shape='doublecircle')
+    for i in range(len(inicial_final)):
+        f.node(str(inicial_final[i][1]))
+    f.attr('node', shape='circle')
+    for i in range(len(transformacion_final)):
+        f.edge(str(transformacion_final[i][0]), str(transformacion_final[i][2]), label= str(transformacion_final[i][1]))
+    f.view()
+
 def graficar_AFN(transformacion_final, inicial_final):
     f = Digraph('finite_state_machine', filename='./Automatas_Graficados/afn')
     f.attr(rankdir='LR', size='8,5')

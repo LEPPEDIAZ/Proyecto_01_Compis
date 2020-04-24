@@ -1,1 +1,1 @@
-archivos/Ejemplo.ATG
+archivos/Aritmetica.ATG
