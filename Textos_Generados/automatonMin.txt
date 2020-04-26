@@ -1,0 +1,6 @@
+Automata
+ESTADOS: [1, '1', 'b', '2', 4, 3, 'c|n|a|l', 'o', 2]
+SIMBOLOS: [2, 3, 4]
+INICIO: 1
+ACEPTACION: 2
+TRANSICION: [[1, '1', 2], [1, 'b', 3], [1, '2', 4], [4, '2', 4], [4, 'b', 3], [3, 'c|n|a|l', 3], [3, 'o', 4], [2, '1', 2]]

@@ -229,6 +229,7 @@ cantidad = len(tokenizar.tokens)
 print("Cantidad de Tokens:", cantidad)
 cantidad = cantidad
 tokenizar.marcar_nodos(tokenizar.tokens)
+arreglo_todos_los_automatas = []
 for i in range(cantidad):
     print("i", i )
     valor = tokenizar.tokens[i].contenido.strip()
@@ -244,7 +245,9 @@ for i in range(cantidad):
        print("PALABRA_SACADA", elemento_array )
        if elemento_array.isdigit() == True:
           print("TEST TRUE",elemento_array)
-          valor = valor.replace(elemento_array,'(1|1)')
+          sacar_integer = "(" + str(i) + "|" + str(i) + ")"
+          print("TEST INTEGER", sacar_integer)
+          valor = valor.replace(elemento_array, sacar_integer)
           print("CAMBIO VALOR", valor)
        if elemento_array.isdigit() == False:
           print("TEST FALSE", elemento_array)
@@ -263,6 +266,7 @@ for i in range(cantidad):
     print("VALORTEST", valortest)
     expresion_regular = valor
     print("QUE ENTRO", expresion_regular)
+    arreglo_todos_los_automatas.append(expresion_regular)
     
     if "?" in expresion_regular:
        expresion_regular.replace("?", "|e")
@@ -290,6 +294,41 @@ for i in range(cantidad):
     keypass.close()
     
 
+print("LISTA DE TODOS LOS AUTOMATAS", arreglo_todos_los_automatas )
+fullStr = '|'.join('("' + item + '")' for item in arreglo_todos_los_automatas)
+print("LISTA DE TODOS LOS AUTOMATAS2", fullStr )
+fullStr = fullStr.replace('"',"")
+print("LISTA DE TODOS LOS AUTOMATAS3", fullStr )
+expresion_regular = fullStr
+expresion_regular = expresion_regular.replace('ε', 'e')
+print("-------------------------------------------------------")
+first_char = expresion_regular[0]
+print('First character : ', first_char)
+if first_char in "()":
+   print("|------------Thompson--------------|")
+   if "?" in expresion_regular:
+      expresion_regular.replace("?", "|e")
+   if "ε" in expresion_regular:
+      expresion_regular.replace("ε", "@")
+   a = Thmp(expresion_regular)
+   sacar_variable =a.FunctionsNFA()
+   sacar_variable2 = a.InEnd()
+   print("|------------Subconjuntos--------------|")
+   b = Subconjunto(a.afn)
+   sacar_variable =b.TransposicionFinalAFD()
+   sacar_variable2 = b.InEndAFD()
+   graficar_Automaton(sacar_variable,sacar_variable2)
+   generacion_de_archivo_Automaton(sacar_variable,sacar_variable2)
+   print("|------------MINIMIZACION--------------|")
+   b.minimizador()
+   sacar_variable =b.TransposicionFinalMIN()
+   sacar_variable2 = b.InEndMIN()
+   graficar_Automaton_MIN(sacar_variable,sacar_variable2)
+   generacion_de_archivo_Automaton_MIN(sacar_variable,sacar_variable2)
+    #keypass = open("expresion_regular.txt", "w")
+    #keypass.write(expresion_regular)
+    #keypass.close()
+	
 
 archivo_seleccionado = open("OriginalScanner.py", "r+")
 archivo_seleccionado = archivo_seleccionado.read()

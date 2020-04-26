@@ -15,6 +15,72 @@ alphabet = [chr(i) for i in range(ord('A'), ord('Z') + 1)] + \
     [chr(i) for i in range(ord('0'), ord('9') + 1)]
 epsilon = 'ε'
 
+def graficar_Automaton(resultado, inicial_final):
+    f = Digraph('finite_state_machine', filename='./Automatas_Graficados/Automaton')
+    f.attr(rankdir='LR', size='8,5')
+    f.attr('node', shape='doublecircle')
+    for i in range(len(inicial_final)):
+        f.node(str(inicial_final[i][1]))
+    f.attr('node', shape='circle')
+    for i in range(len(resultado)):
+        f.edge(str(resultado[i][0]), str(resultado[i][2]), label= str(resultado[i][1]))
+    f.view()
+
+def generacion_de_archivo_Automaton(transformacion_final, inicial_final):
+    stdos = []
+    simb = []
+    for i in range(len(transformacion_final)):
+        if transformacion_final[i][0] not in stdos:
+            stdos.append(transformacion_final[i][0])
+                
+        if transformacion_final[i][1] not in stdos:
+            stdos.append(transformacion_final[i][1])
+                
+        if transformacion_final[i][2] not in simb:
+            simb.append(transformacion_final[i][2])
+    f= open("Textos_Generados/automaton.txt","w+")
+    f.write("Automata\n") 
+    f.write("ESTADOS: " + str(stdos) +  "\n")
+    f.write("SIMBOLOS: " + str(simb) + "\n")    
+    for i in range(len(inicial_final)):
+        f.write("INICIO: " + str(inicial_final[i][0]) + "\n")
+    for i in range(len(inicial_final)):
+        f.write("ACEPTACION: " + str(inicial_final[i][1]) + "\n")
+    f.write("TRANSICION: " + str(transformacion_final) + "\n") 
+
+def graficar_Automaton_MIN(resultado, inicial_final):
+    f = Digraph('finite_state_machine', filename='./Automatas_Graficados/AutomatonMin')
+    f.attr(rankdir='LR', size='8,5')
+    f.attr('node', shape='doublecircle')
+    for i in range(len(inicial_final)):
+        f.node(str(inicial_final[i][1]))
+    f.attr('node', shape='circle')
+    for i in range(len(resultado)):
+        f.edge(str(resultado[i][0]), str(resultado[i][2]), label= str(resultado[i][1]))
+    f.view()
+
+def generacion_de_archivo_Automaton_MIN(transformacion_final, inicial_final):
+    stdos = []
+    simb = []
+    for i in range(len(transformacion_final)):
+        if transformacion_final[i][0] not in stdos:
+            stdos.append(transformacion_final[i][0])
+                
+        if transformacion_final[i][1] not in stdos:
+            stdos.append(transformacion_final[i][1])
+                
+        if transformacion_final[i][2] not in simb:
+            simb.append(transformacion_final[i][2])
+    f= open("Textos_Generados/automatonMin.txt","w+")
+    f.write("Automata\n") 
+    f.write("ESTADOS: " + str(stdos) +  "\n")
+    f.write("SIMBOLOS: " + str(simb) + "\n")    
+    for i in range(len(inicial_final)):
+        f.write("INICIO: " + str(inicial_final[i][0]) + "\n")
+    for i in range(len(inicial_final)):
+        f.write("ACEPTACION: " + str(inicial_final[i][1]) + "\n")
+    f.write("TRANSICION: " + str(transformacion_final) + "\n") 	
+	
 
 def graficar_AFD(transformacion_final, inicial_final):
     f = Digraph('finite_state_machine', filename='./Automatas_Graficados/afn_to_afd')
