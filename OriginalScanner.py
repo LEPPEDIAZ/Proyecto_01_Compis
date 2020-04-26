@@ -70,6 +70,8 @@ class Token( object ):
         return marcar_nodo
 
    def marcar_nodos(self, definir_lista):
+      arreglo_contenido = []
+      arreglo_nombre = []
       nombreend = []
       contenidoend = []
       excepcionesend = [] 
@@ -80,6 +82,7 @@ class Token( object ):
             nombreend.append(nombrefinal)
             contenidofinal = (str(index_nodo.contenido) )
             contenidoend.append(contenidofinal)
+            arreglo_contenido.append(contenidofinal)
             excepcionesfinal = (str(index_nodo.excepciones))
             excepcionesend.append(excepcionesfinal)
             lindo2 = ("----------------------------\n")
@@ -103,7 +106,10 @@ class Token( object ):
          for line in excepcionesend:
             txt_file.write("".join(line) + "\n") 
          txt_file.write("----------------------------------\n")
+    
 
+    
+         
 class Posicion( object ):    
    def __init__( self, buf, inicio, len, col ):
       assert isinstance( buf, Buffer )

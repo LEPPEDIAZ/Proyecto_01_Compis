@@ -193,7 +193,8 @@ class Thompson(object):
 		if (test == 1):
 			postfix = infix_a_postfix(una_instancia(self.infix))
 		print("postfix",postfix)
-		valor = postfix.split(".")
+    
+		'''valor = postfix.split(".")
 		print(valor)
 		array2 = []
 		result = any(len(elem) == 2 for elem in valor)
@@ -231,6 +232,7 @@ class Thompson(object):
 
         #print("test2",postfix)
         #print(postfix.replace('.', ''))
+        '''
         
 		for s in postfix:
 			print(s)

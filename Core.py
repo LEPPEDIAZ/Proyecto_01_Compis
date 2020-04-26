@@ -4,6 +4,7 @@ import os
 from expresion_regular import *
 from generadorAFN import *
 from AFD_por_AFN import *
+import numpy as np
 #tokenizar = Token()
 class Tabla_de_Simbolos( object ):
    terminales     = [ ]    
@@ -96,8 +97,16 @@ for i, j in enumerate(corte_caracteres):
          corte_caracteres[i].append(rehacer[1])
 
 with open("Textos_Generados/analizador_lexico.txt", "a+") as txt_file:
+    corte_caracteres_finales = [] 
     txt_file.write("CORTE DE CARACTERES\n")
     txt_file.write("__________________________________\n")
+    corte_caracteres_finales = corte_caracteres
+    print("CORTE CARACTERES", corte_caracteres)
+    corte_caracteres_finales = np.array(corte_caracteres)
+    def column(matrix, i):
+       return [row[i] for row in matrix]
+    corte_caracteres_finales2 = column(corte_caracteres, 1)
+    #print("CORTE CARACTERES FINALES 2", corte_caracteres_finales2)
     
     for line in corte_caracteres:
         txt_file.write("".join(line) + "\n")
@@ -223,12 +232,35 @@ tokenizar.marcar_nodos(tokenizar.tokens)
 for i in range(cantidad):
     print("i", i )
     valor = tokenizar.tokens[i].contenido.strip()
+    valor2 = valor 
+    print("VALORINICIAL", valor)
     i = i +1
+    print("CORTE CARACTERES FINALES 2!!!", corte_caracteres_finales2)
     valor = valor.replace(' ', '(')
     valor = valor.replace("*", ")*")
-    valor = valor.replace('0123456789', '(1|1)')
-    valor = valor.replace('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', '(a|b)')
+    for elemento_array in corte_caracteres_finales2:
+       elemento_array = elemento_array.replace("'", "")
+       elemento_array = elemento_array.replace('"', "")
+       print("PALABRA_SACADA", elemento_array )
+       if elemento_array.isdigit() == True:
+          print("TEST TRUE",elemento_array)
+          valor = valor.replace(elemento_array,'(1|1)')
+          print("CAMBIO VALOR", valor)
+       if elemento_array.isdigit() == False:
+          print("TEST FALSE", elemento_array)
+          elemento_array = elemento_array.replace('.', "")
+          valor = valor.replace(elemento_array, '(a|b)')
+          print("CAMBIO VALOR", valor )
+           
     print("VALOR", valor)
+    valortest = valor 
+    valortest = valortest.replace("("," ")
+    valortest = valortest.replace(")","")
+    valortest = valortest.replace("|","")
+    print("VALOR CORTADITO", valortest[0])
+    if len(valortest[1]) > 2:
+       print("VALOR QUE LE FALTA", valortest[1]) 
+    print("VALORTEST", valortest)
     expresion_regular = valor
     print("QUE ENTRO", expresion_regular)
     
