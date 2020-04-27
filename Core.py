@@ -5,6 +5,7 @@ from expresion_regular import *
 from generadorAFN import *
 from AFD_por_AFN import *
 import numpy as np
+import string
 #tokenizar = Token()
 class Tabla_de_Simbolos( object ):
    terminales     = [ ]    
@@ -106,7 +107,9 @@ with open("Textos_Generados/analizador_lexico.txt", "a+") as txt_file:
     def column(matrix, i):
        return [row[i] for row in matrix]
     corte_caracteres_finales2 = column(corte_caracteres, 1)
-    #print("CORTE CARACTERES FINALES 2", corte_caracteres_finales2)
+    print("CORTE CARACTERES VIEW", corte_caracteres_finales2)
+    corte_caracteres_finales_header = column(corte_caracteres, 0)
+    print("CORTE CARACTERES VIEW 2", corte_caracteres_finales_header)
     
     for line in corte_caracteres:
         txt_file.write("".join(line) + "\n")
@@ -230,6 +233,11 @@ print("Cantidad de Tokens:", cantidad)
 cantidad = cantidad
 tokenizar.marcar_nodos(tokenizar.tokens)
 arreglo_todos_los_automatas = []
+terminales_finales = []
+guardar_estados_transformados = []
+guardar_estados_transformados_2 = [] 
+arreglo_de_inicio_finales = [] 
+d = dict(enumerate(string.ascii_lowercase, 1))
 for i in range(cantidad):
     print("i", i )
     valor = tokenizar.tokens[i].contenido.strip()
@@ -239,7 +247,12 @@ for i in range(cantidad):
     print("CORTE CARACTERES FINALES 2!!!", corte_caracteres_finales2)
     valor = valor.replace(' ', '(')
     valor = valor.replace("*", ")*")
+    posicion_actual = -1
     for elemento_array in corte_caracteres_finales2:
+       posicion_actual = posicion_actual + 1
+       print("VER QUE POSICION ESTA", posicion_actual)
+       sacar_token_name = corte_caracteres_finales_header[posicion_actual]
+       print("ARRAY OBTENIDO", sacar_token_name)
        elemento_array = elemento_array.replace("'", "")
        elemento_array = elemento_array.replace('"', "")
        print("PALABRA_SACADA", elemento_array )
@@ -249,13 +262,32 @@ for i in range(cantidad):
           print("TEST INTEGER", sacar_integer)
           valor = valor.replace(elemento_array, sacar_integer)
           print("CAMBIO VALOR", valor)
+          valor_guardado = elemento_array + "=" + str(i)
+          guardar_estados_transformados.append(valor_guardado)
+          valor_guardado_2 = sacar_token_name + "=" + str(i)
+          guardar_estados_transformados_2.append(valor_guardado_2)
        if elemento_array.isdigit() == False:
+          alfabeto = d[int(i)]
+          i = i+1
+          alfabeto2 = d[int(i)]
+          sacar_integer = "(" + alfabeto + "|" + alfabeto2 + ")"
+          print("ALFABETO", sacar_integer)
           print("TEST FALSE", elemento_array)
           elemento_array = elemento_array.replace('.', "")
-          valor = valor.replace(elemento_array, '(a|b)')
+          valor = valor.replace(elemento_array, sacar_integer)
           print("CAMBIO VALOR", valor )
+          valor_guardado = elemento_array + "=" + alfabeto
+          guardar_estados_transformados.append(valor_guardado)
+          valor_guardado2 = elemento_array + "=" + alfabeto2
+          guardar_estados_transformados.append(valor_guardado2)
+          valor_guardado2_2 = sacar_token_name + "=" + alfabeto
+          guardar_estados_transformados_2.append(valor_guardado2_2)
+          valor_guardado2_3 = sacar_token_name + "=" + alfabeto2
+          guardar_estados_transformados_2.append(valor_guardado2_3)
            
     print("VALOR", valor)
+    print("Relacion de valor de token con valor de automatas", guardar_estados_transformados)
+    print("relacion de nombre de token con valor de automatas", guardar_estados_transformados_2)
     valortest = valor 
     valortest = valortest.replace("("," ")
     valortest = valortest.replace(")","")
@@ -283,6 +315,7 @@ for i in range(cantidad):
     sacar_variable2 = b.InEndAFD()
     graficar_AFDFinal(sacar_variable,sacar_variable2,str(i))
     generacion_de_archivo_afd_test(sacar_variable,sacar_variable2)
+    arreglo_de_inicio_finales.append(sacar_variable2)
     print("|------------MINIMIZACION--------------|")
     b.minimizador()
     sacar_variable =b.TransposicionFinalMIN()
@@ -325,11 +358,12 @@ if first_char in "()":
    sacar_variable2 = b.InEndMIN()
    graficar_Automaton_MIN(sacar_variable,sacar_variable2)
    generacion_de_archivo_Automaton_MIN(sacar_variable,sacar_variable2)
+   print("Sacar terminales finales", sacar_variable2)
     #keypass = open("expresion_regular.txt", "w")
     #keypass.write(expresion_regular)
     #keypass.close()
 	
-
+print("TERMINALES FINALES", arreglo_de_inicio_finales)
 archivo_seleccionado = open("OriginalScanner.py", "r+")
 archivo_seleccionado = archivo_seleccionado.read()
 print("Inicio de Modificacion del Scanner")
