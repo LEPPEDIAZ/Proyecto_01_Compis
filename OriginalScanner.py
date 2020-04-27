@@ -185,8 +185,7 @@ class Buffer( object ):
 class Escaner(object):
    EOL     = u'\n'
    eofSym  = 0
-
-#!declaraciones
+   #!declaraciones
 
    def __init__( self, s ):
       self.buffer = Buffer( unicode(s) ) 

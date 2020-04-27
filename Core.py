@@ -264,7 +264,7 @@ for i in range(cantidad):
           print("CAMBIO VALOR", valor)
           valor_guardado = elemento_array + "=" + str(i)
           guardar_estados_transformados.append(valor_guardado)
-          valor_guardado_2 = sacar_token_name + "=" + str(i)
+          valor_guardado_2 = str(i) + "=" + sacar_token_name
           guardar_estados_transformados_2.append(valor_guardado_2)
        if elemento_array.isdigit() == False:
           alfabeto = d[int(i)]
@@ -280,9 +280,9 @@ for i in range(cantidad):
           guardar_estados_transformados.append(valor_guardado)
           valor_guardado2 = elemento_array + "=" + alfabeto2
           guardar_estados_transformados.append(valor_guardado2)
-          valor_guardado2_2 = sacar_token_name + "=" + alfabeto
+          valor_guardado2_2 = alfabeto + "=" + sacar_token_name
           guardar_estados_transformados_2.append(valor_guardado2_2)
-          valor_guardado2_3 = sacar_token_name + "=" + alfabeto2
+          valor_guardado2_3 = alfabeto2 + "=" + sacar_token_name
           guardar_estados_transformados_2.append(valor_guardado2_3)
            
     print("VALOR", valor)
@@ -348,6 +348,7 @@ if first_char in "()":
    sacar_variable2 = a.InEnd()
    print("|------------Subconjuntos--------------|")
    b = Subconjunto(a.afn)
+   variable_transposicion = b.TransposicionFinalAFD()
    sacar_variable =b.TransposicionFinalAFD()
    sacar_variable2 = b.InEndAFD()
    graficar_Automaton(sacar_variable,sacar_variable2)
@@ -362,15 +363,42 @@ if first_char in "()":
     #keypass = open("expresion_regular.txt", "w")
     #keypass.write(expresion_regular)
     #keypass.close()
-	
+
+buscar_ultimo_estado = max(variable_transposicion)	
+values1 = '\n'.join(str(v) for v in buscar_ultimo_estado)
+values1 = values1[0]
+values1 = "maxT" + "=" + values1 + "\n"
+values2 = "noSym" + "=" + values1 + "\n"
 print("TERMINALES FINALES", arreglo_de_inicio_finales)
 archivo_seleccionado = open("OriginalScanner.py", "r+")
 archivo_seleccionado = archivo_seleccionado.read()
 print("Inicio de Modificacion del Scanner")
 #print(archivo_seleccionado)
+print("CORTE", corte_caracteres)
+values = '\n'.join(str(v) for v in corte_caracteres)
+values = values.replace("[", "")
+values = values.replace("]", "")
+values = values.replace("'", "")
+values = values.replace(",", "=")
+values = values.replace(".", "")
+print("CORTE MODIFICADO",values)
+declaracion_string = ("\n".join(guardar_estados_transformados_2))
+declaracion_string = declaracion_string.replace("1", "one")
+declaracion_string = declaracion_string.replace("2", "two")
+declaracion_string = declaracion_string.replace("3", "three")
+declaracion_string = declaracion_string.replace("4", "four")
+declaracion_string = declaracion_string.replace("5", "five")
+declaracion_string = declaracion_string.replace("6", "six")
+declaracion_string = declaracion_string.replace("7", "seven")
+declaracion_string = declaracion_string.replace("8", "eight")
+declaracion_string = declaracion_string.replace("9", "nine")
+
+todo_limpio = values1 + values2 + values + "\n" + declaracion_string
+archivo_seleccionado = archivo_seleccionado.replace("#!declaraciones", todo_limpio)
 keypass_01 = open("NewScanner.py", "w")
 keypass_01.write(archivo_seleccionado)
 keypass_01.close()
+
 '''
     def AbrirGenerador(backUp):
       assert isinstance(backUp,bool)

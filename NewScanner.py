@@ -185,8 +185,27 @@ class Buffer( object ):
 class Escaner(object):
    EOL     = u'\n'
    eofSym  = 0
+   maxT=8
+   noSym=maxT=8
 
-#!declaraciones
+   letter= "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+   digit= "0123456789"
+   tab= "\\t"
+   eol= "\\n"
+   a=letter
+   b=letter
+   two=digit
+   b=tab
+   c=tab
+   c=eol
+   d=eol
+   b=letter
+   c=letter
+   three=digit
+   c=tab
+   d=tab
+   d=eol
+   e=eol
 
    def __init__( self, s ):
       self.buffer = Buffer( unicode(s) ) 
