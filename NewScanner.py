@@ -186,12 +186,14 @@ class Escaner(object):
    EOL     = u'\n'
    eofSym  = 0
    maxT=8
+
    noSym=maxT=8
 
-   letter= "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-   digit= "0123456789"
-   tab= "\\t"
-   eol= "\\n"
+
+   letter="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+   digit="0123456789"
+   tab="\\t"
+   eol="\\n"
    a=letter
    b=letter
    two=digit
@@ -206,6 +208,8 @@ class Escaner(object):
    d=tab
    d=eol
    e=eol
+   transposicion=[[1, b, 2], [1, three, 3], [1, a, 4], [4, b, 5], [4, two, 6], [4, a, 7], [7, b, 5], [7, two, 6], [7, a, 7], [6, b, 5], [6, two, 6], [6, a, 7], [5, b, 5], [5, two, 6], [5, a, 7], [3, three, 8], [8, three, 8], [2, b, 5], [2, two, 6], [2, a, 7]]
+   print(transposicion)
 
    def __init__( self, s ):
       self.buffer = Buffer( unicode(s) ) 

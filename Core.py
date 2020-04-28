@@ -236,6 +236,7 @@ arreglo_todos_los_automatas = []
 terminales_finales = []
 guardar_estados_transformados = []
 guardar_estados_transformados_2 = [] 
+guardar_estados_en_DFA = []
 arreglo_de_inicio_finales = [] 
 d = dict(enumerate(string.ascii_lowercase, 1))
 for i in range(cantidad):
@@ -264,6 +265,7 @@ for i in range(cantidad):
           print("CAMBIO VALOR", valor)
           valor_guardado = elemento_array + "=" + str(i)
           guardar_estados_transformados.append(valor_guardado)
+          guardar_estados_en_DFA.append(i)
           valor_guardado_2 = str(i) + "=" + sacar_token_name
           guardar_estados_transformados_2.append(valor_guardado_2)
        if elemento_array.isdigit() == False:
@@ -278,8 +280,10 @@ for i in range(cantidad):
           print("CAMBIO VALOR", valor )
           valor_guardado = elemento_array + "=" + alfabeto
           guardar_estados_transformados.append(valor_guardado)
+          guardar_estados_en_DFA.append(alfabeto)
           valor_guardado2 = elemento_array + "=" + alfabeto2
           guardar_estados_transformados.append(valor_guardado2)
+          guardar_estados_en_DFA.append(alfabeto2)
           valor_guardado2_2 = alfabeto + "=" + sacar_token_name
           guardar_estados_transformados_2.append(valor_guardado2_2)
           valor_guardado2_3 = alfabeto2 + "=" + sacar_token_name
@@ -364,158 +368,62 @@ if first_char in "()":
     #keypass.write(expresion_regular)
     #keypass.close()
 
-buscar_ultimo_estado = max(variable_transposicion)	
-values1 = '\n'.join(str(v) for v in buscar_ultimo_estado)
-values1 = values1[0]
-values1 = "maxT" + "=" + values1 + "\n"
-values2 = "noSym" + "=" + values1 + "\n"
-print("TERMINALES FINALES", arreglo_de_inicio_finales)
-archivo_seleccionado = open("OriginalScanner.py", "r+")
-archivo_seleccionado = archivo_seleccionado.read()
-print("Inicio de Modificacion del Scanner")
-#print(archivo_seleccionado)
-print("CORTE", corte_caracteres)
-values = '\n'.join(str(v) for v in corte_caracteres)
-values = values.replace("[", "")
-values = values.replace("]", "")
-values = values.replace("'", "")
-values = values.replace(",", "=")
-values = values.replace(".", "")
-print("CORTE MODIFICADO",values)
-declaracion_string = ("\n".join(guardar_estados_transformados_2))
-declaracion_string = declaracion_string.replace("1", "one")
-declaracion_string = declaracion_string.replace("2", "two")
-declaracion_string = declaracion_string.replace("3", "three")
-declaracion_string = declaracion_string.replace("4", "four")
-declaracion_string = declaracion_string.replace("5", "five")
-declaracion_string = declaracion_string.replace("6", "six")
-declaracion_string = declaracion_string.replace("7", "seven")
-declaracion_string = declaracion_string.replace("8", "eight")
-declaracion_string = declaracion_string.replace("9", "nine")
+def declarar_variables_de_inicializacion ():
+   buscar_ultimo_estado = max(variable_transposicion)	
+   values1 = '\n'.join(str(v) for v in buscar_ultimo_estado)
+   values1 = values1[0] + values1[1]
+   values1 = "maxT" + "=" + values1 + "\n"
+   values2 = "noSym" + "=" + values1 + "\n"
+   print("TERMINALES FINALES", arreglo_de_inicio_finales)
+   archivo_seleccionado = open("OriginalScanner.py", "r+")
+   archivo_seleccionado = archivo_seleccionado.read()
+   print("Inicio de Modificacion del Scanner")
+   print("CORTE", corte_caracteres)
+   primero_01 = [i[0] for i in corte_caracteres]
+   segundo_02 = [i[1:] for i in corte_caracteres]
+   concat_matrix = "\n".join([str(a.replace("'","")) + "="+ '"' + str(b) + '"' for a,b in zip(primero_01,segundo_02)])
+   print("concat_matrix", concat_matrix)
+   values = concat_matrix
+   values = values.replace("[", "")
+   values = values.replace("]", "")
+   values = values.replace("',", " ")
+   values = values.replace("'", "")
+   values = values.replace('""', '"')
+   values = values.replace('" ', '')
+   values = values.replace('.', '')
+   print("RESULTADO", values)
+   declaracion_string = ("\n".join(guardar_estados_transformados_2))
+   declaracion_string = declaracion_string.replace("1", "one")
+   declaracion_string = declaracion_string.replace("2", "two")
+   declaracion_string = declaracion_string.replace("3", "three")
+   declaracion_string = declaracion_string.replace("4", "four")
+   declaracion_string = declaracion_string.replace("5", "five")
+   declaracion_string = declaracion_string.replace("6", "six")
+   declaracion_string = declaracion_string.replace("7", "seven")
+   declaracion_string = declaracion_string.replace("8", "eight")
+   declaracion_string = declaracion_string.replace("9", "nine")
 
-todo_limpio = values1 + values2 + values + "\n" + declaracion_string
-archivo_seleccionado = archivo_seleccionado.replace("#!declaraciones", todo_limpio)
-keypass_01 = open("NewScanner.py", "w")
-keypass_01.write(archivo_seleccionado)
-keypass_01.close()
+   print("TRANSPOSICION",variable_transposicion )
+   print("ESTADOS ACTUALES", guardar_estados_en_DFA)
+   transposicion_show = str(variable_transposicion)
+   transposicion_show = transposicion_show.replace("'1'", "one")
+   transposicion_show = transposicion_show.replace("'2'", "two")
+   transposicion_show = transposicion_show.replace("'3'", "three")
+   transposicion_show = transposicion_show.replace("'4'", "four")
+   transposicion_show = transposicion_show.replace("'5'", "five")
+   transposicion_show = transposicion_show.replace("'6'", "six")
+   transposicion_show = transposicion_show.replace("'7'", "seven")
+   transposicion_show = transposicion_show.replace("'8'", "eight")
+   transposicion_show = transposicion_show.replace("'9'", "nine")
+   transposicion_show = transposicion_show.replace("'", "")
+   start_declaration = "transposicion=" + transposicion_show + "\n" + "print(" + "transposicion" + ")"
+   todo_limpio = values1 + values2 + values + "\n" + declaracion_string +  "\n" + start_declaration
+   archivo_seleccionado = archivo_seleccionado.replace("#!declaraciones", todo_limpio)
+   keypass_01 = open("NewScanner.py", "w")
+   keypass_01.write(archivo_seleccionado)
+   keypass_01.close()
 
-'''
-    def AbrirGenerador(backUp):
-      assert isinstance(backUp,bool)
-      try:
-         fn = FILE.srcDir + "Scanner.py"   # String
-         if backUp and os.path.exists(fn):
-            if os.path.exists(fn + '.old'):
-               os.remove( fn + '.old' )
-            os.rename( fn, fn + '.old' )
-         FILE.gen = file( fn, 'w' )
-      except:
-         raise RuntimeError("-- Compiler Error: Cannot generate scanner file.")
-
-   @staticmethod
-   def EscribirScanner( AllNombres):
-      assert isinstance(AllNombres,bool)
-      startTab = [ 0 for i in xrange(CharClass.charSetSize) ]
-      fr = FILE.srcDir + "OriginalScanner.py"   # String
-      if not os.path.exists( fr ):
-         if Tab.frameDir is not None:
-            fr = os.path.join( Tab.frameDir.strip(), "OriginalScanner.py" )
-         if not os.path.exists(fr):
-            raise RuntimeError("-- Compiler Error: Cannot find OriginalScanner.py")
-      try:
-         FILE.fram = file( fr, 'r' )
-      except:
-         raise RuntimeError("-- Compiler Error: Cannot open OriginalScanner.py.")
-      FILE.AbrirGenerador(True)
-      if FILE.dirtyFILE:
-         FILE.MakeDeterministic( )
-      FILE.FillStartTab(startTab)
-      FILE.CopyFramePart( "#!inicio" )
-      if not FILE.srcName.lower( ).endswith( 'coco.atg' ):
-         FILE.gen.close()
-         FILE.AbrirGenerador(False)
-
-      FILE.CopyFramePart("#!declaraciones")
-      FILE.gen.write("   charSetSize = " + str(CharClass.charSetSize) + '\n')
-      FILE.gen.write("   maxT = "        + str(len(Symbol.terminals) - 1) + '\n')
-      FILE.gen.write("   noSym = "       + str(Tab.noSym.n) + '\n')
-      if AllNombres:
-         FILE.gen.write("   # terminals\n")
-         for sym in Symbol.terminals:
-            FILE.gen.write("   " + sym.symName + " = " + str(sym.n) + '\n')
-         FILE.gen.write("   # pragmas\n")
-         for sym in Symbol.pragmas:
-            FILE.gen.write("   " + sym.symName + " = " + str(sym.n) + '\n')
-         FILE.gen.write( '\n' )
-      FILE.gen.write("   start = [\n")
-      for i in xrange(0,CharClass.charSetSize / 16):
-         FILE.gen.write("   ")
-         for j in xrange(0,16):
-            FILE.gen.write(Trace.formatString(str(startTab[16*i+j]), 3))
-            FILE.gen.write(",")
-         FILE.gen.write( '\n' )
-      FILE.gen.write("     -1]\n")
-
-      if FILE.ignoreCase:
-         FILE.gen.write("   valCh = u''       # current input character (for token.val)")
-
-      FILE.CopyFramePart("#!inicializacion")
-      j = 0
-      for i in Tab.ignored:
-         FILE.gen.write("      self.ignore.add(" + str(i) + ") \n")
-
-      FILE.CopyFramePart("#!nextcharcas")
-      if FILE.ignoreCase:
-         FILE.gen.write("      valCh = self.ch\n")
-         FILE.gen.write("      if self.ch != Buffer.EOF:\n")
-         FILE.gen.write("         self.ch = self.ch.lower()\n");
-
-      FILE.CopyFramePart("#!comentarios")
-      com = Comment.first   # Comment
-      i = 0
-      while com is not None:
-         FILE.GenComment(com, i)
-         com = com.next
-         i += 1
-
-      FILE.CopyFramePart("#!inicio_literales")
-      FILE.GenLiterals()
-
-      FILE.CopyFramePart("#!scan01")
-      if Comment.first!=None:
-         FILE.gen.write("if (")
-         com = Comment.first
-         i = 0
-         while com is not None:
-            FILE.gen.write(FILE.ChCond(com.start[0]))
-            FILE.gen.write(" and self.Comment" + str(i) + "()")
-            if com.next is not None:
-               FILE.gen.write(" or ")
-            com = com.next
-            i += 1
-         FILE.gen.write("):\n")
-         FILE.gen.write("         return self.NextToken()\n")
-      if FILE.hasCtxMoves:
-         FILE.gen.write('\n')
-         FILE.gen.write("      apx = 0")
-
-      FILE.CopyFramePart("#!scan02")
-      if FILE.ignoreCase:
-         FILE.gen.write("buf += unicode(self.ch)\n")
-         FILE.gen.write("      self.NextCh()\n")
-      else:
-         FILE.gen.write("buf += unicode(self.ch)\n")
-         FILE.gen.write("      self.NextCh()\n")
-
-      FILE.CopyFramePart("#!scan03")
-      state = FILE.firstState.next
-      while state is not None:
-         FILE.gen.write("         elif state == ")
-         FILE.WriteState(state)
-         state = state.next
-      FILE.CopyFramePart("#!final")
-      FILE.gen.close()
-'''
+declarar_variables_de_inicializacion()
 print("+ analizador lexico generado")
 
 
