@@ -271,8 +271,9 @@ for i in range(cantidad):
        if elemento_array.isdigit() == False:
           alfabeto = d[int(i)]
           i = i+1
-          alfabeto2 = d[int(i)]
-          sacar_integer = "(" + alfabeto + "|" + alfabeto2 + ")"
+          #alfabeto2 = d[int(i)]
+          #sacar_integer = "(" + alfabeto + "|" + alfabeto2 + ")"
+          sacar_integer = "(" + alfabeto + "|" + alfabeto + ")"
           print("ALFABETO", sacar_integer)
           print("TEST FALSE", elemento_array)
           elemento_array = elemento_array.replace('.', "")
@@ -281,13 +282,13 @@ for i in range(cantidad):
           valor_guardado = elemento_array + "=" + alfabeto
           guardar_estados_transformados.append(valor_guardado)
           guardar_estados_en_DFA.append(alfabeto)
-          valor_guardado2 = elemento_array + "=" + alfabeto2
-          guardar_estados_transformados.append(valor_guardado2)
-          guardar_estados_en_DFA.append(alfabeto2)
+          #valor_guardado2 = elemento_array + "=" + alfabeto2
+          #guardar_estados_transformados.append(valor_guardado2)
+          #guardar_estados_en_DFA.append(alfabeto2)
           valor_guardado2_2 = alfabeto + "=" + sacar_token_name
           guardar_estados_transformados_2.append(valor_guardado2_2)
-          valor_guardado2_3 = alfabeto2 + "=" + sacar_token_name
-          guardar_estados_transformados_2.append(valor_guardado2_3)
+          #valor_guardado2_3 = alfabeto2 + "=" + sacar_token_name
+          #guardar_estados_transformados_2.append(valor_guardado2_3)
            
     print("VALOR", valor)
     print("Relacion de valor de token con valor de automatas", guardar_estados_transformados)
@@ -320,15 +321,7 @@ for i in range(cantidad):
     graficar_AFDFinal(sacar_variable,sacar_variable2,str(i))
     generacion_de_archivo_afd_test(sacar_variable,sacar_variable2)
     arreglo_de_inicio_finales.append(sacar_variable2)
-    print("|------------MINIMIZACION--------------|")
-    b.minimizador()
-    sacar_variable =b.TransposicionFinalMIN()
-    sacar_variable2 = b.InEndMIN()
-    graficar_MINVS2(sacar_variable,sacar_variable2,str(i))
-    generacion_de_archivo_min(sacar_variable,sacar_variable2)
-    keypass = open("expresion_regular.txt", "w")
-    keypass.write(expresion_regular)
-    keypass.close()
+    
     
 
 print("LISTA DE TODOS LOS AUTOMATAS", arreglo_todos_los_automatas )
@@ -357,16 +350,8 @@ if first_char in "()":
    sacar_variable2 = b.InEndAFD()
    graficar_Automaton(sacar_variable,sacar_variable2)
    generacion_de_archivo_Automaton(sacar_variable,sacar_variable2)
-   print("|------------MINIMIZACION--------------|")
-   b.minimizador()
-   sacar_variable =b.TransposicionFinalMIN()
-   sacar_variable2 = b.InEndMIN()
-   graficar_Automaton_MIN(sacar_variable,sacar_variable2)
-   generacion_de_archivo_Automaton_MIN(sacar_variable,sacar_variable2)
-   print("Sacar terminales finales", sacar_variable2)
-    #keypass = open("expresion_regular.txt", "w")
-    #keypass.write(expresion_regular)
-    #keypass.close()
+   
+
 
 def declarar_variables_de_inicializacion ():
    buscar_ultimo_estado = max(variable_transposicion)	
@@ -388,6 +373,7 @@ def declarar_variables_de_inicializacion ():
    values = values.replace("]", "")
    values = values.replace("',", " ")
    values = values.replace("'", "")
+   #falta debuggear
    values = values.replace('""', '"')
    values = values.replace('" ', '')
    values = values.replace('.', '')
@@ -423,7 +409,20 @@ def declarar_variables_de_inicializacion ():
    keypass_01.write(archivo_seleccionado)
    keypass_01.close()
 
+def declarar_siguiente_caracter():
+    archivo_seleccionado = open("NewScanner.py", "r+")
+    archivo_seleccionado = archivo_seleccionado.read()
+    archivo_seleccionado = archivo_seleccionado.replace("#!scan03", "")
+    print("SIGUIENTE TOKEN",variable_transposicion )
+    x = np.array(variable_transposicion)
+    arr2D = x
+    columnIndex = 0
+    sortedArr = arr2D[arr2D[:,columnIndex].argsort()]
+    print("Ordenado",sortedArr)
+
+
 declarar_variables_de_inicializacion()
+declarar_siguiente_caracter()
 print("+ analizador lexico generado")
 
 

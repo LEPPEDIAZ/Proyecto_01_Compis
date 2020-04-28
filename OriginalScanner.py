@@ -256,7 +256,7 @@ class Escaner(object):
          elif state == 0:
             self.t.kind = Escaner.noSym      
             listo = True
-#!scan03
+         #!scan03
       self.t.val = buf
       return self.t
 

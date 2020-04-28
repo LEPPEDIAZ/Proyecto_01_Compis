@@ -185,9 +185,9 @@ class Buffer( object ):
 class Escaner(object):
    EOL     = u'\n'
    eofSym  = 0
-   maxT=8
+   maxT=6
 
-   noSym=maxT=8
+   noSym=maxT=6
 
 
    letter="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
@@ -195,20 +195,14 @@ class Escaner(object):
    tab="\\t"
    eol="\\n"
    a=letter
-   b=letter
    two=digit
    b=tab
-   c=tab
    c=eol
-   d=eol
    b=letter
-   c=letter
    three=digit
    c=tab
-   d=tab
    d=eol
-   e=eol
-   transposicion=[[1, b, 2], [1, three, 3], [1, a, 4], [4, b, 5], [4, two, 6], [4, a, 7], [7, b, 5], [7, two, 6], [7, a, 7], [6, b, 5], [6, two, 6], [6, a, 7], [5, b, 5], [5, two, 6], [5, a, 7], [3, three, 8], [8, three, 8], [2, b, 5], [2, two, 6], [2, a, 7]]
+   transposicion=[[1, a, 2], [1, three, 3], [3, three, 4], [4, three, 4], [2, two, 5], [2, a, 6], [6, two, 5], [6, a, 6], [5, two, 5], [5, a, 6]]
    print(transposicion)
 
    def __init__( self, s ):
@@ -280,7 +274,7 @@ class Escaner(object):
          elif state == 0:
             self.t.kind = Escaner.noSym      
             listo = True
-#!scan03
+         #!scan03
       self.t.val = buf
       return self.t
 
