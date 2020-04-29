@@ -412,17 +412,61 @@ def declarar_variables_de_inicializacion ():
 def declarar_siguiente_caracter():
     archivo_seleccionado = open("NewScanner.py", "r+")
     archivo_seleccionado = archivo_seleccionado.read()
-    archivo_seleccionado = archivo_seleccionado.replace("#!scan03", "")
-    print("SIGUIENTE TOKEN",variable_transposicion )
+    
+    #transposicion_show = transposicion_show.replace("'", "")
     x = np.array(variable_transposicion)
-    arr2D = x
-    columnIndex = 0
-    sortedArr = arr2D[arr2D[:,columnIndex].argsort()]
-    print("Ordenado",sortedArr)
+    print("Ordenado",x)
+    arreglo_estado_inicio = []
+    arreglo_estado_medio_final = []
+    for i, j in enumerate(x):
+        #print ("elif state ==" + j[0] + ":" + "\n")
+        primer_elemento = ("elif state ==" + j[0] + ":" + "\n")
+        arreglo_estado_inicio.append(":" + j[0] + ":")
+        segundo_elemento = j[1]
+        segundo_elemento = segundo_elemento.replace("1", "'one'")
+        segundo_elemento = segundo_elemento.replace("2", "'two'")
+        segundo_elemento = segundo_elemento.replace("3", "'three'")
+        segundo_elemento = segundo_elemento.replace("4", "'four'")
+        segundo_elemento = segundo_elemento.replace("5", "'five'")
+        segundo_elemento = segundo_elemento.replace("6", "'six'")
+        segundo_elemento = segundo_elemento.replace("7", "'seven'")
+        segundo_elemento = segundo_elemento.replace("8", "'eight'")
+        segundo_elemento = segundo_elemento.replace("9", "'nine'")
+        segundo_elemento = ":" + j[0] + ":" + "self.ch ==" + segundo_elemento + ":" + "\n" + "   "+ "buf += unicode(self.ch)" + "\n" + "   " + "self.Siguiente_Caracter()"+ "\n" +"   "+ "state=" + j[2] + "\n"
+        arreglo_estado_medio_final.append(segundo_elemento)
+        #print(segundo_elemento)
 
-
+    unicos_primer_elemento = np.unique(arreglo_estado_inicio)
+    unicos_primer_elemento = np.array(unicos_primer_elemento)
+    print("Valor unico primer_elemento", unicos_primer_elemento)
+    print("arreglo_estado_inicio",arreglo_estado_inicio)
+    print("arreglo_estado_medio_final",arreglo_estado_medio_final)
+    todo_scan3 = []
+    for i in unicos_primer_elemento:
+        #print( i + "!!!")
+        inicio = i 
+        inicio = inicio.replace(":", "")
+        inicio = "elif state ==" + inicio + ":" + "\n"
+        print(inicio)
+        todo_scan3.append(inicio)
+        for j in arreglo_estado_medio_final:
+            if i in j:
+                segundo_valor = j
+                segundo_valor = segundo_valor.replace(i, "")
+                print(segundo_valor)
+                todo_scan3.append(segundo_valor)
+                #print(j)
+    print("------------------------------------")
+    print(todo_scan3)
+    new_text = "".join(todo_scan3)
+    print(new_text) 
+    archivo_seleccionado = archivo_seleccionado.replace("#!scan03", new_text)
+    keypass_01 = open("NewScanner.py", "w")
+    keypass_01.write(archivo_seleccionado)
+    keypass_01.close()          
 declarar_variables_de_inicializacion()
 declarar_siguiente_caracter()
+print()
 print("+ analizador lexico generado")
 
 

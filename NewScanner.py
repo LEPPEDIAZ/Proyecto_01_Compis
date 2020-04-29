@@ -186,10 +186,7 @@ class Escaner(object):
    EOL     = u'\n'
    eofSym  = 0
    maxT=6
-
    noSym=maxT=6
-
-
    letter="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
    digit="0123456789"
    tab="\\t"
@@ -274,7 +271,32 @@ class Escaner(object):
          elif state == 0:
             self.t.kind = Escaner.noSym      
             listo = True
-         #!scan03
+         elif state ==1:
+            if self.ch ==a:
+               buf += unicode(self.ch)
+               self.Siguiente_Caracter()
+               state=2
+            elif self.ch ==three:
+               buf += unicode(self.ch)
+               self.Siguiente_Caracter()
+               state=3
+            else:
+               self.t.kind = Scanner.less_Sym
+               done = True
+         elif state ==2:
+               if self.ch ==two:
+                  buf += unicode(self.ch)
+                  self.Siguiente_Caracter()
+                  state=5
+               elif self.ch ==a:
+                  buf += unicode(self.ch)
+                  self.Siguiente_Caracter()
+                  state=6
+               else:
+                  self.t.kind = Scanner.less_Sym
+                  done = True
+    
+
       self.t.val = buf
       return self.t
 
