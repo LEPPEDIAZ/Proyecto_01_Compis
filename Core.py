@@ -432,29 +432,49 @@ def declarar_siguiente_caracter():
         segundo_elemento = segundo_elemento.replace("7", "'seven'")
         segundo_elemento = segundo_elemento.replace("8", "'eight'")
         segundo_elemento = segundo_elemento.replace("9", "'nine'")
-        segundo_elemento = ":" + j[0] + ":" + "self.ch ==" + segundo_elemento + ":" + "\n" + "   "+ "buf += unicode(self.ch)" + "\n" + "   " + "self.Siguiente_Caracter()"+ "\n" +"   "+ "state=" + j[2] + "\n"
+        segundo_elemento = ":" + j[0] + ":" + "self.ch ==" + segundo_elemento + ":" + "\n" + "      "+ "buf += unicode(self.ch)" + "\n" + "      " + "self.Siguiente_Caracter()"+ "\n" +"      "+ "state=" + j[2] + "\n"
         arreglo_estado_medio_final.append(segundo_elemento)
         #print(segundo_elemento)
 
     unicos_primer_elemento = np.unique(arreglo_estado_inicio)
     unicos_primer_elemento = np.array(unicos_primer_elemento)
     print("Valor unico primer_elemento", unicos_primer_elemento)
-    print("arreglo_estado_inicio",arreglo_estado_inicio)
     print("arreglo_estado_medio_final",arreglo_estado_medio_final)
     todo_scan3 = []
+    test_change = 0
     for i in unicos_primer_elemento:
         #print( i + "!!!")
         inicio = i 
         inicio = inicio.replace(":", "")
+        revisar = inicio
         inicio = "elif state ==" + inicio + ":" + "\n"
-        print(inicio)
-        todo_scan3.append(inicio)
+        print("i:" ,revisar )
+        if (revisar == "1"):
+            todo_scan3.append(inicio)
+            print(inicio)
+        if (revisar != "1"):
+            add_else = "   "+ "else:" + "\n" + "      " + "self.t.tipo_token= Escaner.noSym " +  "\n" + "      " +"done = True" + "\n"
+            inicio_2 = add_else + inicio
+            todo_scan3.append(inicio_2)
+            print(inicio_2)
+        anterior = i
         for j in arreglo_estado_medio_final:
             if i in j:
-                segundo_valor = j
-                segundo_valor = segundo_valor.replace(i, "")
-                print(segundo_valor)
-                todo_scan3.append(segundo_valor)
+                if (test_change) == inicio:
+                    segundo_valor = j
+                    segundo_valor = segundo_valor.replace(i, "")
+                    segundo_valor = "   "+ "elif" + " " + segundo_valor
+                    print(segundo_valor)
+                    todo_scan3.append(segundo_valor)
+                if (test_change) != inicio:
+                    test_change = inicio
+                    segundo_valor = j
+                    segundo_valor = segundo_valor.replace(i, "")
+                    segundo_valor = "   "+ "if" + " " + segundo_valor
+                    print(segundo_valor)
+                    todo_scan3.append(segundo_valor)
+                test_change = inicio
+                
                 #print(j)
     print("------------------------------------")
     print(todo_scan3)

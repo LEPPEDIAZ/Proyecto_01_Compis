@@ -251,10 +251,10 @@ class Escaner(object):
       listo = False
       while not listo:
          if state == -1:
-            self.t.kind = Escaner.eofSym     
+            self.t.tipo_token = Escaner.eofSym     
             listo = True
          elif state == 0:
-            self.t.kind = Escaner.noSym      
+            self.t.tipo_token = Escaner.noSym      
             listo = True
          #!scan03
       self.t.val = buf
