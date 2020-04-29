@@ -185,7 +185,7 @@ class Buffer( object ):
 class Escaner(object):
    EOL     = u'\n'
    eofSym  = 0
-   #!declaraciones
+#!declaraciones
 
    def __init__( self, s ):
       self.buffer = Buffer( unicode(s) ) 
@@ -256,7 +256,7 @@ class Escaner(object):
          elif state == 0:
             self.t.tipo_token = Escaner.noSym      
             listo = True
-         #!scan03
+#!scan03
       self.t.val = buf
       return self.t
 

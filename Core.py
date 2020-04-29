@@ -6,6 +6,7 @@ from generadorAFN import *
 from AFD_por_AFN import *
 import numpy as np
 import string
+import textwrap
 #tokenizar = Token()
 class Tabla_de_Simbolos( object ):
    terminales     = [ ]    
@@ -357,8 +358,8 @@ def declarar_variables_de_inicializacion ():
    buscar_ultimo_estado = max(variable_transposicion)	
    values1 = '\n'.join(str(v) for v in buscar_ultimo_estado)
    values1 = values1[0] + values1[1]
-   values1 = "maxT" + "=" + values1 + "\n"
-   values2 = "noSym" + "=" + values1 + "\n"
+   values1 = "   "+"maxT" + "=" + values1 + "\n"
+   values2 = "   "+"noSym" + "=" + values1 + "\n"
    print("TERMINALES FINALES", arreglo_de_inicio_finales)
    archivo_seleccionado = open("OriginalScanner.py", "r+")
    archivo_seleccionado = archivo_seleccionado.read()
@@ -366,7 +367,7 @@ def declarar_variables_de_inicializacion ():
    print("CORTE", corte_caracteres)
    primero_01 = [i[0] for i in corte_caracteres]
    segundo_02 = [i[1:] for i in corte_caracteres]
-   concat_matrix = "\n".join([str(a.replace("'","")) + "="+ '"' + str(b) + '"' for a,b in zip(primero_01,segundo_02)])
+   concat_matrix = "\n".join([str("   " + a.replace("'","")) + "="+ '"' + str(b) + '"' for a,b in zip(primero_01,segundo_02)])
    print("concat_matrix", concat_matrix)
    values = concat_matrix
    values = values.replace("[", "")
@@ -378,7 +379,13 @@ def declarar_variables_de_inicializacion ():
    values = values.replace('" ', '')
    values = values.replace('.', '')
    print("RESULTADO", values)
-   declaracion_string = ("\n".join(guardar_estados_transformados_2))
+   guardar_estados_transformados_2_nuevos = []
+   for i in guardar_estados_transformados_2:
+       print("PINTAR ELEMENTO",i)
+       manage_tab = "   " + i
+       guardar_estados_transformados_2_nuevos.append(manage_tab)
+
+   declaracion_string = ("\n".join(guardar_estados_transformados_2_nuevos))
    declaracion_string = declaracion_string.replace("1", "one")
    declaracion_string = declaracion_string.replace("2", "two")
    declaracion_string = declaracion_string.replace("3", "three")
@@ -402,8 +409,8 @@ def declarar_variables_de_inicializacion ():
    transposicion_show = transposicion_show.replace("'8'", "eight")
    transposicion_show = transposicion_show.replace("'9'", "nine")
    transposicion_show = transposicion_show.replace("'", "")
-   start_declaration = "transposicion=" + transposicion_show + "\n" + "print(" + "transposicion" + ")"
-   todo_limpio = values1 + values2 + values + "\n" + declaracion_string +  "\n" + start_declaration
+   start_declaration = "transposicion=" + transposicion_show + "\n" + "   "+  "print(" + "transposicion" + ")"
+   todo_limpio = values1 + values2 + values + "\n" + declaracion_string +  "\n" + "   "+  start_declaration
    archivo_seleccionado = archivo_seleccionado.replace("#!declaraciones", todo_limpio)
    keypass_01 = open("NewScanner.py", "w")
    keypass_01.write(archivo_seleccionado)
@@ -434,7 +441,7 @@ def declarar_siguiente_caracter():
         segundo_elemento = segundo_elemento.replace("7", "'seven'")
         segundo_elemento = segundo_elemento.replace("8", "'eight'")
         segundo_elemento = segundo_elemento.replace("9", "'nine'")
-        segundo_elemento = ":" + j[0] + ":" + "self.ch ==" + segundo_elemento + ":" + "\n" + "      "+ "buf += unicode(self.ch)" + "\n" + "      " + "self.Siguiente_Caracter()"+ "\n" +"      "+ "state=" + j[2] + "\n"
+        segundo_elemento = ":" + j[0] + ":" + "self.ch ==" + segundo_elemento + ":" + "\n" + "               "+ "buf += unicode(self.ch)" + "\n" + "               " + "self.Siguiente_Caracter()"+ "\n" +"               "+ "state=" + j[2] + "\n"
         arreglo_estado_medio_final.append(segundo_elemento)
         #print(segundo_elemento)
 
@@ -457,13 +464,13 @@ def declarar_siguiente_caracter():
         i = ":" + i + ":"
         #inicio = inicio.replace(":", "")
         revisar = inicio
-        inicio = "elif state ==" + inicio + ":" + "\n"
+        inicio = "         "+"elif state ==" + inicio + ":" + "\n"
         print("i:" ,revisar )
         if (revisar == "1"):
             todo_scan3.append(inicio)
             print(inicio)
         if (revisar != "1"):
-            add_else = "   "+ "else:" + "\n" + "      " + "self.t.tipo_token= Escaner.noSym " +  "\n" + "      " +"done = True" + "\n"
+            add_else = "            "+ "else:" + "\n" + "               " + "self.t.tipo_token= Escaner.noSym " +  "\n" + "               " +"done = True" + "\n"
             inicio_2 = add_else + inicio
             todo_scan3.append(inicio_2)
             print(inicio_2)
@@ -473,14 +480,14 @@ def declarar_siguiente_caracter():
                 if (test_change) == inicio:
                     segundo_valor = j
                     segundo_valor = segundo_valor.replace(i, "")
-                    segundo_valor = "   "+ "elif" + " " + segundo_valor
+                    segundo_valor = "            "+ "elif" + " " + segundo_valor
                     print(segundo_valor)
                     todo_scan3.append(segundo_valor)
                 if (test_change) != inicio:
                     test_change = inicio
                     segundo_valor = j
                     segundo_valor = segundo_valor.replace(i, "")
-                    segundo_valor = "   "+ "if" + " " + segundo_valor
+                    segundo_valor = "            "+ "if" + " " + segundo_valor
                     print(segundo_valor)
                     todo_scan3.append(segundo_valor)
                 test_change = inicio
