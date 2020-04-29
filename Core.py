@@ -417,11 +417,13 @@ def declarar_siguiente_caracter():
     x = np.array(variable_transposicion)
     print("Ordenado",x)
     arreglo_estado_inicio = []
+    arreglo_estado_inicio_limpio = [] 
     arreglo_estado_medio_final = []
     for i, j in enumerate(x):
         #print ("elif state ==" + j[0] + ":" + "\n")
         primer_elemento = ("elif state ==" + j[0] + ":" + "\n")
         arreglo_estado_inicio.append(":" + j[0] + ":")
+        arreglo_estado_inicio_limpio.append(j[0])
         segundo_elemento = j[1]
         segundo_elemento = segundo_elemento.replace("1", "'one'")
         segundo_elemento = segundo_elemento.replace("2", "'two'")
@@ -438,14 +440,22 @@ def declarar_siguiente_caracter():
 
     unicos_primer_elemento = np.unique(arreglo_estado_inicio)
     unicos_primer_elemento = np.array(unicos_primer_elemento)
+    ordenar_unicos = np.sort(unicos_primer_elemento)
+
+    unicos_primer_elemento1 = np.unique(arreglo_estado_inicio_limpio)
+    unicos_primer_elemento1 = np.array(unicos_primer_elemento1)
+    ordenar_unicos_limpios = np.sort(unicos_primer_elemento1)
     print("Valor unico primer_elemento", unicos_primer_elemento)
+    print("ordenar valor unico primer_elemento", ordenar_unicos)
+    print("test ordenar valor unico primer_elemento", ordenar_unicos_limpios)
     print("arreglo_estado_medio_final",arreglo_estado_medio_final)
     todo_scan3 = []
     test_change = 0
-    for i in unicos_primer_elemento:
+    for i in ordenar_unicos_limpios:
         #print( i + "!!!")
         inicio = i 
-        inicio = inicio.replace(":", "")
+        i = ":" + i + ":"
+        #inicio = inicio.replace(":", "")
         revisar = inicio
         inicio = "elif state ==" + inicio + ":" + "\n"
         print("i:" ,revisar )
