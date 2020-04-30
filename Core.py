@@ -292,6 +292,31 @@ for poss_keys in arregloB:
             todos.pop(todos.index(poss_token))
 
 print("ALL_FOR_IT_2", todos)
+i_variable = 0 
+for n in todos:
+    i_variable = i_variable + 1
+    print("N!$", n)
+    n = n.replace(" ","")
+    expresion_regular = n
+    print("QUE ENTRO AUTOMATITOS", expresion_regular)
+    arreglo_todos_los_automatas.append(expresion_regular)
+    if "?" in expresion_regular:
+       expresion_regular.replace("?", "|e")
+    if "ε" in expresion_regular:
+       expresion_regular.replace("ε", "@")
+    a = Thmp(expresion_regular)
+    sacar_variable =a.FunctionsNFA()
+    sacar_variable2 = a.InEnd()
+    #graficar_AFNVS2(sacar_variable,sacar_variable2)
+    generacion_de_archivo_AFN(sacar_variable,sacar_variable2)
+    print("|------------Subconjuntos--------------|")
+    b = Subconjunto(a.afn)
+    sacar_variable =b.TransposicionFinalAFD()
+    sacar_variable2 = b.InEndAFD()
+    graficar_AFDFinal(sacar_variable,sacar_variable2,str(i_variable))
+    generacion_de_archivo_afd_test(sacar_variable,sacar_variable2)
+    arreglo_de_inicio_finales.append(sacar_variable2)
+   
 
 for i in range(cantidad):
     print("i", i )
@@ -372,16 +397,17 @@ for i in range(cantidad):
     b = Subconjunto(a.afn)
     sacar_variable =b.TransposicionFinalAFD()
     sacar_variable2 = b.InEndAFD()
-    graficar_AFDFinal(sacar_variable,sacar_variable2,str(i))
-    generacion_de_archivo_afd_test(sacar_variable,sacar_variable2)
-    arreglo_de_inicio_finales.append(sacar_variable2)
+    #graficar_AFDFinal(sacar_variable,sacar_variable2,str(i))
+    #generacion_de_archivo_afd_test(sacar_variable,sacar_variable2)
+    #arreglo_de_inicio_finales.append(sacar_variable2)
     
     
 
-print("LISTA DE TODOS LOS AUTOMATAS", arreglo_todos_los_automatas )
-fullStr = '|'.join('("' + item + '")' for item in arreglo_todos_los_automatas)
+print("LISTA DE TODOS LOS AUTOMATAS", todos )
+fullStr = '|'.join('("' + item + '")' for item in todos)
 print("LISTA DE TODOS LOS AUTOMATAS2", fullStr )
 fullStr = fullStr.replace('"',"")
+fullStr = fullStr.replace(" ","")
 print("LISTA DE TODOS LOS AUTOMATAS3", fullStr )
 expresion_regular = fullStr
 expresion_regular = expresion_regular.replace('ε', 'e')
@@ -437,7 +463,7 @@ def declarar_variables_de_inicializacion ():
        print("PINTAR ELEMENTO",i)
        manage_tab = "   " + i
        guardar_estados_transformados_2_nuevos.append(manage_tab)
-
+    
    declaracion_string = ("\n".join(guardar_estados_transformados_2_nuevos))
    declaracion_string = declaracion_string.replace("1", "one")
    declaracion_string = declaracion_string.replace("2", "two")
@@ -449,9 +475,31 @@ def declarar_variables_de_inicializacion ():
    declaracion_string = declaracion_string.replace("8", "eight")
    declaracion_string = declaracion_string.replace("9", "nine")
 
+   print("PRIMER SACAR DECLARACIONES", primero_01)
+   nueva_declaracion = []
+   for i in primero_01:
+       buscar_posicion = primero_01.index(i)
+       buscar_posicion = str(buscar_posicion)
+       buscar_posicion = buscar_posicion.replace('0',"zero")
+       buscar_posicion = buscar_posicion.replace('1', "one")
+       buscar_posicion = buscar_posicion.replace('2', "two")
+       buscar_posicion = buscar_posicion.replace('3', "three")
+       buscar_posicion = buscar_posicion.replace('4', "four")
+       buscar_posicion = buscar_posicion.replace('5', "five")
+       buscar_posicion = buscar_posicion.replace('6', "six")
+       buscar_posicion = buscar_posicion.replace('7', "seven")
+       buscar_posicion = buscar_posicion.replace('8', "eight")
+       buscar_posicion = buscar_posicion.replace('9', "nine")
+       nuevo_string = "   " + buscar_posicion + "=" + i
+       print(nuevo_string)
+       nueva_declaracion.append(nuevo_string)
+
+
    print("TRANSPOSICION",variable_transposicion )
+   nueva_declaracion_string = ("\n".join(nueva_declaracion))
    print("ESTADOS ACTUALES", guardar_estados_en_DFA)
    transposicion_show = str(variable_transposicion)
+   transposicion_show = transposicion_show.replace("'0'", "zero")
    transposicion_show = transposicion_show.replace("'1'", "one")
    transposicion_show = transposicion_show.replace("'2'", "two")
    transposicion_show = transposicion_show.replace("'3'", "three")
@@ -463,7 +511,7 @@ def declarar_variables_de_inicializacion ():
    transposicion_show = transposicion_show.replace("'9'", "nine")
    transposicion_show = transposicion_show.replace("'", "")
    start_declaration = "transposicion=" + transposicion_show + "\n" + "   "+  "print(" + "transposicion" + ")"
-   todo_limpio = values1 + values2 + values + "\n" + declaracion_string +  "\n" + "   "+  start_declaration
+   todo_limpio = values1 + values2 + values + "\n" + nueva_declaracion_string +  "\n" + "   "+  start_declaration
    archivo_seleccionado = archivo_seleccionado.replace("#!declaraciones", todo_limpio)
    keypass_01 = open("NewScanner.py", "w")
    keypass_01.write(archivo_seleccionado)
