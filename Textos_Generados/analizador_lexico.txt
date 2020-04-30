@@ -1,3 +1,53 @@
 ANALIZADOR LEXICO
 _____________________________________________
 _____________________________________________
+CORTE DE CARACTERES
+__________________________________
+upletter'A'..'Z'
+downletter'a'..'z'
+letter"abcdefghijklmnopqrstuvwxyz"upletterdownletter.
+digit"0123456789"
+hexdigitdigit"ABCDEF"
+hexterm'H'
+tabCHR(9)
+eolCHR(10)
+whitespaceCHR(13)eoltab
+sign'''-'
+----------------------------------
+CONDICIONALES
+__________________________________
+while  "while"
+do  "do"
+----------------------------------
+TOKENS
+__________________________________
+ident letter{letter|digit}
+hexnumber hexdigit{hexdigit}hexterm
+number  digit{digit}
+signnumber  [sign]digit{digit}
+whitetoken  whitespace{whitespace}
+----------------------------------
+NOMBRE
+__________________________________
+ident 
+hexnumber 
+number 
+signnumber 
+whitetoken 
+----------------------------------
+CONTENIDO
+__________________________________
+letter letter|0123456789* 
+dAdBdCdDdEdFiAiBiCiDiEiFgAgBgCgDgEgFiAiBiCiDiEiFtAtBtCtDtEtF dAdBdCdDdEdFiAiBiCiDiEiFgAgBgCgDgEgFiAiBiCiDiEiFtAtBtCtDtEtF* 'H'
+ 0123456789 0123456789* 
+ [sign]digit digit* 
+ whitespace whitespace* 
+----------------------------------
+EXCEPCION
+__________________________________
+['keywords']
+['keywords']
+[]
+[]
+[]
+----------------------------------

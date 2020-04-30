@@ -68,6 +68,7 @@ class Tabla_de_Simbolos( object ):
    def comparar( self, x ):
       assert isinstance( x, Symbol )
       return self.nombre.__cmp__( x.nombre )
+      
 archivo_seleccionado = open("seleccionar_archivo.txt", "r+")
 archivo_seleccionado = archivo_seleccionado.read()
 archivo_para_scanner = open(archivo_seleccionado, 'r')
@@ -78,7 +79,9 @@ index_palabras_clave = lineas.index("KEYWORDS\n")
 index_tokens = lineas.index("TOKENS\n")
 index_producciones = lineas.index("PRODUCTIONS\n")
 
+
 corte_caracteres = lineas[index_caracteres:index_palabras_clave]
+print("CORTE DE CARACTERES BUSCAR", corte_caracteres)
 corte_caracteres = quitar_caracteres_inecesarios(corte_caracteres)
 corte_de_palabras_clave = lineas[index_palabras_clave+1:index_tokens]
 corte_de_palabras_clave = quitar_caracteres_inecesarios(corte_de_palabras_clave)
@@ -97,7 +100,7 @@ for i, j in enumerate(corte_caracteres):
          rehacer = deepcopy(l.split('+'))
          corte_caracteres[i][k] = rehacer[0]
          corte_caracteres[i].append(rehacer[1])
-
+arreglo_de_tokens = []
 with open("Textos_Generados/analizador_lexico.txt", "a+") as txt_file:
     corte_caracteres_finales = [] 
     txt_file.write("CORTE DE CARACTERES\n")
@@ -125,9 +128,10 @@ with open("Textos_Generados/analizador_lexico.txt", "a+") as txt_file:
     txt_file.write("TOKENS\n")
     txt_file.write("__________________________________\n")
     for line in corte_de_tokens:
+        arreglo_de_tokens.append(line)
         txt_file.write("".join(line) + "\n") 
         final = "".join(line)
-        print("token", final)
+        print("TOKENS OBTENIDOS", final)
     txt_file.write("----------------------------------\n")
 
 
@@ -240,6 +244,55 @@ guardar_estados_transformados_2 = []
 guardar_estados_en_DFA = []
 arreglo_de_inicio_finales = [] 
 d = dict(enumerate(string.ascii_lowercase, 1))
+
+#print("ARREGLO DE TOKENS", arreglo_de_tokens)
+solo_tokens = [] 
+for i in (arreglo_de_tokens):
+	#print(i[1])
+    solo_tokens.append(i[1])
+print("solo tokens", solo_tokens)
+arregloA = solo_tokens
+
+# TODO: hexdigit no aparece aun
+primero_01 = [i[0] for i in corte_caracteres]
+print("primero_01", primero_01)
+arregloB = primero_01
+segundo_02 = [i[1:] for i in corte_caracteres]
+#print("segundo_02", segundo_02)
+#concat_matrix = "\n".join([str("   " + a.replace("'","")) + "="+ '"' + str(b) + '"' for a,b in zip(primero_01,segundo_02)])
+#print("DEFINICIONES", concat_matrix)
+todos = []
+for i in arregloB:
+	for j in arregloA:
+		if i in j:
+			j_before = j
+			cambiar = arregloB.index(i)
+			j = j.replace(str(i), str(cambiar))
+			j = j.replace("{", "(")
+			j = j.replace("}", ")*")
+			j = j.replace("|", "|")
+			j = j.replace("[", "")
+			j = j.replace("]", "")
+			j = j.replace(".", "")
+			j = j.replace('"', "")
+			print("ESTADOS FINALES",j)
+			print("index", i )
+			todos.append(j)
+			#print(j)
+			arr_pos = arregloA.index(j_before)
+			arregloA.pop(arr_pos)
+			arregloA.insert(arr_pos, todos[arr_pos])
+
+print("ALL_FOR_IT", todos)
+
+for poss_keys in arregloB:
+    for poss_token in todos:
+        if poss_keys in poss_token:
+            #print("ALL_FOR_NOTHING", poss_token)
+            todos.pop(todos.index(poss_token))
+
+print("ALL_FOR_IT_2", todos)
+
 for i in range(cantidad):
     print("i", i )
     valor = tokenizar.tokens[i].contenido.strip()
