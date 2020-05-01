@@ -5,6 +5,7 @@ with open("Textos_Generados/analizador_lexico.txt", "w") as txt_file:
          txt_file.write("ANALIZADOR LEXICO\n")
          txt_file.write("_____________________________________________\n")
          txt_file.write("_____________________________________________\n")
+#!leer_archivo!
 class Nodos():
     arreglo_nodo = []
     ntipo = ["    ", "t   ", "pr  ", "nt  ", "clas", "chr ", "wt  ", "any ", "eps ","sync", "sem ", "alt ", "iter", "opt ", "rslv"]
@@ -186,7 +187,7 @@ class Escaner(object):
    EOL     = u'\n'
    eofSym  = 0
 #!declaraciones
-
+#!tokens
    def __init__( self, s ):
       self.buffer = Buffer( unicode(s) ) 
       self.ch        = u'\0'       

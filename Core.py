@@ -85,14 +85,26 @@ print("CORTE DE CARACTERES BUSCAR", corte_caracteres)
 corte_caracteres = quitar_caracteres_inecesarios(corte_caracteres)
 corte_de_palabras_clave = lineas[index_palabras_clave+1:index_tokens]
 corte_de_palabras_clave = quitar_caracteres_inecesarios(corte_de_palabras_clave)
+
 corte_de_tokens = lineas[index_tokens+1:index_producciones]
+arreglo_tokens_limpios = corte_de_tokens 
+print("ARREGLO LIMPIO DE TOKENS", arreglo_tokens_limpios)
 corte_de_tokens = quitar_caracteres_inecesarios(corte_de_tokens)
+arreglo_tokens_limpios2 = corte_de_tokens
+print("ARREGLO LIMPIO DE TOKENS2", arreglo_tokens_limpios2)
 corte_caracteres = cortar_lista(corte_caracteres)
+print("CORTE DE CARACTERES BUSCAR2", corte_caracteres)
+arreglo_tokens_limpios3 = corte_de_tokens
+print("ARREGLO LIMPIO DE TOKENS3", arreglo_tokens_limpios3)
 corte_de_palabras_clave = process_palabras_clave(corte_de_palabras_clave)
 corte_de_tokens = procesar_tokens(corte_de_tokens)
+arreglo_tokens_limpios4 = corte_de_tokens
+print("ARREGLO LIMPIO DE TOKENS4", arreglo_tokens_limpios4)
 corte_caracteres = [x for x in corte_caracteres if x!= ['']]
 corte_de_palabras_clave = [x for x in corte_de_palabras_clave if x!= ['']]
 corte_de_tokens = [x for x in corte_de_tokens if x!= ['']]
+arreglo_tokens_limpios5 = corte_de_tokens
+print("ARREGLO LIMPIO DE TOKENS5", arreglo_tokens_limpios5)
 
 for i, j in enumerate(corte_caracteres):
    for k, l in enumerate(j):
@@ -114,6 +126,8 @@ with open("Textos_Generados/analizador_lexico.txt", "a+") as txt_file:
     print("CORTE CARACTERES VIEW", corte_caracteres_finales2)
     corte_caracteres_finales_header = column(corte_caracteres, 0)
     print("CORTE CARACTERES VIEW 2", corte_caracteres_finales_header)
+    sacar_nombre_de_caracteres = corte_caracteres_finales_header
+    print("CORTE DE CARACTERES FINALES", sacar_nombre_de_caracteres )
     
     for line in corte_caracteres:
         txt_file.write("".join(line) + "\n")
@@ -127,11 +141,13 @@ with open("Textos_Generados/analizador_lexico.txt", "a+") as txt_file:
     txt_file.write("----------------------------------\n")
     txt_file.write("TOKENS\n")
     txt_file.write("__________________________________\n")
+    arreglo_tokens_con_valor = [] 
     for line in corte_de_tokens:
         arreglo_de_tokens.append(line)
         txt_file.write("".join(line) + "\n") 
         final = "".join(line)
         print("TOKENS OBTENIDOS", final)
+        arreglo_tokens_con_valor.append(final)
     txt_file.write("----------------------------------\n")
 
 
@@ -254,44 +270,73 @@ print("solo tokens", solo_tokens)
 arregloA = solo_tokens
 
 # TODO: hexdigit no aparece aun
+print("CORTE DE CARACTERES CON TODO", corte_caracteres)
 primero_01 = [i[0] for i in corte_caracteres]
-print("primero_01", primero_01)
-arregloB = primero_01
+print("primero_01", sacar_nombre_de_caracteres)
+arregloB = sacar_nombre_de_caracteres
 segundo_02 = [i[1:] for i in corte_caracteres]
+
+
 #print("segundo_02", segundo_02)
 #concat_matrix = "\n".join([str("   " + a.replace("'","")) + "="+ '"' + str(b) + '"' for a,b in zip(primero_01,segundo_02)])
 #print("DEFINICIONES", concat_matrix)
+
+contained = []
+for key in arregloB:
+    for value in arregloB:
+        if (key in value) and (key != value):
+            str_contained = key
+            contained.append(str_contained)
+
+contained = list(dict.fromkeys(contained))
+
+for i in range(len(contained)):
+    for values in arregloB:
+        if contained[i] == values:
+            arregloB.pop(arregloB.index(values))
+            arregloB.append(contained[i])
+
+print(arregloB)
+
 todos = []
+todos_index = 0
 for i in arregloB:
-	for j in arregloA:
-		if i in j:
-			j_before = j
-			cambiar = arregloB.index(i)
-			j = j.replace(str(i), str(cambiar))
-			j = j.replace("{", "(")
-			j = j.replace("}", ")*")
-			j = j.replace("|", "|")
-			j = j.replace("[", "")
-			j = j.replace("]", "")
-			j = j.replace(".", "")
-			j = j.replace('"', "")
-			print("ESTADOS FINALES",j)
-			print("index", i )
-			todos.append(j)
-			#print(j)
-			arr_pos = arregloA.index(j_before)
-			arregloA.pop(arr_pos)
-			arregloA.insert(arr_pos, todos[arr_pos])
+    for j in arregloA:
+        if i in j:
+            j_before = j
+            cambiar = arregloB.index(i)
+            j = j.replace(str(i), str(cambiar))
+            j = j.replace("{", "(")
+            j = j.replace("}", ")*")
+            j = j.replace("|", "|")
+            j = j.replace("[", "")
+            j = j.replace("]", "")
+            j = j.replace(".", "")
+            j = j.replace('"', "")
+            #print("ESTADOS FINALES",j)
+            #print("index", i )
+            todos.append(j)
+            #print(j)
+            arr_pos = arregloA.index(j_before)
+            arregloA.pop(arr_pos)
+            arregloA.insert(arr_pos, todos[todos_index])
+            todos_index = todos_index + 1
 
 print("ALL_FOR_IT", todos)
 
 for poss_keys in arregloB:
     for poss_token in todos:
         if poss_keys in poss_token:
-            #print("ALL_FOR_NOTHING", poss_token)
+            todos.pop(todos.index(poss_token))
+
+for poss_keys in arregloB:
+    for poss_token in todos:
+        if poss_keys in poss_token:
             todos.pop(todos.index(poss_token))
 
 print("ALL_FOR_IT_2", todos)
+
+
 i_variable = 0 
 for n in todos:
     i_variable = i_variable + 1
@@ -533,6 +578,7 @@ def declarar_siguiente_caracter():
         arreglo_estado_inicio.append(":" + j[0] + ":")
         arreglo_estado_inicio_limpio.append(j[0])
         segundo_elemento = j[1]
+        segundo_elemento = segundo_elemento.replace("0", "'zero'")
         segundo_elemento = segundo_elemento.replace("1", "'one'")
         segundo_elemento = segundo_elemento.replace("2", "'two'")
         segundo_elemento = segundo_elemento.replace("3", "'three'")
@@ -601,9 +647,51 @@ def declarar_siguiente_caracter():
     archivo_seleccionado = archivo_seleccionado.replace("#!scan03", new_text)
     keypass_01 = open("NewScanner.py", "w")
     keypass_01.write(archivo_seleccionado)
-    keypass_01.close()          
+    keypass_01.close()       
+def input_de_archivo():
+    archivo_seleccionado = open("NewScanner.py", "r+")
+    archivo_seleccionado = archivo_seleccionado.read()
+    new_text = 'ver_archivo = input("Ingrese el archivo del cual desea ver tokens:  ")' + "\n" + "archivo_para_scanner = open(ver_archivo, 'r')" + "\n" + "lineas = archivo_para_scanner.readlines()" + "\n" + 'lineas = ", ".join(lineas)' + "\n"  + "archivo_para_scanner.close()"
+    archivo_seleccionado = archivo_seleccionado.replace("#!leer_archivo!", new_text)
+    keypass_01 = open("NewScanner.py", "w")
+    keypass_01.write(archivo_seleccionado)
+    keypass_01.close()       
+
+def definiciones_de_tokens():
+    print("tokens para pasar a definicon", arreglo_tokens_limpios5)
+    print("sacar caracteres", sacar_nombre_de_caracteres)
+    arreglo_limpio = [] 
+    arreglo_headers = [] 
+    for i in arreglo_tokens_limpios5:
+        arreglo_por_valor = []
+        valor_entrada = i[0] 
+        arreglo_headers.append(valor_entrada)
+        print("for", i )
+        for j in sacar_nombre_de_caracteres:
+            print("for", j )
+            if j in i[1]:
+                arreglo_por_valor.append(j)
+        arreglo_limpio.append(arreglo_por_valor)
+    print("ARREGLO LIMPIO", arreglo_limpio)
+    print("ARREGLO HEADERS", arreglo_headers)
+    concat_matrix = "\n".join([str("   " + a.replace("'","")) + "="+ '"' + str(b) + '"' for a,b in zip(arreglo_headers,arreglo_limpio)])
+    print("CONCATENACION", concat_matrix)
+    concat_matrix = concat_matrix.replace('"', "")
+    concat_matrix = concat_matrix.replace("'", "")
+    print("CONCATENACION", concat_matrix)
+    archivo_seleccionado = open("NewScanner.py", "r+")
+    archivo_seleccionado = archivo_seleccionado.read()
+    new_text = concat_matrix
+    archivo_seleccionado = archivo_seleccionado.replace("#!tokens", new_text)
+    keypass_01 = open("NewScanner.py", "w")
+    keypass_01.write(archivo_seleccionado)
+    keypass_01.close()   
+    
+
 declarar_variables_de_inicializacion()
 declarar_siguiente_caracter()
+input_de_archivo()
+definiciones_de_tokens()
 print()
 print("+ analizador lexico generado")
 

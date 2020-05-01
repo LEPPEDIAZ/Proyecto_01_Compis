@@ -1,15 +1,20 @@
 #!inicio
 import sys
 from copy import deepcopy
-with open("Textos_Generados/analizador_lexico.txt", "w") as txt_file:
-         txt_file.write("ANALIZADOR LEXICO\n")
-         txt_file.write("_____________________________________________\n")
-         txt_file.write("_____________________________________________\n")
+
+#area de ingreso de texto ###########################################
 ver_archivo = input("Ingrese el archivo del cual desea ver tokens:  ")
 archivo_para_scanner = open(ver_archivo, 'r')
 lineas = archivo_para_scanner.readlines()
 lineas = ", ".join(lineas)
 archivo_para_scanner.close()
+#####################################################################
+
+
+with open("Textos_Generados/analizador_lexico.txt", "w") as txt_file:
+         txt_file.write("ANALIZADOR LEXICO\n")
+         txt_file.write("_____________________________________________\n")
+         txt_file.write("_____________________________________________\n")
 class Nodos():
     arreglo_nodo = []
     ntipo = ["    ", "t   ", "pr  ", "nt  ", "clas", "chr ", "wt  ", "any ", "eps ","sync", "sem ", "alt ", "iter", "opt ", "rslv"]
@@ -190,43 +195,49 @@ class Buffer( object ):
 class Escaner(object):
    EOL     = u'\n'
    eofSym  = 0
-   maxT=23
-   noSym=   maxT=23
+   maxT=6
 
-   letterLo="a""z"
-   letterUp="A""Z"
-   ll="a""z "A""Z"
-   aA="aeiou  AEIOU"
-   consonants="letter-vowels"
+   noSym=   maxT=6
+
+
    digit="0123456789"
-   sign=  "-"
-   dA="0123456789 ABCDEF"
-   tab="CHR(9)"
-   eol="CHR(10)"
-   space="CHR(32)"
-   whitespace="CHR(13)  CHR(10)  CHR(9)"
-   zero=letterLo
-   one=letterUp
-   two=ll
-   three=aA
-   four=consonants
-   five=digit
-   six=sign
-   seven=dA
-   eight=tab
-   nine=eol
-   onezero=space
-   oneone=whitespace
-   transposicion=[[1, four, 2], [1, five, 3], [1, one, 4], [1, eight, 5], [1, nine, 6], [6, one, 7], [6, nine, 8], [8, one, 7], [8, nine, 8], [7, zero, 9], [9, one, 7], [9, nine, 10], [10, one, 7], [10, nine, 10], [5, eight, 11], [11, eight, 11], [4, zero, 12], [12, one, 13], [12, zero, 14], [14, zero, 14], [13, zero, 15], [15, one, 16], [16, zero, 17], [17, one, 16], [3, five, 18], [3, H, 19], [18, five, 18], [18, H, 19], [2, one, 20], [20, zero, 21], [21, one, 22], [22, zero, 23], [23, one, 22]]
+   tab="\\t"
+   eol="\\n"
+   blanco="\\n  \\r  \\t"
+   zero=digit
+   one=tab
+   two=eol
+   three=blanco
+   transposicion=[[1, zero, 2], [1, three, 3], [3, three, 4], [4, three, 4], [2, zero, 5], [5, zero, 6], [6, zero, 6]]
+
+   #### agregar tokens value ####################################
+   number = [digit]
+   decnumber = [digit + "".join(number), "".join(number), "".join(number) + digit]
+   white = [blanco]
+
+   ### agregar transposicion #####################################
    print(transposicion)
-   string =[letter]
-   name =[letterLo, letterUp, letter]
-   var =[letter, digit]
-   signInt =[sign, digit]
-   int =[digit]
-   float =[digit]
-   hexnumber =[hexdigit, digit]
-   space =[whitespace, space]
+   print("--------------------------------------------------------")
+   print("RECONOCIMIENTO DE TOKENS")
+   print("--------------------------------------------------------")
+   print("texto: ", lineas)
+   print("digito: ", digit)
+   ###############################################
+   numero1 = 0
+   for i in decnumber:
+      if i in lineas:
+         print("Se encontro decnumber", i)
+         numero1 = numero1 +1 
+   print(numero1)
+   numero2 = 0
+   for i in number:
+      if i in number:
+         print("se encontro numero", i )
+         numero2 = numero2 + 1 
+   print(numero2)
+
+
+
    def __init__( self, s ):
       self.buffer = Buffer( unicode(s) ) 
       self.ch        = u'\0'       
@@ -297,222 +308,54 @@ class Escaner(object):
             self.t.tipo_token = Escaner.noSym      
             listo = True
          elif state ==1:
-            if self.ch =='four':
+            if self.ch =='zero':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=2
-            elif self.ch =='five':
+            elif self.ch =='three':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=3
-            elif self.ch =='one':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=4
-            elif self.ch =='eight':
+            else:
+               self.t.tipo_token= Escaner.noSym 
+               done = True
+         elif state ==2:
+            if self.ch =='zero':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=5
-            elif self.ch =='nine':
+            else:
+               self.t.tipo_token= Escaner.noSym 
+               done = True
+         elif state ==3:
+            if self.ch =='three':
+               buf += unicode(self.ch)
+               self.Siguiente_Caracter()
+               state=4
+            else:
+               self.t.tipo_token= Escaner.noSym 
+               done = True
+         elif state ==4:
+            if self.ch =='three':
+               buf += unicode(self.ch)
+               self.Siguiente_Caracter()
+               state=4
+            else:
+               self.t.tipo_token= Escaner.noSym 
+               done = True
+         elif state ==5:
+            if self.ch =='zero':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=6
             else:
                self.t.tipo_token= Escaner.noSym 
                done = True
-         elif state ==10:
-            if self.ch =='one':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=7
-            elif self.ch =='nine':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=10
-            else:
-               self.t.tipo_token= Escaner.noSym 
-               done = True
-         elif state ==11:
-            if self.ch =='eight':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=11
-            else:
-               self.t.tipo_token= Escaner.noSym 
-               done = True
-         elif state ==12:
-            if self.ch =='one':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=13
-            elif self.ch =='zero':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=14
-            else:
-               self.t.tipo_token= Escaner.noSym 
-               done = True
-         elif state ==13:
-            if self.ch =='zero':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=15
-            else:
-               self.t.tipo_token= Escaner.noSym 
-               done = True
-         elif state ==14:
-            if self.ch =='zero':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=14
-            else:
-               self.t.tipo_token= Escaner.noSym 
-               done = True
-         elif state ==15:
-            if self.ch =='one':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=16
-            else:
-               self.t.tipo_token= Escaner.noSym 
-               done = True
-         elif state ==16:
-            if self.ch =='zero':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=17
-            else:
-               self.t.tipo_token= Escaner.noSym 
-               done = True
-         elif state ==17:
-            if self.ch =='one':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=16
-            else:
-               self.t.tipo_token= Escaner.noSym 
-               done = True
-         elif state ==18:
-            if self.ch =='five':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=18
-            elif self.ch ==H:
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=19
-            else:
-               self.t.tipo_token= Escaner.noSym 
-               done = True
-         elif state ==2:
-            if self.ch =='one':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=20
-            else:
-               self.t.tipo_token= Escaner.noSym 
-               done = True
-         elif state ==20:
-            if self.ch =='zero':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=21
-            else:
-               self.t.tipo_token= Escaner.noSym 
-               done = True
-         elif state ==21:
-            if self.ch =='one':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=22
-            else:
-               self.t.tipo_token= Escaner.noSym 
-               done = True
-         elif state ==22:
-            if self.ch =='zero':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=23
-            else:
-               self.t.tipo_token= Escaner.noSym 
-               done = True
-         elif state ==23:
-            if self.ch =='one':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=22
-            else:
-               self.t.tipo_token= Escaner.noSym 
-               done = True
-         elif state ==3:
-            if self.ch =='five':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=18
-            elif self.ch ==H:
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=19
-            else:
-               self.t.tipo_token= Escaner.noSym 
-               done = True
-         elif state ==4:
-            if self.ch =='zero':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=12
-            else:
-               self.t.tipo_token= Escaner.noSym 
-               done = True
-         elif state ==5:
-            if self.ch =='eight':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=11
-            else:
-               self.t.tipo_token= Escaner.noSym 
-               done = True
          elif state ==6:
-            if self.ch =='one':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=7
-            elif self.ch =='nine':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=8
-            else:
-               self.t.tipo_token= Escaner.noSym 
-               done = True
-         elif state ==7:
             if self.ch =='zero':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
-               state=9
-            else:
-               self.t.tipo_token= Escaner.noSym 
-               done = True
-         elif state ==8:
-            if self.ch =='one':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=7
-            elif self.ch =='nine':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=8
-            else:
-               self.t.tipo_token= Escaner.noSym 
-               done = True
-         elif state ==9:
-            if self.ch =='one':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=7
-            elif self.ch =='nine':
-               buf += unicode(self.ch)
-               self.Siguiente_Caracter()
-               state=10
+               state=6
 
       self.t.val = buf
       return self.t
