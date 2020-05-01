@@ -687,11 +687,39 @@ def definiciones_de_tokens():
     keypass_01.write(archivo_seleccionado)
     keypass_01.close()   
     
+def validaciones():
+    print("tokens para pasar a definicon", arreglo_tokens_limpios5)
+    arreglo_headers = [] 
+    for i in arreglo_tokens_limpios5:
+        valor_entrada = i[0] 
+        arreglo_headers.append(valor_entrada)
+    print("Encabezados", arreglo_headers)
+    todas_las_validaciones = [] 
+    for j in arreglo_headers:
+        nuevo_texto_validar = "   " + "for i in " + j + ":" + "\n" + "      " + "lista_creada = list(i)" + "\n" + "      " + "for j in lista_creada:" + "\n" 
+        #print("encabezado", nuevo_texto_validar)
+        #nuevo_texto_validar = "   " + "for i in" + j + ":" + "\n" + "      " + lista_creada = list(i) + "\n" + "      " + "for j in lista_creada:" + "\n" + "         "
+        nuevo_texto_validar = nuevo_texto_validar + "         if j in lineas:" + "\n"
+        nuevo_texto_validar  = nuevo_texto_validar  + "            " + 'print("Token:", j, "token name:",' + "'" + j + "'" + ")"
+        print("------------------------")
+        print(nuevo_texto_validar )
+        print("------------------------")
+        todas_las_validaciones.append(nuevo_texto_validar)
+    
+    declaracion_string = ("\n".join(todas_las_validaciones))
+    archivo_seleccionado = open("NewScanner.py", "r+")
+    archivo_seleccionado = archivo_seleccionado.read()
+    archivo_seleccionado = archivo_seleccionado.replace("#validar!$", declaracion_string)
+    keypass_01 = open("NewScanner.py", "w")
+    keypass_01.write(archivo_seleccionado)
+    keypass_01.close()   
+        
 
 declarar_variables_de_inicializacion()
 declarar_siguiente_caracter()
 input_de_archivo()
 definiciones_de_tokens()
+validaciones()
 print()
 print("+ analizador lexico generado")
 

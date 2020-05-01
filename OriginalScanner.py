@@ -275,7 +275,7 @@ class Escaner(object):
 
    def reiniciar( self ):
       self.PeakDeTokenActual = self.t
-
+#validar!$
 #!final
 tokenizar = Token()
 

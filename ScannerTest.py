@@ -1,20 +1,15 @@
 #!inicio
 import sys
 from copy import deepcopy
-
-#area de ingreso de texto ###########################################
+with open("Textos_Generados/analizador_lexico.txt", "w") as txt_file:
+         txt_file.write("ANALIZADOR LEXICO\n")
+         txt_file.write("_____________________________________________\n")
+         txt_file.write("_____________________________________________\n")
 ver_archivo = input("Ingrese el archivo del cual desea ver tokens:  ")
 archivo_para_scanner = open(ver_archivo, 'r')
 lineas = archivo_para_scanner.readlines()
 lineas = ", ".join(lineas)
 archivo_para_scanner.close()
-#####################################################################
-
-
-with open("Textos_Generados/analizador_lexico.txt", "w") as txt_file:
-         txt_file.write("ANALIZADOR LEXICO\n")
-         txt_file.write("_____________________________________________\n")
-         txt_file.write("_____________________________________________\n")
 class Nodos():
     arreglo_nodo = []
     ntipo = ["    ", "t   ", "pr  ", "nt  ", "clas", "chr ", "wt  ", "any ", "eps ","sync", "sem ", "alt ", "iter", "opt ", "rslv"]
@@ -200,43 +195,20 @@ class Escaner(object):
    noSym=   maxT=6
 
 
+   letter="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
    digit="0123456789"
    tab="\\t"
    eol="\\n"
-   blanco="\\n  \\r  \\t"
-   zero=digit
-   one=tab
-   two=eol
-   three=blanco
-   transposicion=[[1, zero, 2], [1, three, 3], [3, three, 4], [4, three, 4], [2, zero, 5], [5, zero, 6], [6, zero, 6]]
-
-   #### agregar tokens value ####################################
-   number = [digit]
-   decnumber = [digit + "".join(number), "".join(number), "".join(number) + digit]
-   white = [blanco]
-
-   ### agregar transposicion #####################################
+   zero=letter
+   one=digit
+   two=tab
+   three=eol
+   transposicion=[[1, zero, 2], [1, one, 3], [3, one, 4], [4, one, 4], [2, zero, 5], [2, one, 6], [6, zero, 5], [6, one, 6], [5, zero, 5], [5, one, 6]]
    print(transposicion)
-   print("--------------------------------------------------------")
-   print("RECONOCIMIENTO DE TOKENS")
-   print("--------------------------------------------------------")
-   print("texto: ", lineas)
-   print("digito: ", digit)
-   ###############################################
-   numero1 = 0
-   for i in decnumber:
-      if i in lineas:
-         print("Se encontro decnumber", i)
-         numero1 = numero1 +1 
-   print(numero1)
-   numero2 = 0
-   for i in number:
-      if i in number:
-         print("se encontro numero", i )
-         numero2 = numero2 + 1 
-   print(numero2)
-
-
+   ident =[letter, digit]
+   number =[digit]
+   cantidad = 0
+   
 
    def __init__( self, s ):
       self.buffer = Buffer( unicode(s) ) 
@@ -312,7 +284,7 @@ class Escaner(object):
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=2
-            elif self.ch =='three':
+            elif self.ch =='one':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=3
@@ -324,11 +296,15 @@ class Escaner(object):
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=5
+            elif self.ch =='one':
+               buf += unicode(self.ch)
+               self.Siguiente_Caracter()
+               state=6
             else:
                self.t.tipo_token= Escaner.noSym 
                done = True
          elif state ==3:
-            if self.ch =='three':
+            if self.ch =='one':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=4
@@ -336,7 +312,7 @@ class Escaner(object):
                self.t.tipo_token= Escaner.noSym 
                done = True
          elif state ==4:
-            if self.ch =='three':
+            if self.ch =='one':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=4
@@ -347,12 +323,20 @@ class Escaner(object):
             if self.ch =='zero':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
+               state=5
+            elif self.ch =='one':
+               buf += unicode(self.ch)
+               self.Siguiente_Caracter()
                state=6
             else:
                self.t.tipo_token= Escaner.noSym 
                done = True
          elif state ==6:
             if self.ch =='zero':
+               buf += unicode(self.ch)
+               self.Siguiente_Caracter()
+               state=5
+            elif self.ch =='one':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=6
@@ -374,6 +358,14 @@ class Escaner(object):
 
    def reiniciar( self ):
       self.PeakDeTokenActual = self.t
+   
+   for i in number:
+      lista_creada = list(i)
+      for j in lista_creada:
+         if j in lineas:
+            print("Token:", j, "token name:", "digit")
+            cantidad = cantidad + 1
+   print("cantidad de Token digit:", cantidad)
 
 #!final
 tokenizar = Token()
