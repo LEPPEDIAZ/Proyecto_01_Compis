@@ -336,7 +336,8 @@ for poss_keys in arregloB:
 
 print("ALL_FOR_IT_2", todos)
 
-
+arreglo_todos_los_tokens_transposicion = []
+arreglo_todos_los_tokens_final_inicial = []
 i_variable = 0 
 for n in todos:
     i_variable = i_variable + 1
@@ -361,7 +362,10 @@ for n in todos:
     graficar_AFDFinal(sacar_variable,sacar_variable2,str(i_variable))
     generacion_de_archivo_afd_test(sacar_variable,sacar_variable2)
     arreglo_de_inicio_finales.append(sacar_variable2)
-   
+    arreglo_todos_los_tokens_transposicion.append(sacar_variable)
+    arreglo_todos_los_tokens_final_inicial.append(sacar_variable2)
+print("todos los tokens transposicion",arreglo_todos_los_tokens_transposicion)
+print("todos los tokens inicial y final",arreglo_todos_los_tokens_final_inicial)   
 
 for i in range(cantidad):
     print("i", i )
@@ -696,30 +700,53 @@ def validaciones():
     print("Encabezados", arreglo_headers)
     todas_las_validaciones = [] 
     for j in arreglo_headers:
-        nuevo_texto_validar = "   " + "for i in " + j + ":" + "\n" + "      " + "lista_creada = list(i)" + "\n" + "      " + "for j in lista_creada:" + "\n" 
-        #print("encabezado", nuevo_texto_validar)
-        #nuevo_texto_validar = "   " + "for i in" + j + ":" + "\n" + "      " + lista_creada = list(i) + "\n" + "      " + "for j in lista_creada:" + "\n" + "         "
-        nuevo_texto_validar = nuevo_texto_validar + "         if j in lineas:" + "\n"
-        nuevo_texto_validar  = nuevo_texto_validar  + "            " + 'print("Token:", j, "token name:",' + "'" + j + "'" + ")"
+        #nuevo_texto_validar = "   " + "new_lineas = []" + "\n" + "   "+  "new_lineas.append(lineas)" +  "\n" + "   " + "lista_de_palabras = convert(new_lineas)" +  "\n" + "   " + "arreglo_con_todos_los_tokens = [] "
+        nuevo_texto_validar = "\n" + "   " + "for i in " + j + ":" 
+        nuevo_texto_validar = nuevo_texto_validar + "\n" + "      " + "lista_creada = list(i)" + "\n" + "      " + "arreglo_nuevo = []" + "\n" + "      " + "for j in lista_creada:"
+        nuevo_texto_validar = nuevo_texto_validar + "\n" + "         " + "for k in lista_de_palabras:" + "\n" + "            " + "arreglo_test = []" + "\n" + "            "+ "lista_creada2 = list(k)"  + "\n" + "            "+"for n in lista_creada2:"
+        nuevo_texto_validar = nuevo_texto_validar + "\n" + "               if n in lista_creada:" + "\n" + "                  arreglo_test.append(True)" + "\n" + "               if n not in lista_creada:" + "\n" + "                  arreglo_test.append(False)"
+        nuevo_texto_validar = nuevo_texto_validar + "\n" + "            if all(arreglo_test) == True:" + "\n" + '               salvar_valor = "Token:"+ k  ' + "\n" + "               arreglo_con_todos_los_tokens.append(salvar_valor)"
         print("------------------------")
         print(nuevo_texto_validar )
         print("------------------------")
         todas_las_validaciones.append(nuevo_texto_validar)
     
     declaracion_string = ("\n".join(todas_las_validaciones))
+    declaracion_string = "   " + "new_lineas = []" + "\n" + "   "+  "new_lineas.append(lineas)" +  "\n" + "   " + "lista_de_palabras = convert(new_lineas)" +  "\n" + "   " + "arreglo_con_todos_los_tokens = [] " + declaracion_string
+    declaracion_string = declaracion_string + "\n" + "   unique(arreglo_con_todos_los_tokens)"
     archivo_seleccionado = open("NewScanner.py", "r+")
     archivo_seleccionado = archivo_seleccionado.read()
     archivo_seleccionado = archivo_seleccionado.replace("#validar!$", declaracion_string)
     keypass_01 = open("NewScanner.py", "w")
     keypass_01.write(archivo_seleccionado)
     keypass_01.close()   
-        
 
+def segunda_validacion():
+    print("tokens para pasar a definicon", arreglo_tokens_limpios5)
+    arreglo_headers = [] 
+    for i in arreglo_tokens_limpios5:
+        valor_entrada = i[0] 
+        arreglo_headers.append(valor_entrada)
+    print("Encabezados de Tokens", arreglo_headers)
+    print("transposiciones", arreglo_todos_los_tokens_transposicion )
+    print("final e inicial", arreglo_todos_los_tokens_final_inicial)
+    concat_matrix = "\n".join([str("   transposicion_" + a.replace("'","")) + "="+ str(b) for a,b in zip(arreglo_headers,arreglo_todos_los_tokens_transposicion)])
+    print(concat_matrix)
+    concat_matrix2 = "\n".join([str("   inicialfinal_" + a.replace("'","")) + "="+ str(b) for a,b in zip(arreglo_headers,arreglo_todos_los_tokens_final_inicial)])
+    print(concat_matrix2)
+    pasar_variable = concat_matrix + "\n" + concat_matrix2
+    archivo_seleccionado = open("NewScanner.py", "r+")
+    archivo_seleccionado = archivo_seleccionado.read()
+    archivo_seleccionado = archivo_seleccionado.replace("#validar2!@", pasar_variable)
+    keypass_01 = open("NewScanner.py", "w")
+    keypass_01.write(archivo_seleccionado)
+    keypass_01.close()  
 declarar_variables_de_inicializacion()
 declarar_siguiente_caracter()
 input_de_archivo()
 definiciones_de_tokens()
 validaciones()
+segunda_validacion()
 print()
 print("+ analizador lexico generado")
 

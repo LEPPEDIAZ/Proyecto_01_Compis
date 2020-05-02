@@ -3,6 +3,9 @@ from expresion_regular import *
 from graphviz import Digraph
 import numpy as np
 
+
+
+
 def generacion_de_archivo(transformacion_final, inicial_final):
     stdos = []
     simb = []

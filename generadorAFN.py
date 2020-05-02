@@ -15,6 +15,61 @@ alphabet = [chr(i) for i in range(ord('A'), ord('Z') + 1)] + \
     [chr(i) for i in range(ord('0'), ord('9') + 1)]
 epsilon = 'ε'
 
+def move(nodos, cadena, lenguaje):
+    nodos = list(nodos)
+    movimiento = []
+    if isinstance(nodos, list):
+        for n in range(len(nodos)):
+            move = posibles_movimientos(nodos[n], cadena, lenguaje)
+            for x in move:
+                if x[2] not in movimiento:
+                    movimiento.append(x[2])
+        s = set()
+        for item in movimiento:
+            s.add(item)
+        return s
+    
+    else:
+        move = posibles_movimientos(nodos, cadena, lenguaje)
+        for x in move:
+            if x[2] not in movimiento:
+                movimiento.append(x[2])
+                
+                
+        s = set()
+        for item in movimiento:
+            s.add(item)
+        return s
+
+#nos indica los posibles movimientos que podemos tomar
+#nodo = de que nodo queremos ver los movimientos
+#cadena = que simbolo queremos buscar los posibles movimientos
+#atomata = las transiciones de nuestro automata
+def posibles_movimientos(nodo,cadena, automata):
+    movimientos = []
+    for n in automata:
+        if n[0] == nodo and n[1] == str(cadena):
+            movimientos.append(n) 
+    return movimientos
+    
+def existe(cadena, lenguaje,infin):
+    i = 0
+    inicial = infin[0][0]
+    for n in cadena:
+        x = move(inicial, n, lenguaje)
+        if len(x)==0:
+            return "NO"
+        x = list(x)
+        inicial = x[0]
+    i = 0 
+    for n in range(len(infin)):
+        if inicial == infin[n][1]:
+            i += 1
+    if i !=0:
+        return "YES"
+    else:
+        return "NO"
+        
 def graficar_Automaton(resultado, inicial_final):
     f = Digraph('finite_state_machine', filename='./Automatas_Graficados/Automaton')
     f.attr(rankdir='LR', size='8,5')

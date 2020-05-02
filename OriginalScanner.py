@@ -186,6 +186,7 @@ class Buffer( object ):
 class Escaner(object):
    EOL     = u'\n'
    eofSym  = 0
+   H = "H"
 #!declaraciones
 #!tokens
    def __init__( self, s ):
@@ -275,7 +276,20 @@ class Escaner(object):
 
    def reiniciar( self ):
       self.PeakDeTokenActual = self.t
+   
+   def convert(lst):
+      return ([i for item in lst for i in item.split()]) 
+   
+
+   def unique(list1):
+      unique_list = [] 
+      for x in list1:
+         if x not in unique_list:
+            unique_list.append(x)
+      for x in unique_list:
+         print (x)
 #validar!$
+#validar2!@
 #!final
 tokenizar = Token()
 

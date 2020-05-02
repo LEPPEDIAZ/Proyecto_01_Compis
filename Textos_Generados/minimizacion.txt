@@ -1,6 +1,6 @@
 AFD
-ESTADOS: [1, '3', 2]
-SIMBOLOS: [2]
+ESTADOS: [1, 'a', 2, 'b|a']
+SIMBOLOS: [2, 3]
 INICIO: ['1']
-ACEPTACION: ['2']
-TRANSICION: [[1, '3', 2], [2, '3', 2]]
+ACEPTACION: ['3']
+TRANSICION: [[1, 'a', 2], [2, 'b|a', 3]]
