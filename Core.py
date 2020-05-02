@@ -118,12 +118,20 @@ with open("Textos_Generados/analizador_lexico.txt", "a+") as txt_file:
     txt_file.write("CORTE DE CARACTERES\n")
     txt_file.write("__________________________________\n")
     corte_caracteres_finales = corte_caracteres
-    print("CORTE CARACTERES", corte_caracteres)
+    print("CORTE CARACTERES!!!!!!", corte_caracteres)
+    sacar_inicio_caracteres = corte_caracteres
+    print("CORTE CARACTERES2!!!!!!", sacar_inicio_caracteres)
+
     corte_caracteres_finales = np.array(corte_caracteres)
+    primer_caracter_header = [i[0] for i in corte_caracteres]
+    primer_caracter_valor = [i[1:] for i in corte_caracteres]
+    print("CARACTER HEADER TEST",primer_caracter_header )
+    print("CARACTER HEADER VALOR", primer_caracter_valor)
     def column(matrix, i):
        return [row[i] for row in matrix]
     corte_caracteres_finales2 = column(corte_caracteres, 1)
     print("CORTE CARACTERES VIEW", corte_caracteres_finales2)
+
     corte_caracteres_finales_header = column(corte_caracteres, 0)
     print("CORTE CARACTERES VIEW 2", corte_caracteres_finales_header)
     sacar_nombre_de_caracteres = corte_caracteres_finales_header
@@ -483,6 +491,8 @@ if first_char in "()":
 
 
 def declarar_variables_de_inicializacion ():
+   print("sacar caracteres header inicializacion", primer_caracter_header)
+   print("SACAR CARACTERES PARA INICIALIZACION", sacar_inicio_caracteres)
    buscar_ultimo_estado = max(variable_transposicion)	
    values1 = '\n'.join(str(v) for v in buscar_ultimo_estado)
    values1 = values1[0] + values1[1]
@@ -495,8 +505,18 @@ def declarar_variables_de_inicializacion ():
    print("CORTE", corte_caracteres)
    primero_01 = [i[0] for i in corte_caracteres]
    segundo_02 = [i[1:] for i in corte_caracteres]
-   concat_matrix = "\n".join([str("   " + a.replace("'","")) + "="+ '"' + str(b) + '"' for a,b in zip(primero_01,segundo_02)])
-   print("concat_matrix", concat_matrix)
+   print("produccciones", segundo_02)
+   arreglo_value_char = []
+   for i in segundo_02:
+       arrayprod = []
+       test = ("".join(i))
+       test = test.replace('"',"")
+       test = test.replace("'","")
+       test = '"' + test + '"'
+       arrayprod.append(test)
+       arreglo_value_char.append(arrayprod)
+   concat_matrix = "\n".join([str("   " + a.replace("'","")) + "="+ '"' + str(b) + '"' for a,b in zip(primer_caracter_header,arreglo_value_char)])
+   print("concat_matrix_declare", concat_matrix)
    values = concat_matrix
    values = values.replace("[", "")
    values = values.replace("]", "")
@@ -524,10 +544,10 @@ def declarar_variables_de_inicializacion ():
    declaracion_string = declaracion_string.replace("8", "eight")
    declaracion_string = declaracion_string.replace("9", "nine")
 
-   print("PRIMER SACAR DECLARACIONES", primero_01)
+   print("PRIMER SACAR DECLARACIONES", sacar_nombre_de_caracteres)
    nueva_declaracion = []
-   for i in primero_01:
-       buscar_posicion = primero_01.index(i)
+   for i in sacar_nombre_de_caracteres:
+       buscar_posicion = sacar_nombre_de_caracteres.index(i)
        buscar_posicion = str(buscar_posicion)
        buscar_posicion = buscar_posicion.replace('0',"zero")
        buscar_posicion = buscar_posicion.replace('1', "one")

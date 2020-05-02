@@ -199,12 +199,12 @@ class Escaner(object):
    digit="0123456789"
    tab="\\t"
    eol="\\n"
-   blanco="\\n  \\r  \\t"
+   blanco="\\n\\r\\t"
    zero=digit
    one=tab
    two=eol
    three=blanco
-   transposicion=[[1, zero, 2], [1, three, 3], [3, three, 4], [4, three, 4], [2, zero, 5], [5, zero, 6], [6, zero, 6]]
+   transposicion=[[1, three, 2], [1, zero, 3], [3, zero, 4], [4, zero, 5], [5, zero, 5], [2, three, 6], [6, three, 6]]
    print(transposicion)
    number =[digit]
    decnumber =[digit]
@@ -279,11 +279,11 @@ class Escaner(object):
             self.t.tipo_token = Escaner.noSym      
             listo = True
          elif state ==1:
-            if self.ch =='zero':
+            if self.ch =='three':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=2
-            elif self.ch =='three':
+            elif self.ch =='zero':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=3
@@ -291,15 +291,15 @@ class Escaner(object):
                self.t.tipo_token= Escaner.noSym 
                done = True
          elif state ==2:
-            if self.ch =='zero':
+            if self.ch =='three':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
-               state=5
+               state=6
             else:
                self.t.tipo_token= Escaner.noSym 
                done = True
          elif state ==3:
-            if self.ch =='three':
+            if self.ch =='zero':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=4
@@ -307,10 +307,10 @@ class Escaner(object):
                self.t.tipo_token= Escaner.noSym 
                done = True
          elif state ==4:
-            if self.ch =='three':
+            if self.ch =='zero':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
-               state=4
+               state=5
             else:
                self.t.tipo_token= Escaner.noSym 
                done = True
@@ -318,12 +318,12 @@ class Escaner(object):
             if self.ch =='zero':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
-               state=6
+               state=5
             else:
                self.t.tipo_token= Escaner.noSym 
                done = True
          elif state ==6:
-            if self.ch =='zero':
+            if self.ch =='three':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=6
