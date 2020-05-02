@@ -289,10 +289,11 @@ class Escaner(object):
             unique_list.append(x)
       for x in unique_list:
          print (x)
-#!error_validator
+
 #validar!$
 #validar2!@
 #!final
+#!error_validator
 tokenizar = Token()
 
 def procesar_tokens(lista_de_tokens):
