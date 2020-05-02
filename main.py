@@ -37,9 +37,9 @@ if __name__ == '__main__':
 		graficar_AFDVS2(sacar_variable,sacar_variable2)
 		generacion_de_archivo_afd_test(sacar_variable,sacar_variable2)
 		mensaje = input("Ingrese el mensaje que desea saber si pertenece al lenguaje: ")
-		#sacar_variable2 = [[str(num) for num in item] for item in sacar_variable2]
+		sacar_variable2 = [[str(num) for num in item] for item in sacar_variable2]
 		print("sacar variable2 ", sacar_variable2)
-		#sacar_variable = [[str(num) for num in item] for item in sacar_variable]
+		sacar_variable = [[str(num) for num in item] for item in sacar_variable]
 		print("sacar_variable", sacar_variable)
 		print(existe(mensaje,sacar_variable,sacar_variable2))
 		#print("|------------MINIMIZACION--------------|")

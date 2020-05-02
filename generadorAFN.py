@@ -41,10 +41,6 @@ def move(nodos, cadena, lenguaje):
             s.add(item)
         return s
 
-#nos indica los posibles movimientos que podemos tomar
-#nodo = de que nodo queremos ver los movimientos
-#cadena = que simbolo queremos buscar los posibles movimientos
-#atomata = las transiciones de nuestro automata
 def posibles_movimientos(nodo,cadena, automata):
     movimientos = []
     for n in automata:

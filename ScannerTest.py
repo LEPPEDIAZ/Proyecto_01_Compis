@@ -206,10 +206,9 @@ class Escaner(object):
    three=eol
    transposicion=[[1, one, 2], [1, zero, 3], [3, one, 4], [3, zero, 5], [5, one, 4], [5, zero, 5], [4, one, 4], [4, zero, 5], [2, one, 6], [6, one, 6]]
    print(transposicion)
-   ident =[letter, letter+digit]
+   ident =[letter, digit]
    number =[digit]
-   
-   
+
    def __init__( self, s ):
       self.buffer = Buffer( unicode(s) ) 
       self.ch        = u'\0'       
@@ -370,19 +369,16 @@ class Escaner(object):
             unique_list.append(x)
       for x in unique_list:
          print (x)
+   error_validator =letter+digit+tab+eol
+   lineas2 = lineas.replace(' ', '')
+   for i in lineas2:
+      if i not in error_validator:
+         print("ERROR!: Se ingreso un caracter no valido" , i)
    new_lineas = []
    new_lineas.append(lineas)
    lista_de_palabras = convert(new_lineas)
    arreglo_con_todos_los_tokens = [] 
-   error_validator = letter + digit + tab + eol 
-   print("lineas", lineas)
-   print("lista de palabras", lista_de_palabras) 
-   print("error validator", error_validator)
-   lineas = lineas.replace(" ", "")
-   for i in lineas:
-      if i not in error_validator:
-         print("ERROR!: Se ingreso un caracter no valido" , i)
-   #if 
+   arreglo_con_todos_los_tokens2 = []
    for i in ident :
       lista_creada = list(i)
       arreglo_nuevo = []
@@ -415,10 +411,54 @@ class Escaner(object):
                salvar_valor = "Token:"+ k  
                arreglo_con_todos_los_tokens.append(salvar_valor)
    unique(arreglo_con_todos_los_tokens)
-   transposicion_ident =[[1, '0', 2], [2, '1', 3], [2, '0', 4], [4, '1', 3], [4, '0', 4], [3, '1', 3], [3, '0', 4]]
-   transposicion_number =[[1, '1', 2], [2, '1', 3], [3, '1', 3]]
-   inicialfinal_ident =[[1, 2]]
+   transposicion_ident =[[1, zero, 2], [2, one, 3], [2, zero, 4], [4, one, 3], [4, zero, 4], [3, zero, 3], [3, zero, 4]]
+   transposicion_number =[[1, one, 2], [2, one, 3], [3, one, 3]]
+   inicialfinal_ident =[[1, 2],[2, 3]]
    inicialfinal_number =[[1, 2]]
+
+
+   for i in inicialfinal_ident:
+      for j in transposicion_ident:
+         if(i[0] == j[0] and i[1] == j[2]):
+            lista_creada = []
+            for i in j[1] :
+               lista_creada.append(i)
+            for j in lista_creada:
+               for k in lista_de_palabras:
+                  arreglo_test = []
+                  lista_creada2 = list(k)
+                  for n in lista_creada2:
+                     if n in lista_creada:
+                        arreglo_test.append(True)
+                     if n not in lista_creada:
+                        arreglo_test.append(False)
+                  if all(arreglo_test) == True:
+                     salvar_valor = "Token_VS2:"+ k  
+                     arreglo_con_todos_los_tokens2.append(salvar_valor)
+   
+   for i in inicialfinal_number:
+      for j in transposicion_number:
+         if(i[0] == j[0] and i[1] == j[2]):
+            lista_creada = []
+            for i in j[1] :
+               lista_creada.append(i)
+            for j in lista_creada:
+               for k in lista_de_palabras:
+                  arreglo_test = []
+                  lista_creada2 = list(k)
+                  for n in lista_creada2:
+                     if n in lista_creada:
+                        arreglo_test.append(True)
+                     if n not in lista_creada:
+                        arreglo_test.append(False)
+                  if all(arreglo_test) == True:
+                     salvar_valor = "Token_VS2:"+ k  
+                     arreglo_con_todos_los_tokens2.append(salvar_valor)
+   #print("ARREGLO TODOS LOS TOKENS 2", arreglo_con_todos_los_tokens2)
+   print("-------------------------VS2 ----------------------------------")
+   unique(arreglo_con_todos_los_tokens2)
+   print("-------------------------VS2 ----------------------------------")
+
 #!final
 tokenizar = Token()
 
@@ -469,4 +509,3 @@ def cortar_lista(lista):
                 espacio_vacio = segundo_string.join(espacio_vacio)
                 sblista[indx] = espacio_vacio
     return lista
-

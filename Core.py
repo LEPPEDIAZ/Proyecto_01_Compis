@@ -751,16 +751,57 @@ def segunda_validacion():
     print("transposiciones", arreglo_todos_los_tokens_transposicion )
     print("final e inicial", arreglo_todos_los_tokens_final_inicial)
     concat_matrix = "\n".join([str("   transposicion_" + a.replace("'","")) + "="+ str(b) for a,b in zip(arreglo_headers,arreglo_todos_los_tokens_transposicion)])
-    print(concat_matrix)
+    print("TRANS",concat_matrix)
+    concat_matrix = concat_matrix.replace("'0'", "zero")
+    concat_matrix = concat_matrix.replace("'1'", "one")
+    concat_matrix = concat_matrix.replace("'2'", "two")
+    concat_matrix = concat_matrix.replace("'3'", "three")
+    concat_matrix = concat_matrix.replace("'4'", "four")
+    concat_matrix = concat_matrix.replace("'5'", "five")
+    concat_matrix = concat_matrix.replace("'6'", "six")
+    concat_matrix = concat_matrix.replace("'7'", "seven")
+    concat_matrix = concat_matrix.replace("'8'", "eight")
+    concat_matrix = concat_matrix.replace("'9'", "nine")
     concat_matrix2 = "\n".join([str("   inicialfinal_" + a.replace("'","")) + "="+ str(b) for a,b in zip(arreglo_headers,arreglo_todos_los_tokens_final_inicial)])
     print(concat_matrix2)
-    pasar_variable = concat_matrix + "\n" + concat_matrix2
+    pasar_variable = concat_matrix + "\n" + concat_matrix2 + "\n" + "   arreglo_con_todos_los_tokens2 = []" + "\n"
+    print("PASAR VARIABLE", concat_matrix)
+    arreglo_verificar_afd = []
+    for i in arreglo_headers:
+        print("********************************")
+        #arreglo_verificar_afd.append(variable_analizar2)
+        nuevo_texto = "   for i in " + "inicialfinal_" + i + ":" + "\n"
+        nuevo_texto= nuevo_texto + "      for j in transposicion_" + i + ":" + "\n"
+        nuevo_texto= nuevo_texto + "         if(i[0] == j[0] and i[1] == j[2]):" + "\n"
+        nuevo_texto= nuevo_texto + "            lista_creada = []" + "\n"
+        nuevo_texto= nuevo_texto + "            for i in j[1] :" + "\n"
+        nuevo_texto= nuevo_texto + "               lista_creada.append(i)"+ "\n"
+        nuevo_texto= nuevo_texto + "            for j in lista_creada:"+ "\n"
+        nuevo_texto= nuevo_texto + "               for k in lista_de_palabras:"+ "\n"
+        nuevo_texto= nuevo_texto + "                  arreglo_test = []"+ "\n"
+        nuevo_texto= nuevo_texto + "                  lista_creada2 = list(k)"+ "\n"
+        nuevo_texto= nuevo_texto + "                  for n in lista_creada2:"+ "\n"
+        nuevo_texto= nuevo_texto + "                     if n in lista_creada:"+ "\n"
+        nuevo_texto= nuevo_texto + "                        arreglo_test.append(True)"+ "\n"
+        nuevo_texto= nuevo_texto + "                     if n not in lista_creada:"+ "\n"
+        nuevo_texto= nuevo_texto + "                        arreglo_test.append(False)"+ "\n"
+        nuevo_texto= nuevo_texto + "                  if all(arreglo_test) == True:"+ "\n"
+        nuevo_texto= nuevo_texto + "                     salvar_valor = 'Token_VS2:'+ k "+ "\n"
+        nuevo_texto= nuevo_texto + "                     arreglo_con_todos_los_tokens2.append(salvar_valor)"+ "\n"
+        print(nuevo_texto)
+        arreglo_verificar_afd.append(nuevo_texto)
+        print("********************************")
+    print("PROBAR", arreglo_verificar_afd)
+    verificar_afd = "\n".join(arreglo_verificar_afd)
+    pasar_variable = pasar_variable + verificar_afd + "\n" + '   print("-------------------------VS2 ----------------------------------")'+ "\n"
+    pasar_variable = pasar_variable + "   unique(arreglo_con_todos_los_tokens2)" + "\n" 
     archivo_seleccionado = open("NewScanner.py", "r+")
     archivo_seleccionado = archivo_seleccionado.read()
     archivo_seleccionado = archivo_seleccionado.replace("#validar2!@", pasar_variable)
     keypass_01 = open("NewScanner.py", "w")
     keypass_01.write(archivo_seleccionado)
     keypass_01.close()  
+
 def error_validator():
     print("sacar caracteres", sacar_nombre_de_caracteres)
     error_value = "+".join(sacar_nombre_de_caracteres)
