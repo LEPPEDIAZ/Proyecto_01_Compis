@@ -761,12 +761,26 @@ def segunda_validacion():
     keypass_01 = open("NewScanner.py", "w")
     keypass_01.write(archivo_seleccionado)
     keypass_01.close()  
+def error_validator():
+    print("sacar caracteres", sacar_nombre_de_caracteres)
+    error_value = "+".join(sacar_nombre_de_caracteres)
+    error_value = "   " + "error_validator =" + error_value + "\n" + "   lineas2 = lineas.replace(' ', '')"
+    error_value = error_value + "\n" + "   for i in lineas2:" + "\n" + "      if i not in error_validator:" + "\n"+ '         print("ERROR!: Se ingreso un caracter no valido" , i)'
+    print("error value", error_value)
+    archivo_seleccionado = open("NewScanner.py", "r+")
+    archivo_seleccionado = archivo_seleccionado.read()
+    archivo_seleccionado = archivo_seleccionado.replace("#!error_validator", error_value)
+    keypass_01 = open("NewScanner.py", "w")
+    keypass_01.write(archivo_seleccionado)
+    keypass_01.close()
+
 declarar_variables_de_inicializacion()
 declarar_siguiente_caracter()
 input_de_archivo()
 definiciones_de_tokens()
 validaciones()
 segunda_validacion()
+error_validator()
 print()
 print("+ analizador lexico generado")
 

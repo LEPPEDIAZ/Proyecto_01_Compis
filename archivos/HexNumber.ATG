@@ -6,8 +6,8 @@ COMPILER Aritmetica
 
 CHARACTERS
 
-upletter = 'A' .. 'Z'
-downletter = 'a' .. 'z'
+upletter = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+downletter = 'abcdefghijklmnopqrstuvwxyz'
 letter = "abcdefghijklmnopqrstuvwxyz" + upletter + downletter. 
 digit = "0123456789" .
 hexdigit = digit + "ABCDEF".

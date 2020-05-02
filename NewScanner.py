@@ -196,19 +196,19 @@ class Escaner(object):
    noSym=   maxT=6
 
 
+   letter="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
    digit="0123456789"
    tab="\\t"
    eol="\\n"
-   blanco="\\n\\r\\t"
-   zero=digit
-   one=tab
-   two=eol
-   three=blanco
-   transposicion=[[1, three, 2], [1, zero, 3], [3, zero, 4], [4, zero, 5], [5, zero, 5], [2, three, 6], [6, three, 6]]
+   zero=letter
+   one=digit
+   two=tab
+   three=eol
+   transposicion=[[1, zero, 2], [1, one, 3], [3, one, 4], [4, one, 4], [2, zero, 5], [2, one, 6], [6, zero, 5], [6, one, 6], [5, zero, 5], [5, one, 6]]
    print(transposicion)
+   ident =[letter, digit]
    number =[digit]
-   decnumber =[digit]
-   white =[blanco]
+
    def __init__( self, s ):
       self.buffer = Buffer( unicode(s) ) 
       self.ch        = u'\0'       
@@ -279,11 +279,11 @@ class Escaner(object):
             self.t.tipo_token = Escaner.noSym      
             listo = True
          elif state ==1:
-            if self.ch =='three':
+            if self.ch =='zero':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=2
-            elif self.ch =='zero':
+            elif self.ch =='one':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=3
@@ -291,7 +291,11 @@ class Escaner(object):
                self.t.tipo_token= Escaner.noSym 
                done = True
          elif state ==2:
-            if self.ch =='three':
+            if self.ch =='zero':
+               buf += unicode(self.ch)
+               self.Siguiente_Caracter()
+               state=5
+            elif self.ch =='one':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=6
@@ -299,7 +303,7 @@ class Escaner(object):
                self.t.tipo_token= Escaner.noSym 
                done = True
          elif state ==3:
-            if self.ch =='zero':
+            if self.ch =='one':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=4
@@ -307,10 +311,10 @@ class Escaner(object):
                self.t.tipo_token= Escaner.noSym 
                done = True
          elif state ==4:
-            if self.ch =='zero':
+            if self.ch =='one':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
-               state=5
+               state=4
             else:
                self.t.tipo_token= Escaner.noSym 
                done = True
@@ -319,11 +323,19 @@ class Escaner(object):
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=5
+            elif self.ch =='one':
+               buf += unicode(self.ch)
+               self.Siguiente_Caracter()
+               state=6
             else:
                self.t.tipo_token= Escaner.noSym 
                done = True
          elif state ==6:
-            if self.ch =='three':
+            if self.ch =='zero':
+               buf += unicode(self.ch)
+               self.Siguiente_Caracter()
+               state=5
+            elif self.ch =='one':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=6
@@ -357,10 +369,31 @@ class Escaner(object):
             unique_list.append(x)
       for x in unique_list:
          print (x)
+   error_validator =letter+digit+tab+eol
+   lineas2 = lineas.replace(' ', '')
+   for i in lineas2:
+      if i not in error_validator:
+         print("ERROR!: Se ingreso un caracter no valido" , i)
    new_lineas = []
    new_lineas.append(lineas)
    lista_de_palabras = convert(new_lineas)
    arreglo_con_todos_los_tokens = [] 
+   for i in ident :
+      lista_creada = list(i)
+      arreglo_nuevo = []
+      for j in lista_creada:
+         for k in lista_de_palabras:
+            arreglo_test = []
+            lista_creada2 = list(k)
+            for n in lista_creada2:
+               if n in lista_creada:
+                  arreglo_test.append(True)
+               if n not in lista_creada:
+                  arreglo_test.append(False)
+            if all(arreglo_test) == True:
+               salvar_valor = "Token:"+ k  
+               arreglo_con_todos_los_tokens.append(salvar_valor)
+
    for i in number :
       lista_creada = list(i)
       arreglo_nuevo = []
@@ -376,45 +409,11 @@ class Escaner(object):
             if all(arreglo_test) == True:
                salvar_valor = "Token:"+ k  
                arreglo_con_todos_los_tokens.append(salvar_valor)
-
-   for i in decnumber :
-      lista_creada = list(i)
-      arreglo_nuevo = []
-      for j in lista_creada:
-         for k in lista_de_palabras:
-            arreglo_test = []
-            lista_creada2 = list(k)
-            for n in lista_creada2:
-               if n in lista_creada:
-                  arreglo_test.append(True)
-               if n not in lista_creada:
-                  arreglo_test.append(False)
-            if all(arreglo_test) == True:
-               salvar_valor = "Token:"+ k  
-               arreglo_con_todos_los_tokens.append(salvar_valor)
-
-   for i in white :
-      lista_creada = list(i)
-      arreglo_nuevo = []
-      for j in lista_creada:
-         for k in lista_de_palabras:
-            arreglo_test = []
-            lista_creada2 = list(k)
-            for n in lista_creada2:
-               if n in lista_creada:
-                  arreglo_test.append(True)
-               if n not in lista_creada:
-                  arreglo_test.append(False)
-            if all(arreglo_test) == True:
-               salvar_valor = "Token:"+ k  
-               arreglo_con_todos_los_tokens.append(salvar_valor)
    unique(arreglo_con_todos_los_tokens)
-   transposicion_number =[[1, '0', 2], [2, '0', 3], [3, '0', 3]]
-   transposicion_decnumber =[[1, '0', 2], [2, '0', 3], [3, '0', 4], [4, '0', 4]]
-   transposicion_white =[[1, '3', 2], [2, '3', 3], [3, '3', 3]]
+   transposicion_ident =[[1, '0', 2], [2, '0', 3], [2, '1', 4], [4, '0', 3], [4, '1', 4], [3, '0', 3], [3, '1', 4]]
+   transposicion_number =[[1, '1', 2], [2, '1', 3], [3, '1', 3]]
+   inicialfinal_ident =[[1, 2]]
    inicialfinal_number =[[1, 2]]
-   inicialfinal_decnumber =[[1, 3]]
-   inicialfinal_white =[[1, 2]]
 #!final
 tokenizar = Token()
 

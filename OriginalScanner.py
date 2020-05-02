@@ -189,6 +189,7 @@ class Escaner(object):
    H = "H"
 #!declaraciones
 #!tokens
+
    def __init__( self, s ):
       self.buffer = Buffer( unicode(s) ) 
       self.ch        = u'\0'       
@@ -288,6 +289,7 @@ class Escaner(object):
             unique_list.append(x)
       for x in unique_list:
          print (x)
+#!error_validator
 #validar!$
 #validar2!@
 #!final
