@@ -1,1 +1,1 @@
-archivos/HexNumber.ATG
+archivos/General.ATG

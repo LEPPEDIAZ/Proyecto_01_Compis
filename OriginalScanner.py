@@ -34,15 +34,15 @@ class Nodos():
         self.excepciones = [] 
     @staticmethod
     def DelGrafico( p ):
-       return (p is None) or Nodos.DelNodos(p) and Nodos.DelGrafico(p.next)
+       return (p is None) or Nodos.DelNodos(p) and Nodos.DelGrafico(p.linked_list)
 
     @staticmethod
     def DelSbGrafo( p ):
-       return p is None or Nodos.DelNodos(p) and (p.up or Nodos.DelSbGrafo(p.next))
+       return p is None or Nodos.DelNodos(p) and (p.up or Nodos.DelSbGrafo(p.linked_list))
 
     @staticmethod
     def DelA( p ):
-       return p is None or Nodos.DelNodos(p) and (p.up or Nodos.DelA(p.next))
+       return p is None or Nodos.DelNodos(p) and (p.up or Nodos.DelA(p.linked_list))
 
     @staticmethod
     def DelNodos( p ):
@@ -205,30 +205,25 @@ class Escaner(object):
       self.corriente_de_tokens = Token( )       
       nodo   = self.corriente_de_tokens
 
-      nodo.next = self.Siguiente_Token( )
-      nodo = nodo.next
-      while nodo.kind != Escaner.eofSym:
-         nodo.next = self.Siguiente_Token( )
-         nodo = nodo.next
+      nodo.linked_list = self.Siguiente_Token( )
+      nodo = nodo.linked_list
+      while nodo.tipo_token != Escaner.eofSym:
+         nodo.linked_list = self.Siguiente_Token( )
+         nodo = nodo.linked_list
 
-      nodo.next = nodo
+      nodo.linked_list = nodo
       nodo.val  = u'EOF'
       self.t  = self.corriente_de_tokens    
       self.PeekDeTokenActual = self.corriente_de_tokens     
 
    def Siguiente_Caracter( self ):
-      if self.AntiguoEols > 0:
+      self.ch = self.buffer.Read( )
+      self.posicion_token += 1
+      if (self.ch == u'\r') and (self.buffer.Peek() != u'\n'):
          self.ch = Escaner.EOL
-         self.AntiguoEols -= 1
-      else:
-         self.ch = self.buffer.Read( )
-         self.posicion_token += 1
-      
-         if (self.ch == u'\r') and (self.buffer.Peek() != u'\n'):
-            self.ch = Escaner.EOL
-         if self.ch == Escaner.EOL:
-            self.token_linea += 1
-            self.linea_de_inicio = self.posicion_token + 1
+      if self.ch == Escaner.EOL:
+         self.token_linea += 1
+         self.linea_de_inicio = self.posicion_token + 1
       #!nextcharcas
 
 
@@ -246,11 +241,13 @@ class Escaner(object):
       self.t.pos = self.posicion_token
       self.t.col = self.posicion_token - self.linea_de_inicio + 1
       self.t.line = self.token_linea
-      if ord(self.ch) < len(self.start):
-         state = self.start[ord(self.ch)]
+      if ord(self.ch) < len(self.transposicion):
+         state = self.transposicion[ord(self.ch)]
       else:
          state = 0
       buf = u''
+      buf += unicode(self.ch)
+      self.Siguiente_Caracter()
 #!scan02
       listo = False
       while not listo:
@@ -265,14 +262,14 @@ class Escaner(object):
       return self.t
 
    def Escanear( self ):
-      self.t = self.t.next
-      self.PeekDeTokenActual = self.t.next
+      self.t = self.t.linked_list
+      self.PeekDeTokenActual = self.t.linked_list
       return self.t
 
    def Peek( self ):
-      self.PeekDeTokenActual = self.PeekDeTokenActual.next
-      while self.PeekDeTokenActual.kind > self.maxT:
-         self.PeekDeTokenActual = self.PeekDeTokenActual.next
+      self.PeekDeTokenActual = self.PeekDeTokenActual.linked_list
+      while self.PeekDeTokenActual.tipo_token > self.maxT:
+         self.PeekDeTokenActual = self.PeekDeTokenActual.linked_list
 
       return self.PeekDeTokenActual
 
