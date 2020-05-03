@@ -192,31 +192,33 @@ class Escaner(object):
    eofSym  = 0
    H = "H"
    maxT=6
+
    noSym=   maxT=6
+
+
    digit="0123456789"
    tab="\\t"
    eol="\\n"
-   blanco=" "
+   blanco="\\n\\r\\t"
    zero=digit
    one=tab
    two=eol
    three=blanco
-   transposicion=[[1, three, 2], [1, zero, 3], [3, zero, 4], [4, zero, 5], [5, zero, 5], [2, three, 6], [6, three, 6]]
+   transposicion=[[1, zero, 2], [1, three, 3], [3, three, 4], [4, three, 4], [2, zero, 5], [5, zero, 6], [6, zero, 6]]
    print(transposicion)
    number =[digit,digit]
    decnumber =[digit,digit,digit,digit]
    white =[blanco,blanco]
    key_while ="while"
+   if key_while  in lineas:
+      print("KEYWORD:", key_while )
+      lineas = lineas.replace(key_while , "")
+
    key_do = "do"
-   
-   if key_while in lineas:
-      print("KEYWORD:", key_while)
-      lineas = lineas.replace(key_while, "")
-      print("LINEAS VERIFICAR", lineas)
-   if key_do in lineas:
-      print("KEYWORD:", key_do)
-      lineas = lineas.replace(key_do, "")
-      print("LINEAS VERIFICAR", lineas)
+   if key_do  in lineas:
+      print("KEYWORD:", key_do )
+      lineas = lineas.replace(key_do , "")
+
 
    def __init__( self, s ):
       self.buffer = Buffer( unicode(s) ) 
@@ -278,7 +280,16 @@ class Escaner(object):
       else:
          state = 0
       buf = u''
-      #!scan02
+#!scan02
+      zero_array = []
+      two_array = []
+      three_array = [] 
+      zero_array  += zero 
+      two_array  += two 
+      three_array  += three
+      print("ZERO_ARRAY", zero_array)
+      print("two_array", two_array)
+      print("three_array", three_array)
       listo = False
       while not listo:
          if state == -1:
@@ -288,11 +299,11 @@ class Escaner(object):
             self.t.tipo_token = Escaner.noSym      
             listo = True
          elif state ==1:
-            if self.ch =='three':
+            if self.ch  in zero_array:
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=2
-            elif self.ch =='zero':
+            elif self.ch in two_array:
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=3
@@ -300,15 +311,15 @@ class Escaner(object):
                self.t.tipo_token= Escaner.noSym 
                done = True
          elif state ==2:
-            if self.ch =='three':
+            if self.ch in three_array :
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
-               state=6
+               state=5
             else:
                self.t.tipo_token= Escaner.noSym 
                done = True
          elif state ==3:
-            if self.ch =='zero':
+            if self.ch =='three':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=4
@@ -316,10 +327,10 @@ class Escaner(object):
                self.t.tipo_token= Escaner.noSym 
                done = True
          elif state ==4:
-            if self.ch =='zero':
+            if self.ch =='three':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
-               state=5
+               state=4
             else:
                self.t.tipo_token= Escaner.noSym 
                done = True
@@ -327,12 +338,12 @@ class Escaner(object):
             if self.ch =='zero':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
-               state=5
+               state=6
             else:
                self.t.tipo_token= Escaner.noSym 
                done = True
          elif state ==6:
-            if self.ch =='three':
+            if self.ch =='zero':
                buf += unicode(self.ch)
                self.Siguiente_Caracter()
                state=6
@@ -366,17 +377,30 @@ class Escaner(object):
             unique_list.append(x)
       for x in unique_list:
          print (x)
-   
+
+   print("zero", zero)
+   print("two", two)
+   print("three", three)
+   zero_array = []
+   two_array = []
+   three_array = [] 
+   zero_array  += zero 
+   #print("ZERO_ARRAY", zero_array)
+   #print("two_array", two_array)
+   #print("three_array", three_array)
    lineas = lineas.replace(" ", " # ")
    new_lineas = []
    new_lineas.append(lineas)
+   print("NEW_LINES", new_lineas)
    new_lista_de_palabras = convert(new_lineas)
+   print("NEW_LINES_CONVERT",new_lista_de_palabras)
    lista_de_palabras = []
    for i in new_lista_de_palabras:
       if i == "#":
          i = i.replace("#", " ")
       lista_de_palabras.append(i)
    arreglo_con_todos_los_tokens = [] 
+
    for i in number :
       lista_creada = list(i)
       arreglo_nuevo = []
@@ -495,10 +519,12 @@ class Escaner(object):
 #!final
    error_validator =str(digit)+str(tab)+str(eol)+str(blanco)
    lineas2 = lineas.replace(' ', '')
+   lineas2 = lineas.replace('#', '')
    for i in lineas2:
       if i not in error_validator:
-         i = i.replace("#", " ")
-         print("ERROR!: Se ingreso un caracter no valido" , i)
+         if i != " ":
+            print("ERROR!: Se ingreso un caracter no valido" , i)
+
 tokenizar = Token()
 
 def procesar_tokens(lista_de_tokens):

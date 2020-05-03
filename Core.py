@@ -370,8 +370,8 @@ for n in todos:
     b = Subconjunto(a.afn)
     sacar_variable =b.TransposicionFinalAFD()
     sacar_variable2 = b.InEndAFD()
-    graficar_AFDFinal(sacar_variable,sacar_variable2,str(i_variable))
-    generacion_de_archivo_afd_test(sacar_variable,sacar_variable2)
+    #!graficar_AFDFinal(sacar_variable,sacar_variable2,str(i_variable))
+    #!generacion_de_archivo_afd_test(sacar_variable,sacar_variable2)
     arreglo_de_inicio_finales.append(sacar_variable2)
     arreglo_todos_los_tokens_transposicion.append(sacar_variable)
     arreglo_todos_los_tokens_final_inicial.append(sacar_variable2)
@@ -488,8 +488,8 @@ if first_char in "()":
    variable_transposicion = b.TransposicionFinalAFD()
    sacar_variable =b.TransposicionFinalAFD()
    sacar_variable2 = b.InEndAFD()
-   graficar_Automaton(sacar_variable,sacar_variable2)
-   generacion_de_archivo_Automaton(sacar_variable,sacar_variable2)
+   #!graficar_Automaton(sacar_variable,sacar_variable2)
+   #!generacion_de_archivo_Automaton(sacar_variable,sacar_variable2)
    
 
 
@@ -537,6 +537,7 @@ def declarar_variables_de_inicializacion ():
        guardar_estados_transformados_2_nuevos.append(manage_tab)
     
    declaracion_string = ("\n".join(guardar_estados_transformados_2_nuevos))
+   declaracion_string = declaracion_string.replace("0", "zero")
    declaracion_string = declaracion_string.replace("1", "one")
    declaracion_string = declaracion_string.replace("2", "two")
    declaracion_string = declaracion_string.replace("3", "three")
@@ -605,17 +606,17 @@ def declarar_siguiente_caracter():
         arreglo_estado_inicio.append(":" + j[0] + ":")
         arreglo_estado_inicio_limpio.append(j[0])
         segundo_elemento = j[1]
-        segundo_elemento = segundo_elemento.replace("0", "'zero'")
-        segundo_elemento = segundo_elemento.replace("1", "'one'")
-        segundo_elemento = segundo_elemento.replace("2", "'two'")
-        segundo_elemento = segundo_elemento.replace("3", "'three'")
-        segundo_elemento = segundo_elemento.replace("4", "'four'")
-        segundo_elemento = segundo_elemento.replace("5", "'five'")
-        segundo_elemento = segundo_elemento.replace("6", "'six'")
-        segundo_elemento = segundo_elemento.replace("7", "'seven'")
-        segundo_elemento = segundo_elemento.replace("8", "'eight'")
-        segundo_elemento = segundo_elemento.replace("9", "'nine'")
-        segundo_elemento = ":" + j[0] + ":" + "self.ch ==" + segundo_elemento + ":" + "\n" + "               "+ "buf += unicode(self.ch)" + "\n" + "               " + "self.Siguiente_Caracter()"+ "\n" +"               "+ "state=" + j[2] + "\n"
+        segundo_elemento = segundo_elemento.replace("0", "zero_array")
+        segundo_elemento = segundo_elemento.replace("1", "one_array")
+        segundo_elemento = segundo_elemento.replace("2", "two_array")
+        segundo_elemento = segundo_elemento.replace("3", "three_array")
+        segundo_elemento = segundo_elemento.replace("4", "four_array")
+        segundo_elemento = segundo_elemento.replace("5", "five_array")
+        segundo_elemento = segundo_elemento.replace("6", "six_array")
+        segundo_elemento = segundo_elemento.replace("7", "seven_array")
+        segundo_elemento = segundo_elemento.replace("8", "eight_array")
+        segundo_elemento = segundo_elemento.replace("9", "nine_array")
+        segundo_elemento = ":" + j[0] + ":" + "self.ch in " + segundo_elemento + ":" + "\n" + "               "+ "buf += unicode(self.ch)" + "\n" + "               " + "self.Siguiente_Caracter()"+ "\n" +"               "+ "state=" + j[2] + "\n"
         arreglo_estado_medio_final.append(segundo_elemento)
         #print(segundo_elemento)
 
@@ -923,6 +924,46 @@ def keywords_manager():
     keypass_01 = open("NewScanner.py", "w")
     keypass_01.write(archivo_seleccionado)
     keypass_01.close()
+def por_caracter():
+    print("PRIMER SACAR DECLARACIONES", sacar_nombre_de_caracteres)
+    nueva_declaracion = []
+    for i in sacar_nombre_de_caracteres:
+        buscar_posicion = sacar_nombre_de_caracteres.index(i)
+        buscar_posicion = str(buscar_posicion)
+        buscar_posicion = buscar_posicion.replace('0',"zero_array")
+        buscar_posicion = buscar_posicion.replace('1', "one_array")
+        buscar_posicion = buscar_posicion.replace('2', "two_array")
+        buscar_posicion = buscar_posicion.replace('3', "three_array")
+        buscar_posicion = buscar_posicion.replace('4', "four_array")
+        buscar_posicion = buscar_posicion.replace('5', "five_array")
+        buscar_posicion = buscar_posicion.replace('6', "six_array")
+        buscar_posicion = buscar_posicion.replace('7', "seven_array")
+        buscar_posicion = buscar_posicion.replace('8', "eight_array")
+        buscar_posicion = buscar_posicion.replace('9', "nine_array")
+        buscar_posicion_2 = sacar_nombre_de_caracteres.index(i)
+        buscar_posicion_2 = str(buscar_posicion_2)
+        buscar_posicion_2 = buscar_posicion_2.replace('0',"zero")
+        buscar_posicion_2 = buscar_posicion_2.replace('1', "one")
+        buscar_posicion_2 = buscar_posicion_2.replace('2', "two")
+        buscar_posicion_2 = buscar_posicion_2.replace('3', "three")
+        buscar_posicion_2 = buscar_posicion_2.replace('4', "four")
+        buscar_posicion_2 = buscar_posicion_2.replace('5', "five")
+        buscar_posicion_2 = buscar_posicion_2.replace('6', "six")
+        buscar_posicion_2 = buscar_posicion_2.replace('7', "seven")
+        buscar_posicion_2 = buscar_posicion_2.replace('8', "eight")
+        buscar_posicion_2 = buscar_posicion_2.replace('9', "nine")
+        nuevo_string = "      " + buscar_posicion + "=" + "[]" + "\n"
+        nuevo_string = nuevo_string + "      " + buscar_posicion + "+=" + buscar_posicion_2
+        #print("PROBAR NUEVO SCAN", nuevo_string)
+        nueva_declaracion.append(nuevo_string)
+    values1 = '\n'.join(nueva_declaracion)
+    print("PROBAR INICIALIZACION", values1)
+    archivo_seleccionado = open("NewScanner.py", "r+")
+    archivo_seleccionado = archivo_seleccionado.read()
+    archivo_seleccionado = archivo_seleccionado.replace("#!scan02", values1)
+    keypass_01 = open("NewScanner.py", "w")
+    keypass_01.write(archivo_seleccionado)
+    keypass_01.close()
 
     
 
@@ -934,6 +975,7 @@ validaciones()
 segunda_validacion()
 error_validator()
 keywords_manager()
+por_caracter()
 print()
 print("+ analizador lexico generado")
 

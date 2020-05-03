@@ -251,7 +251,7 @@ class Escaner(object):
       else:
          state = 0
       buf = u''
-      #!scan02
+#!scan02
       listo = False
       while not listo:
          if state == -1:
