@@ -148,7 +148,7 @@ class Buffer( object ):
       self.posicion_token += numero_bytes
       return result
 
-   def Peak( self ):
+   def Peek( self ):
       if self.posicion_token < self.largo_buffer:
          return self.buf[self.posicion_token]
       else:
@@ -189,6 +189,7 @@ class Escaner(object):
    H = "H"
 #!declaraciones
 #!tokens
+#!keywords
 
    def __init__( self, s ):
       self.buffer = Buffer( unicode(s) ) 
@@ -213,7 +214,7 @@ class Escaner(object):
       nodo.next = nodo
       nodo.val  = u'EOF'
       self.t  = self.corriente_de_tokens    
-      self.PeakDeTokenActual = self.corriente_de_tokens     
+      self.PeekDeTokenActual = self.corriente_de_tokens     
 
    def Siguiente_Caracter( self ):
       if self.AntiguoEols > 0:
@@ -223,7 +224,7 @@ class Escaner(object):
          self.ch = self.buffer.Read( )
          self.posicion_token += 1
       
-         if (self.ch == u'\r') and (self.buffer.Peak() != u'\n'):
+         if (self.ch == u'\r') and (self.buffer.Peek() != u'\n'):
             self.ch = Escaner.EOL
          if self.ch == Escaner.EOL:
             self.token_linea += 1
@@ -265,18 +266,18 @@ class Escaner(object):
 
    def Escanear( self ):
       self.t = self.t.next
-      self.PeakDeTokenActual = self.t.next
+      self.PeekDeTokenActual = self.t.next
       return self.t
 
-   def Peak( self ):
-      self.PeakDeTokenActual = self.PeakDeTokenActual.next
-      while self.PeakDeTokenActual.kind > self.maxT:
-         self.PeakDeTokenActual = self.PeakDeTokenActual.next
+   def Peek( self ):
+      self.PeekDeTokenActual = self.PeekDeTokenActual.next
+      while self.PeekDeTokenActual.kind > self.maxT:
+         self.PeekDeTokenActual = self.PeekDeTokenActual.next
 
-      return self.PeakDeTokenActual
+      return self.PeekDeTokenActual
 
    def reiniciar( self ):
-      self.PeakDeTokenActual = self.t
+      self.PeekDeTokenActual = self.t
    
    def convert(lst):
       return ([i for item in lst for i in item.split()]) 

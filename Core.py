@@ -95,7 +95,10 @@ print("ARREGLO LIMPIO DE TOKENS2", arreglo_tokens_limpios2)
 corte_caracteres = cortar_lista(corte_caracteres)
 print("CORTE DE CARACTERES BUSCAR2", corte_caracteres)
 arreglo_tokens_limpios3 = corte_de_tokens
-print("ARREGLO LIMPIO DE TOKENS3", arreglo_tokens_limpios3)
+arreglo_con_key = str(arreglo_tokens_limpios3)
+arreglo_test_key = []
+arreglo_test_key.append(arreglo_con_key)
+print("ARREGLO LIMPIO DE TOKENS3", str(arreglo_test_key))
 corte_de_palabras_clave = process_palabras_clave(corte_de_palabras_clave)
 corte_de_tokens = procesar_tokens(corte_de_tokens)
 arreglo_tokens_limpios4 = corte_de_tokens
@@ -886,6 +889,27 @@ def error_validator():
     keypass_01.write(archivo_seleccionado)
     keypass_01.close()
 
+def keywords_manager():
+    print("condicionales", corte_de_palabras_clave)
+    print("arreglo_tokens_limpios3", arreglo_test_key)
+    condicionales_init = []
+    for i in corte_de_palabras_clave:
+        nueva_variable = "   " + "key_" + i[0] + "=" + i[1] + "\n"
+        nueva_variable = nueva_variable + "   if key_"+ i[0]+ " in lineas:" +  "\n"
+        nueva_variable = nueva_variable + '      print("KEYWORD:", key_' + i[0] + ")"+  "\n"
+        nueva_variable = nueva_variable + "      lineas = lineas.replace(key_" + i[0] + ', "")' +  "\n"
+        print("condicionales iniciales", nueva_variable)
+        condicionales_init.append(nueva_variable)
+    inicializar_keywords = "\n".join(condicionales_init)
+    archivo_seleccionado = open("NewScanner.py", "r+")
+    archivo_seleccionado = archivo_seleccionado.read()
+    archivo_seleccionado = archivo_seleccionado.replace("#!keywords", inicializar_keywords)
+    keypass_01 = open("NewScanner.py", "w")
+    keypass_01.write(archivo_seleccionado)
+    keypass_01.close()
+
+    
+
 declarar_variables_de_inicializacion()
 declarar_siguiente_caracter()
 input_de_archivo()
@@ -893,6 +917,7 @@ definiciones_de_tokens()
 validaciones()
 segunda_validacion()
 error_validator()
+keywords_manager()
 print()
 print("+ analizador lexico generado")
 
