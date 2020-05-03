@@ -893,8 +893,10 @@ def segunda_validacion():
 def error_validator():
     print("sacar caracteres", sacar_nombre_de_caracteres)
     error_value = '+'.join(["str(" + str(elem)+ ")" for elem in sacar_nombre_de_caracteres])
-    error_value = "   " + "error_validator =" + error_value + "\n" + "   lineas2 = lineas.replace(' ', '')"
-    error_value = error_value + "\n" + "   for i in lineas2:" + "\n" + "      if i not in error_validator:" + "\n"+ '         print("ERROR!: Se ingreso un caracter no valido" , i)'
+    error_value = "   " + "error_validator =" + error_value + "\n" + "   lineas2 = lineas.replace(' ', '')" + "\n"+ "   lineas2 = lineas.replace('#', '')"
+    error_value = error_value + "\n" + "   for i in lineas2:" + "\n" + "      if i not in error_validator:" + "\n"
+    error_value = error_value + '         if i != " ":' + "\n"
+    error_value = error_value + '            print("ERROR!: Se ingreso un caracter no valido" , i)'+ "\n"
     print("error value", error_value)
     archivo_seleccionado = open("NewScanner.py", "r+")
     archivo_seleccionado = archivo_seleccionado.read()
