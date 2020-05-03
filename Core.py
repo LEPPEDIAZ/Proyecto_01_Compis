@@ -806,8 +806,22 @@ def validaciones():
         todas_las_validaciones.append(nuevo_texto_validar)
     
     declaracion_string = ("\n".join(todas_las_validaciones))
-    declaracion_string = "   " + "new_lineas = []" + "\n" + "   "+  "new_lineas.append(lineas)" +  "\n" + "   " + "lista_de_palabras = convert(new_lineas)" +  "\n" + "   " + "arreglo_con_todos_los_tokens = [] " + declaracion_string
+    inicializar_limpieza = '   lineas = lineas.replace(" ", " # ")' + "\n"
+    inicializar_limpieza = inicializar_limpieza + "   new_lineas = []"+ "\n"
+    inicializar_limpieza = inicializar_limpieza + "   new_lineas.append(lineas)"+ "\n"
+    inicializar_limpieza = inicializar_limpieza + "   new_lista_de_palabras = convert(new_lineas)"+ "\n"
+    inicializar_limpieza = inicializar_limpieza + "   lista_de_palabras = []"+ "\n"
+    inicializar_limpieza = inicializar_limpieza + "   for i in new_lista_de_palabras:"+ "\n"
+    inicializar_limpieza = inicializar_limpieza + '      if i == "#":'+ "\n"
+    inicializar_limpieza = inicializar_limpieza + '         i = i.replace("#", " ")'+ "\n"
+    inicializar_limpieza = inicializar_limpieza + '      lista_de_palabras.append(i)'+ "\n"
+    inicializar_limpieza = inicializar_limpieza + '   arreglo_con_todos_los_tokens = [] '+ "\n"
+    declaracion_string = inicializar_limpieza + declaracion_string
+    #declaracion_string = "   " + "new_lineas = []" + "\n" + "   "+  "new_lineas.append(lineas)" +  "\n" + "   " + "lista_de_palabras = convert(new_lineas)" +  "\n" + "   " + "arreglo_con_todos_los_tokens = [] " + declaracion_string
     declaracion_string = declaracion_string + "\n" + "   unique(arreglo_con_todos_los_tokens)"
+    print("-----------------------------------------")
+    print("DECLARACION STRING", declaracion_string)
+    print("-----------------------------------------")
     archivo_seleccionado = open("NewScanner.py", "r+")
     archivo_seleccionado = archivo_seleccionado.read()
     archivo_seleccionado = archivo_seleccionado.replace("#validar!$", declaracion_string)
