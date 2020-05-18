@@ -1,1 +1,1 @@
-archivos/General.ATG
+archivos/Aritmetica.ATG
