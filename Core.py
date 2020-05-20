@@ -800,7 +800,7 @@ def validaciones():
         nuevo_texto_validar = nuevo_texto_validar + "\n" + "      " + "lista_creada = list(i)" + "\n" + "      " + "arreglo_nuevo = []" + "\n" + "      " + "for j in lista_creada:"
         nuevo_texto_validar = nuevo_texto_validar + "\n" + "         " + "for k in lista_de_palabras:" + "\n" + "            " + "arreglo_test = []" + "\n" + "            "+ "lista_creada2 = list(k)"  + "\n" + "            "+"for n in lista_creada2:"
         nuevo_texto_validar = nuevo_texto_validar + "\n" + "               if n in lista_creada:" + "\n" + "                  arreglo_test.append(True)" + "\n" + "               if n not in lista_creada:" + "\n" + "                  arreglo_test.append(False)"
-        nuevo_texto_validar = nuevo_texto_validar + "\n" + "            if all(arreglo_test) == True:" + "\n" + '               salvar_valor = "Token:"+ k  ' + "\n" + "               arreglo_con_todos_los_tokens.append(salvar_valor)"
+        nuevo_texto_validar = nuevo_texto_validar + "\n" + "            if all(arreglo_test) == True:" + "\n" + '               salvar_valor = "Token:"+ k +' + '" ' + j + '"'  + "\n" + "               arreglo_con_todos_los_tokens.append(salvar_valor)"
         print("------------------------")
         print(nuevo_texto_validar )
         print("------------------------")

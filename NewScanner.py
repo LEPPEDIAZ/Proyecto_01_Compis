@@ -418,7 +418,7 @@ class Escaner(object):
                if n not in lista_creada:
                   arreglo_test.append(False)
             if all(arreglo_test) == True:
-               salvar_valor = "Token:"+ k  
+               salvar_valor = "Token:"+ k +" ident "
                arreglo_con_todos_los_tokens.append(salvar_valor)
 
    for i in number :
@@ -434,7 +434,7 @@ class Escaner(object):
                if n not in lista_creada:
                   arreglo_test.append(False)
             if all(arreglo_test) == True:
-               salvar_valor = "Token:"+ k  
+               salvar_valor = "Token:"+ k +" number "
                arreglo_con_todos_los_tokens.append(salvar_valor)
    unique(arreglo_con_todos_los_tokens)
    transposicion_ident =[[1, zero, 2], [2, zero, 3], [2, one, 4], [4, zero, 3], [4, one, 4], [3, zero, 3], [3, one, 4]]

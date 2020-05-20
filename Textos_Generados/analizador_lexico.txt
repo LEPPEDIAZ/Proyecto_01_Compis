@@ -1,3 +1,37 @@
 ANALIZADOR LEXICO
 _____________________________________________
 _____________________________________________
+CORTE DE CARACTERES
+__________________________________
+letter"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".
+digit"0123456789"
+tab'\t'
+eol'\n'
+----------------------------------
+CONDICIONALES
+__________________________________
+while  "while"
+do  "do"
+if  "if"
+switch  "switch"
+----------------------------------
+TOKENS
+__________________________________
+ident letter{letter|digit}
+number  digit{digit}
+----------------------------------
+NOMBRE
+__________________________________
+ident 
+number 
+----------------------------------
+CONTENIDO
+__________________________________
+ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz|0123456789* 
+ 0123456789 0123456789* 
+----------------------------------
+EXCEPCION
+__________________________________
+['keywords']
+[]
+----------------------------------
