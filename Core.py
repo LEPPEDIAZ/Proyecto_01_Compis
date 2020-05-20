@@ -85,7 +85,6 @@ print("CORTE DE CARACTERES BUSCAR", corte_caracteres)
 corte_caracteres = quitar_caracteres_inecesarios(corte_caracteres)
 corte_de_palabras_clave = lineas[index_palabras_clave+1:index_tokens]
 corte_de_palabras_clave = quitar_caracteres_inecesarios(corte_de_palabras_clave)
-
 corte_de_tokens = lineas[index_tokens+1:index_producciones]
 arreglo_tokens_limpios = corte_de_tokens 
 print("ARREGLO LIMPIO DE TOKENS", arreglo_tokens_limpios)
