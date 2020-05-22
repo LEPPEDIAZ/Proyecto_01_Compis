@@ -1,9 +1,28 @@
+import numpy as np
 #Parser 
 #producciones
 #acciones semanticas
 #atributos
 #any
 #ll1
+mylines = []                             
+with open ('archivos/AritmeticaMod.ATG', 'r') as myfile: 
+    for myline in myfile:
+        myline = myline.strip('\n')
+        myline = myline.strip('\t\t')   
+        mylines.append(myline)           
+print(mylines)  
+get_index = (mylines.index('PRODUCTIONS'))
+new_lista = mylines[:get_index + 1]
+print("----------------")
+print(new_lista)
+print("----------------")
+C = np.array(list(filter(lambda x: x not in new_lista, mylines)))
+print(mylines)  
+print("----------------")
+mylines = mylines[:-1]
+print("lineas",mylines)
+
 
 class Build_Parser:
     def __init__(self):
