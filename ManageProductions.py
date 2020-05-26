@@ -1,4 +1,5 @@
 import numpy as np
+import re
 #Parser 
 #producciones
 #acciones semanticas
@@ -11,18 +12,75 @@ with open ('archivos/AritmeticaMod.ATG', 'r') as myfile:
         myline = myline.strip('\n')
         myline = myline.strip('\t\t')   
         mylines.append(myline)           
-print(mylines)  
+#print(mylines)  
 get_index = (mylines.index('PRODUCTIONS'))
 new_lista = mylines[:get_index + 1]
-print("----------------")
-print(new_lista)
-print("----------------")
 C = np.array(list(filter(lambda x: x not in new_lista, mylines)))
-print(mylines)  
+#print(C)  
 print("----------------")
-mylines = mylines[:-1]
-print("lineas",mylines)
+mylines = C[:-1]
+print(mylines)
+print("----------------")
 
+def get_functions(array):
+    for i in array:
+        #print("--------",i)
+        ssplit = i.split()
+        for j in ssplit:
+            if "(" or ")" or "<" or ">" or "{" or "}" in j:
+                j = re.sub("([\(\[]).*?([\)\]])", "\g<1>\g<2>", j)
+                j = j.replace("(", "")
+                j = j.replace("{", "")
+                j = j.replace("}", "")
+                j = j.replace(")", "")
+
+            print("----",j)
+
+get_functions(mylines)
+
+
+arreglo_funciones = [] 
+def GetFunctionsByName(array):
+    get_special_value1 = []
+    get_special_value2 = []
+    for i in array:
+        #clean variables
+        i = i.replace("=", " = ")
+        i = i.replace("}", "")
+        i = i.replace("{", "")
+        i = i.replace(";", "")
+        i = i.replace('"."', "")
+        i = i.replace('"', "")
+        i = i.replace('[]', "")
+        i = i.replace('..', ".")
+        i = i.replace("<", " <")
+        i = i.replace(">", "> ")
+        i = i.replace("(.", " <")
+        i = i.replace(".)", "> ")
+        i = i.replace("]", "> ")
+        i = i.replace("[", " <")
+        i = re.sub('<[^>]+>', '', i)
+        i = i.replace("[", "")
+        i = i.replace("]", "")
+        i = i.replace("(", "")
+        i = i.replace(")", "")
+        i = i.replace("<", "")
+        i = i.replace(">", "")
+        i = i.replace("/", "")
+        print("######", i)
+        ssplit = i.split()
+        #for j in ssplit:
+        #    print("@@@@@@@@",j)
+        
+       
+
+def get_parameters(array):
+    print("get parameters")
+
+def get_loop_functions(array):
+    print("get loop functions")
+
+GetFunctionsByName(mylines)
 
 class Build_Parser:
     def __init__(self):
@@ -39,7 +97,7 @@ class Build_Parser:
 
     def Leer(self):
         #cambia la gramatica segun producciones
-        self.gramatica = [['S','=','a','A'],['A','=','a']]
+        self.gramatica = [['S','=','fasea','A'],['A','=','fasea','|', 'B']]
         #cambia la gramatica segun sus producciones
         for i in range(len(self.gramatica)):
             for j in range(len(self.gramatica[i])):
