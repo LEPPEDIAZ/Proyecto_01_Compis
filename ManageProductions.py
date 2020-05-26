@@ -6,7 +6,7 @@ import re
 #atributos
 #any
 #ll1
-mylines = []                             
+mylines = []                          
 with open ('archivos/AritmeticaMod.ATG', 'r') as myfile: 
     for myline in myfile:
         myline = myline.strip('\n')
@@ -22,25 +22,10 @@ mylines = C[:-1]
 print(mylines)
 print("----------------")
 
-def get_functions(array):
-    for i in array:
-        #print("--------",i)
-        ssplit = i.split()
-        for j in ssplit:
-            if "(" or ")" or "<" or ">" or "{" or "}" in j:
-                j = re.sub("([\(\[]).*?([\)\]])", "\g<1>\g<2>", j)
-                j = j.replace("(", "")
-                j = j.replace("{", "")
-                j = j.replace("}", "")
-                j = j.replace(")", "")
-
-            print("----",j)
-
-get_functions(mylines)
 
 
-arreglo_funciones = [] 
 def GetFunctionsByName(array):
+    arreglo_funciones = [] 
     get_special_value1 = []
     get_special_value2 = []
     for i in array:
@@ -67,12 +52,31 @@ def GetFunctionsByName(array):
         i = i.replace("<", "")
         i = i.replace(">", "")
         i = i.replace("/", "")
-        print("######", i)
+        #temporales
+        i = i.replace("-", "")
+        i = i.replace("+", "")
+        i = i.replace("*", "")
+        i = i.replace("-", "")
+        #print("######", i)
         ssplit = i.split()
-        #for j in ssplit:
-        #    print("@@@@@@@@",j)
-        
-       
+        single_space = "."
+        for j in ssplit:
+            arreglo_funciones.append(j)
+        #    if single_space in j:
+        #        nuevo_arreglo = []
+        #    nuevo_arreglo.append(j)
+        #arreglo_funciones.append(j)
+    print(arreglo_funciones)
+    smallerlist = [l.split(',') for l in ','.join(arreglo_funciones).split('.')]
+    print("*************")
+    print(smallerlist)
+    print("*************")
+    clean_array = [] 
+    for k in smallerlist:
+        new_list = list(filter(None, k))
+        clean_array.append(new_list)
+    print("~~~~~~~~~~~~")
+    print(clean_array)
 
 def get_parameters(array):
     print("get parameters")
@@ -97,7 +101,9 @@ class Build_Parser:
 
     def Leer(self):
         #cambia la gramatica segun producciones
-        self.gramatica = [['S','=','fasea','A'],['A','=','fasea','|', 'B']]
+        
+        #self.gramatica = [['S','=','fasea','A'],['A','=','fasea','|', 'B']]
+        self.gramatica = [['S', '=', 'A'], ['A', '=', 'B'], ['B', '=', 'C'], ['C', '=', 'D']]
         #cambia la gramatica segun sus producciones
         for i in range(len(self.gramatica)):
             for j in range(len(self.gramatica[i])):
