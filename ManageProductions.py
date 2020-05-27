@@ -1,5 +1,8 @@
 import numpy as np
 import re
+import sys
+from collections import OrderedDict
+sys.setrecursionlimit(10000)
 #Parser 
 #producciones
 #acciones semanticas
@@ -57,6 +60,7 @@ def GetFunctionsByName(array):
         i = i.replace("+", "")
         i = i.replace("*", "")
         i = i.replace("-", "")
+        i = i.replace("=", "->")
         #print("######", i)
         ssplit = i.split()
         single_space = "."
@@ -77,181 +81,109 @@ def GetFunctionsByName(array):
         clean_array.append(new_list)
     print("~~~~~~~~~~~~")
     print(clean_array)
-
-def get_parameters(array):
-    print("get parameters")
-
-def get_loop_functions(array):
-    print("get loop functions")
+    print("----------------------")
+    unique_words = [] 
+    for i in clean_array:
+        for j in i:
+            if j not in unique_words and j!= "->" and j!= "|":
+                unique_words.append(j)
+    print("U",unique_words)
+    new_array_convert_vs2 = [] 
+    for j in clean_array:
+        print("arreglo sin pasar: ", j )
+        new_array_convert = [] 
+        i = 0
+        for k in j:
+            if k != "->" or k !='|':
+                if k in unique_words:
+                    get_index = (unique_words.index(k))
+                    new_array_convert.append(get_index)     
+            if k == "->" or k =='|':
+                new_array_convert.append(k)
+        print("#####", new_array_convert)
+        new_array_convert_vs2.append(new_array_convert)
+    print(" - - -- - -- - - - -- - - -- - - ")
+    print(new_array_convert_vs2)
+    pass_to_text = []
+    for i in new_array_convert_vs2:
+        listToStr = ''.join([str(elem) for elem in i]) 
+        print(listToStr)
+        pass_to_text.append(listToStr)
+    print("@", pass_to_text)
+    with open('grammar.txt', 'w') as f:
+        for item in pass_to_text:
+            f.write("%s\n" % item)
 
 GetFunctionsByName(mylines)
 
-class Build_Parser:
-    def __init__(self):
-        self.gramatica = []
-        self.terminales = []
-        self.no_terminales = []
-        self.first = dict()
-        self.follow = dict()
-        self.tabla_de_parseo = dict()
-        self.Leer()
-        self.encontrar_first()
-        self.encontrar_follow()
-        self.create_tabla_de_parseo()
+reglas = [] 
+firsts = [] 
+reglas_dict = OrderedDict()  
+firsts_dict = OrderedDict() 
+follow_dict = OrderedDict()  
 
-    def Leer(self):
-        #cambia la gramatica segun producciones
-        
-        #self.gramatica = [['S','=','fasea','A'],['A','=','fasea','|', 'B']]
-        self.gramatica = [['S', '=', 'A'], ['A', '=', 'B'], ['B', '=', 'C'], ['C', '=', 'D']]
-        #cambia la gramatica segun sus producciones
-        for i in range(len(self.gramatica)):
-            for j in range(len(self.gramatica[i])):
-                if(self.gramatica[i][j].isupper() and self.gramatica[i][j] not in self.no_terminales ):
-                    self.no_terminales.append(self.gramatica[i][j])
-                if(self.gramatica[i][j] not in self.no_terminales and self.gramatica[i][j] not in ['=','@'] and self.gramatica[i][j] not in self.terminales):
-                    self.terminales.append(self.gramatica[i][j])
-        print("Terminales", self.terminales)
-        print("No Terminales", self.no_terminales )
+#agrega los no terminales en la izquierda de los first_dict
+def pone_los_no_terminales_en_izquierda(firsts, reglas):
+    for regla in reglas:
+        if regla[0][0] not in firsts:
+            firsts.append(regla[0][0])
+            firsts_dict[regla[0][0]] = []
+            follow_dict[regla[0][0]] = []
 
-    def escribir_first(self,k,valor,l):
-        for i in range(len(self.gramatica)):
-            if(k == self.gramatica[i][0]):
-                # si el primer token es un epsion y sino si es una no terminal
-                if(self.gramatica[i][2] == '@' and len(self.gramatica[i])-1 == 2):
-                    valor.add(self.gramatica[i][2])
-                
-                elif(self.gramatica[i][2] in self.no_terminales ):
-                        self.escribir_first(self.gramatica[i][2],valor,l)
-                        if ('@' in valor and len(self.gramatica[i]) > 3):
-                            self.escribir_first(self.gramatica[i][l+1],valor,l+1)
+with open("grammar.txt", 'r') as inp, open('grammar_clean.txt', 'w') as out:
+    for linea in inp:
+        if linea.strip():
+            out.write(linea)
 
-                    # Si el primer token es una terminal
-                else:
-                    valor.add(self.gramatica[i][2])
-        return valor
-    
-    def escribir_follow(self,k,valor):
-        if (self.gramatica[0][0] == k):
-            valor.add('$')
-        for i in range(len(self.gramatica)):
-            if(k in self.gramatica[i][2:len(self.gramatica[i])]):
-                j = self.gramatica[i][:].index(k)
-                if(j+1 <= len(self.gramatica[i])-1):
-                    if(self.gramatica[i][j+1] in self.first):
-                        if('@' not in self.first[self.gramatica[i][j+1]]):
-                            t = (self.first[self.gramatica[i][j+1]])
-                            for elemento in t:
-                                valor.add(elemento)
-                        else:
-                            n = j+1
-                            flag = 0
-                            while(n <= len(self.gramatica[i])-1):
-                                t = self.first[self.gramatica[i][n]]
-                                if('@' in self.first[self.gramatica[i][n]]):
-                                    t.remove('@')
-                                    for elemento in t:
-                                        valor.add(elemento)
-                                else:
-                                    for elemento in t:
-                                        valor.add(elemento)
-                                    flag = 1
-                                    break
-                                n = n+1
-                            if(flag == 0 and self.gramatica[i][0] != self.gramatica[i][n-1] and self.gramatica[i][n-1] in self.no_terminales ):
-                                self.escribir_follow(self.gramatica[i][0],valor)
-                            else:
-                                t = self.first[self.gramatica[i][n-1]]
-                                for elemento in t:
-                                    valor.add(elemento)
-
-                elif(len(self.gramatica[i])-1 == j+1 and self.gramatica[i][0] != self.gramatica[i][j+1]):     
-                    t = self.first[self.gramatica[i][j+1]]
-                    if('@' in t):
-                        t.remove('@')
-                        for elemento in t:
-                            valor.add(elemento)
-                        self.escribir_follow(self.gramatica[i][0],valor)
-                    else:
-                        for elemento in t:
-                            valor.add(elemento)
-                else:
-                    if(len(self.follow[self.gramatica[i][0]])):
-                        t = self.follow[self.gramatica[i][0]]
-                        for elemento in t:
-                            valor.add(elemento)
-                    else:
-                        self.escribir_follow(self.gramatica[i][0],valor)
-        return valor
+with open("grammar_clean.txt", "r") as filetxt:
+    for linea in filetxt:
+        reglas.append(linea.strip().split('\n'))
 
 
-    def encontrar_first(self):
-        for i in range(len(self.no_terminales )):
-            valor = set()
-            self.first[self.no_terminales [i]] = self.escribir_first(self.no_terminales [i],valor,2)
-        for i in range(len(self.terminales)):
-            valor = set()
-            valor.add(self.terminales[i])
-            self.first[self.terminales[i]] = valor
-        print("First: ", self.first)
+numero_de_reglas= len(reglas)
+contador_de_reglas = first_count = 0
+pone_los_no_terminales_en_izquierda(firsts, reglas)
+for first in firsts:
+    reglas_dict[first] = reglas[contador_de_reglas][0][3:]
+    contador_de_reglas += 1
 
+for regla in reglas:
+    if regla[0][3].islower():
+        firsts_dict[regla[0][0]].extend(regla[0][3])
+# implementa un pass 
+for regla in reglas:
+    if regla[0][3].isupper():
+        firsts_dict[regla[0][0]].extend(firsts_dict[regla[0][3]])
 
-    def encontrar_follow(self):
-        for k in self.no_terminales :
-            valor = set()
-            self.follow[k] = self.escribir_follow(k,valor)
-        print("Follow : " , self.follow)
+with open("firsts.txt", "w+") as wp:
+    for k in firsts_dict:
+        wp.write("first(%s): \t " % k)
+        wp.write("%s\n" % firsts_dict[k])
 
-    def create_tabla_de_parseo(self):
-        head = self.terminales
-        head.insert(len(self.terminales),'$')
-        self.tabla_de_parseo['NT/T'] = head
-        alerta = 0
+#se inicia a ver follows
 
-        for i in self.no_terminales :
-            lista_final = dict()
-            final = list()
-            for rule in range(len(self.gramatica)):
-                if i == self.gramatica[rule][0]:
-                    if('@' not in self.gramatica[rule]):   
-                        t = self.first[self.gramatica[rule][0]]
-                        for elemento in t:
-                            if(self.gramatica[rule][2] == elemento):
-                                if(head.index(elemento) in lista_final):
-                                    alerta = 1
-                                else:
-                                    lista_final[head.index(elemento)] = self.gramatica[rule]
-                            else:
-                                t_nt = self.first[self.gramatica[rule][2]]  
-                                if('@' in t_nt):
-                                    t_nt.remove('@')
-                                if(elemento in t_nt):
-                                    if(head.index(elemento) in lista_final):
-                                        alerta = 1
-                                    else:
-                                        lista_final[head.index(elemento)] = self.gramatica[rule]
-                    else: 
-                        t_fol = self.follow[self.gramatica[rule][0]]
-                        for elemento in t_fol:
-                            if(head.index(elemento) in lista_final):
-                                    alerta = 1
-                            else:
-                                lista_final[head.index(elemento)] = self.gramatica[rule]
-            for fl in range(0,len(head)):
-                if(fl in lista_final):
-                    final.append(lista_final[fl])
-                else:
-                    final.append('0')
-            self.tabla_de_parseo[i] = final
-        if(alerta == 1):
-            print("No cumple con una gramatica")
-        else:
-            print()
-            print("Tabla de Parseo: \n")
-            for i in self.tabla_de_parseo:
-                print(i,"\t",self.tabla_de_parseo[i])
+llave_de_reglas = list(reglas_dict.keys())
+key_count = len(llave_de_reglas)
 
+for j in reglas_dict:
+    tmp_regla_str = reglas_dict[j]
+    if j == llave_de_reglas[0]:
+        follow_dict[j].append('$')
+    for i in range(key_count):
+        if llave_de_reglas[i] in tmp_regla_str:
+            tmp_regla_list = list(tmp_regla_str)
+            current_non_term_index = tmp_regla_list.index(llave_de_reglas[i])
 
+            if current_non_term_index == (len(tmp_regla_list) - 1):
+                follow_dict[llave_de_reglas[i]].extend(follow_dict[llave_de_reglas[0]])
+            else:
+                follow_dict[llave_de_reglas[i]].extend(
+                    firsts_dict[llave_de_reglas[(i + 1) % key_count]])
 
-if __name__ == "__main__":
-    Parseo = Build_Parser()
+with open("follows.txt", "w+") as wp:
+    for k in follow_dict:
+        wp.write("follow(%s): \t" % k)
+        wp.write("%s\n" % follow_dict[k])
+print("Firsts:" + " " + str(follow_dict))
+print("Follow:" + " " + str(firsts_dict))
+print("Reglas:" + " " + str(reglas_dict))

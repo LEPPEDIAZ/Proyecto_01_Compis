@@ -1,0 +1,6 @@
+follow(0): 	['$']
+follow(1): 	['$']
+follow(2): 	['$', '$']
+follow(3): 	[]
+follow(4): 	[]
+follow(5): 	[]
