@@ -13,7 +13,7 @@ if __name__ == '__main__':
 	keypass_01 = open("seleccionar_archivo.txt", "w")
 	keypass_01.write(ver_archivo)
 	keypass_01.close()
-	os.system("python Core.py")
+	os.system("python3 Core.py")
 	expresion_regular = input("Ingrese la expresion regular: ")
 	expresion_regular = expresion_regular.replace('ε', 'e')
 	print("-------------------------------------------------------")

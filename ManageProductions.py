@@ -10,7 +10,7 @@ sys.setrecursionlimit(10000)
 #any
 #ll1
 mylines = []                          
-with open ('archivos/AritmeticaMod.ATG', 'r') as myfile: 
+with open ('archivos/DoubleAritmeticaMod.ATG', 'r') as myfile: 
     for myline in myfile:
         myline = myline.strip('\n')
         myline = myline.strip('\t\t')   
@@ -26,8 +26,21 @@ print(mylines)
 print("----------------")
 
 
+def GetParametros(array):
+    guardar_parametros = [] 
+    for i in array:
+        print("i", i)
+        i = i.replace("]", "")
+        i = i.replace("[", "")
+        val = re.findall('\(([^)]+)', i)
+        if "<" or ">" or "System.Console" not in val:
+            print("val", val)
+            guardar_parametros.append(val)
+    print("$$$$$$$$$$$$$$$$$$$$$$$$$$$", guardar_parametros)
 
-def GetFunctionsByName(array):
+unique_words = [] 
+key_words_get = []
+def Expression(array):
     arreglo_funciones = [] 
     get_special_value1 = []
     get_special_value2 = []
@@ -82,7 +95,6 @@ def GetFunctionsByName(array):
     print("~~~~~~~~~~~~")
     print(clean_array)
     print("----------------------")
-    unique_words = [] 
     for i in clean_array:
         for j in i:
             if j not in unique_words and j!= "->" and j!= "|":
@@ -97,6 +109,7 @@ def GetFunctionsByName(array):
             if k != "->" or k !='|':
                 if k in unique_words:
                     get_index = (unique_words.index(k))
+                    key_words_get.append(get_index)
                     new_array_convert.append(get_index)     
             if k == "->" or k =='|':
                 new_array_convert.append(k)
@@ -114,7 +127,8 @@ def GetFunctionsByName(array):
         for item in pass_to_text:
             f.write("%s\n" % item)
 
-GetFunctionsByName(mylines)
+Expression(mylines)
+GetParametros(mylines)
 
 reglas = [] 
 firsts = [] 
@@ -187,3 +201,10 @@ with open("follows.txt", "w+") as wp:
 print("Firsts:" + " " + str(follow_dict))
 print("Follow:" + " " + str(firsts_dict))
 print("Reglas:" + " " + str(reglas_dict))
+print("------------------------------------")
+print("unique words",unique_words)
+index_elements_unique = set(key_words_get)
+print("unicos en keywords", index_elements_unique)
+print("------------------------------------")
+def WriteNewFunctions(array_index, array_with_values, functions_for_variables):
+    print("escribir nuevas funciones")

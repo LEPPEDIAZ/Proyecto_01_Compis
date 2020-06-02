@@ -487,8 +487,8 @@ if first_char in "()":
    variable_transposicion = b.TransposicionFinalAFD()
    sacar_variable =b.TransposicionFinalAFD()
    sacar_variable2 = b.InEndAFD()
-   #!graficar_Automaton(sacar_variable,sacar_variable2)
-   #!generacion_de_archivo_Automaton(sacar_variable,sacar_variable2)
+   graficar_Automaton(sacar_variable,sacar_variable2)
+   generacion_de_archivo_Automaton(sacar_variable,sacar_variable2)
    
 
 

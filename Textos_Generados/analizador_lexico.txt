@@ -1,3 +1,35 @@
 ANALIZADOR LEXICO
 _____________________________________________
 _____________________________________________
+CORTE DE CARACTERES
+__________________________________
+letter"ABCDEFGHIJKLMN�OPQRSTUVWXYZabcdefghijklmn�opqrstuvwxyz"
+digit"0123456789"
+crCHR(13)
+lfCHR(10)
+tabCHR(9)
+ignorecrlftab
+comillasCHR(34)
+stringletterANY-comillas-ignore
+operadores"-
+MyANYANY-operadores
+----------------------------------
+CONDICIONALES
+__________________________________
+while  "while"
+do  "do"
+if  "if"
+switch  "switch"
+----------------------------------
+TOKENS
+__________________________________
+ident letter{letter|digit}
+string  comillas stringletter{stringletter} comillas
+char  "'"["/"]letter"'"
+charnumber  "CHR("digit{digit}")"
+charinterval  "CHR("digit{digit}")""..""CHR("digit{digit}")"
+nontoken  MyANY
+startcode "(."
+endcode".)"
+IGNORE SET ignore
+----------------------------------
