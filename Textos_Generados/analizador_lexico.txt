@@ -3,16 +3,10 @@ _____________________________________________
 _____________________________________________
 CORTE DE CARACTERES
 __________________________________
-letter"ABCDEFGHIJKLMN�OPQRSTUVWXYZabcdefghijklmn�opqrstuvwxyz"
+letter"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".
 digit"0123456789"
-crCHR(13)
-lfCHR(10)
-tabCHR(9)
-ignorecrlftab
-comillasCHR(34)
-stringletterANY-comillas-ignore
-operadores"-
-MyANYANY-operadores
+tab'\t'
+eol'\n'
 ----------------------------------
 CONDICIONALES
 __________________________________
@@ -24,12 +18,20 @@ switch  "switch"
 TOKENS
 __________________________________
 ident letter{letter|digit}
-string  comillas stringletter{stringletter} comillas
-char  "'"["/"]letter"'"
-charnumber  "CHR("digit{digit}")"
-charinterval  "CHR("digit{digit}")""..""CHR("digit{digit}")"
-nontoken  MyANY
-startcode "(."
-endcode".)"
-IGNORE SET ignore
+number  digit{digit}
+----------------------------------
+NOMBRE
+__________________________________
+ident 
+number 
+----------------------------------
+CONTENIDO
+__________________________________
+ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz|0123456789* 
+ 0123456789 0123456789* 
+----------------------------------
+EXCEPCION
+__________________________________
+['keywords']
+[]
 ----------------------------------

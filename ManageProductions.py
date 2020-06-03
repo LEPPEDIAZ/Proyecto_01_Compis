@@ -10,7 +10,7 @@ sys.setrecursionlimit(10000)
 #any
 #ll1
 mylines = []                          
-with open ('archivos/DoubleAritmeticaMod.ATG', 'r') as myfile: 
+with open ('archivos/AritmeticaMod.ATG', 'r') as myfile: 
     for myline in myfile:
         myline = myline.strip('\n')
         myline = myline.strip('\t\t')   
@@ -24,6 +24,7 @@ print("----------------")
 mylines = C[:-1]
 print(mylines)
 print("----------------")
+guardar_todo_arreglo = mylines
 
 
 def GetParametros(array):
@@ -127,8 +128,12 @@ def Expression(array):
         for item in pass_to_text:
             f.write("%s\n" % item)
 
+print("--------------my lines---------------------------")
+print(guardar_todo_arreglo)
+print("--------------my lines---------------------------")
 Expression(mylines)
 GetParametros(mylines)
+
 
 reglas = [] 
 firsts = [] 
@@ -208,3 +213,60 @@ print("unicos en keywords", index_elements_unique)
 print("------------------------------------")
 def WriteNewFunctions(array_index, array_with_values, functions_for_variables):
     print("escribir nuevas funciones")
+
+def CreateNewFunctions(all_array, array_with_values):
+    for i in all_array:
+        write_body_function = " "
+        write_function_name = " "
+        print("@", i )
+        j = re.sub("([\(\[]).*?([\)\]])", "\g<1>\g<2>", i)
+        k = j
+        j = re.sub('<[^>]+>', '', j)
+        if "=" in j:
+            def_name = j.split('=')[0]
+            parameters = re.findall('<[^>]+>', k)
+            next_values = i.split('=')[1:]
+            next_values = "=".join(next_values)
+            print("next values 2 ", next_values)
+            # = i.split('=')[2]
+            if "=" not in next_values:
+                next_values = next_values.replace(".int", "")
+                next_values = next_values.replace(";.", "=0")
+                next_values = next_values.replace(",", "=0 \n")
+                next_values = next_values.replace("(", "")
+                next_values = next_values.replace(")", "")
+                next_values = next_values.replace(" ", "")
+            if "=" in next_values:
+                next_values = next_values.replace(".int", "")
+                next_values = next_values.replace("int.Parse(lastToken.Value).", "=0")
+                next_values = next_values.replace(",", "=0 \n")
+                next_values = next_values.replace(";.", "")
+                next_values = next_values.replace("= =", "=")
+                #next_values = next_values.replace("(", "")
+                #next_values = next_values.replace(")", "")
+                next_values = next_values.replace(".", "")
+                next_values = next_values.replace(" ", "")
+
+            #next_values = re.findall('\(([^)]+)', next_values)
+            print("next values", next_values)
+            if len(parameters)==0:
+                write_function_name = "def " + str(def_name) + "():" + "\n" + "    "+ next_values
+            if len(parameters)!=0:
+                for p in parameters:
+                    print("parametros", p)
+                    p = p.replace("<", "")
+                    p = p.replace(">", "")
+                    p = p.replace("double", "")
+                    p = p.replace("int", "")
+                    p = p.replace("ref", "")
+                    p = p.replace(" ", "")
+                    write_function_name = "def " + str(def_name) + "(" + str(p) + "):" + "\n" + "    "+ next_values
+            print("*************************")
+            print("FUNCION", write_function_name)
+            print("*************************")
+        else:
+            print("test")
+
+
+
+CreateNewFunctions(guardar_todo_arreglo, unique_words)
