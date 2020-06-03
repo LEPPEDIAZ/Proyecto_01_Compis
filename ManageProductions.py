@@ -215,6 +215,7 @@ def WriteNewFunctions(array_index, array_with_values, functions_for_variables):
     print("escribir nuevas funciones")
 
 def CreateNewFunctions(all_array, array_with_values):
+    arreglo_final = [] 
     for i in all_array:
         write_body_function = " "
         write_function_name = " "
@@ -228,29 +229,43 @@ def CreateNewFunctions(all_array, array_with_values):
             next_values = i.split('=')[1:]
             next_values = "=".join(next_values)
             print("next values 2 ", next_values)
+            next_values = next_values.replace(" ", "")
             # = i.split('=')[2]
             if "=" not in next_values:
                 next_values = next_values.replace(".int", "")
                 next_values = next_values.replace(";.", "=0")
-                next_values = next_values.replace(",", "=0 \n")
+                next_values = next_values.replace(" ", "")
+                next_values = next_values.replace(",", "=0 \n       ")
                 next_values = next_values.replace("(", "")
                 next_values = next_values.replace(")", "")
-                next_values = next_values.replace(" ", "")
+               
             if "=" in next_values:
                 next_values = next_values.replace(".int", "")
                 next_values = next_values.replace("int.Parse(lastToken.Value).", "=0")
-                next_values = next_values.replace(",", "=0 \n")
+                next_values = next_values.replace(",", "=0 \n       ")
                 next_values = next_values.replace(";.", "")
                 next_values = next_values.replace("= =", "=")
+                next_values = next_values.replace("==", "=")
                 #next_values = next_values.replace("(", "")
                 #next_values = next_values.replace(")", "")
                 next_values = next_values.replace(".", "")
-                next_values = next_values.replace(" ", "")
+                #next_values = next_values.replace(" ", "")
+            
+            if "{" in next_values:
+                while_enter = next_values
+                while_enter = while_enter.replace("{", "while (")
+                next_values_find = re.findall('"[^"]+"', while_enter)
+                #print("FIND",next_values_find)
+                arreglo_de_valores = []
+                for i in next_values_find:
+                    values_inside_while = "get() ==" + i 
+                    print("@@@@#####@@@@",values_inside_while)
+                    arreglo_de_valores.append(values_inside_while)
 
             #next_values = re.findall('\(([^)]+)', next_values)
             print("next values", next_values)
             if len(parameters)==0:
-                write_function_name = "def " + str(def_name) + "():" + "\n" + "    "+ next_values
+                write_function_name ="   "+ "def " + str(def_name) + "():" + "\n" + "       "+ next_values
             if len(parameters)!=0:
                 for p in parameters:
                     print("parametros", p)
@@ -260,13 +275,21 @@ def CreateNewFunctions(all_array, array_with_values):
                     p = p.replace("int", "")
                     p = p.replace("ref", "")
                     p = p.replace(" ", "")
-                    write_function_name = "def " + str(def_name) + "(" + str(p) + "):" + "\n" + "    "+ next_values
+                    write_function_name ="   "+  "def " + str(def_name) + "(" + str(p) + "):" + "\n" + "       "+ next_values
             print("*************************")
             print("FUNCION", write_function_name)
+            arreglo_final.append(write_function_name)
+            
             print("*************************")
         else:
             print("test")
-
+    values = "\n".join(arreglo_final)
+    archivo_seleccionado = open("Parser.py", "r+")
+    archivo_seleccionado = archivo_seleccionado.read()
+    archivo_seleccionado = archivo_seleccionado.replace("#!productions", values)
+    keypass_01 = open("NewParser.py", "w")
+    keypass_01.write(archivo_seleccionado)
+    keypass_01.close()
 
 
 CreateNewFunctions(guardar_todo_arreglo, unique_words)

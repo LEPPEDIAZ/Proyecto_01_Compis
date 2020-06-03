@@ -92,7 +92,21 @@ class Parser( object ):
             self.Get( )
          return self.Marcar_inicio( syFollow )
 
-#!productions
+   def Expr():
+       #{Stat";"}".".
+       print("expression")
+   def Stat ():
+       value=0
+   def Expression (result):
+       result1=0 
+       result2=0
+   def Term(result):
+       result1=0 
+       result2=0
+   def Factor (result):
+       signo=1
+   def Number (result):
+       number(result=0)
 
    def Parsear( self, escaner ):
       self.escaner = escaner
