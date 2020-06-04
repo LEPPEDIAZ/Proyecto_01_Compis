@@ -217,6 +217,9 @@ def WriteNewFunctions(array_index, array_with_values, functions_for_variables):
 def CreateNewFunctions(all_array, array_with_values):
     arreglo_final = [] 
     for i in all_array:
+        while_enter = " "
+        next_values = " "
+        next_values_01 = " "
         write_body_function = " "
         write_function_name = " "
         print("@", i )
@@ -226,6 +229,8 @@ def CreateNewFunctions(all_array, array_with_values):
         if "=" in j:
             def_name = j.split('=')[0]
             parameters = re.findall('<[^>]+>', k)
+            inside_while_if = re.findall('{[^}]+}', i)
+            print("~~~~~~~~~~~~~~~", inside_while_if)
             next_values = i.split('=')[1:]
             next_values = "=".join(next_values)
             print("next values 2 ", next_values)
@@ -261,11 +266,27 @@ def CreateNewFunctions(all_array, array_with_values):
                     values_inside_while = "get() ==" + i 
                     print("@@@@#####@@@@",values_inside_while)
                     arreglo_de_valores.append(values_inside_while)
-
-            #next_values = re.findall('\(([^)]+)', next_values)
+                print("arreglo de valores", arreglo_de_valores)
+                next_valuesjoin = " or ".join(arreglo_de_valores)
+                new_elementos = "\n           ".join(inside_while_if)
+                print("CHECK CHECK ", new_elementos)
+                new_elementos = new_elementos.replace("{", "")
+                new_elementos = new_elementos.replace("}", "")
+                new_elementos = "           " +  new_elementos
+                print("NEW ELEMENTOS", new_elementos)
+                por_valor = [] 
+                for elem in arreglo_de_valores:
+                    pass_variable_insides = "           " + "if( " + elem + "):" + "\n" + "    "+ new_elementos + "\n"
+                    por_valor.append(pass_variable_insides)
+                nuevo_valor = "\n".join(por_valor)
+                next_values_01 = "       while (" + next_valuesjoin + "):" + "\n" + nuevo_valor
+                
+       
             print("next values", next_values)
             if len(parameters)==0:
-                write_function_name ="   "+ "def " + str(def_name) + "():" + "\n" + "       "+ next_values
+                if "{" in next_values:
+                    next_values = " "
+                write_function_name ="   "+ "def " + str(def_name) + "():" + "\n" + "       "+ next_values + "\n" + next_values_01 
             if len(parameters)!=0:
                 for p in parameters:
                     print("parametros", p)

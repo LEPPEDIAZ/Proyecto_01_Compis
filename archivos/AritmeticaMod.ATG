@@ -27,14 +27,12 @@ Stat =                          (.int value;.)
     .
 Expression<ref int result> =        (.int result1,result2;.)
     Term< ref result1>
-    {    "+"Term< ref result2>      (.result1+=result2;.)
-	   | "-"Term< ref result2>      (.result1-=result2;.)
+    {    "+"Term< ref result2>      (.result1+=result2;.) | "-"Term< ref result2>      (.result1-=result2;.)
 	}                           (.result=result1;.)
     .
 Term<ref int result>=               (.int result1,result2;.)
     Factor<ref result1>
-    {    "*"Factor<ref result2> (.result1*=result2;.)
-       | "/"Factor<ref result2> (.result1/=result2;.)
+    {    "*"Factor<ref result2> (.result1*=result2;.) | "/"Factor<ref result2> (.result1/=result2;.)
 	}                           (.result=result1;.)
     .
 	

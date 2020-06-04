@@ -93,10 +93,17 @@ class Parser( object ):
          return self.Marcar_inicio( syFollow )
 
    def Expr():
-       #{Stat";"}".".
-       print("expression")
+        
+       while (get() ==";" or get() =="."):
+           if( get() ==";"):
+               Stat (";")
+
+           if( get() =="."):
+               Stat (";")
+
    def Stat ():
        value=0
+ 
    def Expression (result):
        result1=0 
        result2=0
