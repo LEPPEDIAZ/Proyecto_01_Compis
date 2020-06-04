@@ -222,15 +222,18 @@ def CreateNewFunctions(all_array, array_with_values):
         next_values_01 = " "
         write_body_function = " "
         write_function_name = " "
+        print("--------------------------------")
         print("@", i )
+        inside_while_if = re.findall('{[^}]+}', i)
+        print("~~~~~~~~~~~~~~~", inside_while_if)
+        print("--------------------------------")
         j = re.sub("([\(\[]).*?([\)\]])", "\g<1>\g<2>", i)
         k = j
         j = re.sub('<[^>]+>', '', j)
+        
         if "=" in j:
             def_name = j.split('=')[0]
             parameters = re.findall('<[^>]+>', k)
-            inside_while_if = re.findall('{[^}]+}', i)
-            print("~~~~~~~~~~~~~~~", inside_while_if)
             next_values = i.split('=')[1:]
             next_values = "=".join(next_values)
             print("next values 2 ", next_values)
@@ -283,10 +286,11 @@ def CreateNewFunctions(all_array, array_with_values):
                 
        
             print("next values", next_values)
+            
             if len(parameters)==0:
                 if "{" in next_values:
                     next_values = " "
-                write_function_name ="   "+ "def " + str(def_name) + "():" + "\n" + "       "+ next_values + "\n" + next_values_01 
+                write_function_name ="   "+ "def " + str(def_name) + "():" + "\n" + "       "+ next_values + "\n" + next_values_01 + "\n" 
             if len(parameters)!=0:
                 for p in parameters:
                     print("parametros", p)
@@ -296,14 +300,66 @@ def CreateNewFunctions(all_array, array_with_values):
                     p = p.replace("int", "")
                     p = p.replace("ref", "")
                     p = p.replace(" ", "")
-                    write_function_name ="   "+  "def " + str(def_name) + "(" + str(p) + "):" + "\n" + "       "+ next_values
-            print("*************************")
+                    write_function_name ="   "+  "def " + str(def_name) + "(" + str(p) + "):" + "\n" + "       "+ next_values + "\n"  
             print("FUNCION", write_function_name)
             arreglo_final.append(write_function_name)
-            
             print("*************************")
         else:
-            print("test")
+            if "{" in i:
+                next_values_03 = " "
+                while_enter = i
+                while_enter = while_enter.replace("{", "while (")
+                next_values_find = re.findall('"[^"]+"', while_enter)
+                arreglo_de_valores = []
+                for i in next_values_find:
+                    values_inside_while = "get() ==" + i 
+                    print("*********------------**********",values_inside_while)
+                    arreglo_de_valores.append(values_inside_while)
+                print("arreglo de valores", arreglo_de_valores)
+                next_valuesjoin = " or ".join(arreglo_de_valores)
+                
+                new_elementos = "\n           ".join(inside_while_if)
+                print("CHECK2 CHECK2 ", new_elementos)
+                x = new_elementos.split("|")
+                for w in next_values_find:
+                    for xi in x:
+                        if w in xi:
+                            xi = xi.replace("{", "")
+                            xi = xi.replace("}", "")
+                            xi = xi.replace("<", "(")
+                            xi = xi.replace(">", ")")
+                            xi = xi.replace("(.", "")
+                            xi = xi.replace(".)", "")
+                            xi = xi.replace(";", "")
+                            xi = xi.replace("ref ", "")
+                            xi = xi.replace("( ", "(")
+                            xi = xi.replace(" ", " \n               ")
+                            xi = xi.replace("\n\n ", " \n")
+                            xi = "           " + xi
+                            xi = re.sub('"[^"]+"', '',xi)
+                            print("SEENCONTRO", xi)
+                            test_array = []
+                            test_array.append(xi)
+                            new_elementos1 = "               " +  xi
+                            por_valor = []
+                            for elem in arreglo_de_valores:
+                                pass_variable_insides = "           " + "if( " + elem + "):" + "\n" + "    "+ new_elementos1 + "\n"
+                                print("---------------------PASO DE VARIABLES ---------------------------------")
+                                por_valor.append(pass_variable_insides)
+                                print(pass_variable_insides)
+                                ("---------------------FINAL ---------------------------------")
+                            print("VIEW0", test_array)
+                        print("VIEW1", test_array)
+                    print("VIEW2", test_array)
+                print("VIEW3", test_array)
+                #por_valor = [] 
+                #for elem in arreglo_de_valores:
+                    #pass_variable_insides = "           " + "if( " + elem + "):" + "\n" + "    "+ new_elementos + "\n"
+                    #por_valor.append(pass_variable_insides)
+                nuevo_valor = "\n".join(por_valor)
+                next_values_03 = "       while (" + next_valuesjoin + "):" + "\n" + nuevo_valor
+                arreglo_final.append(next_values_03)    
+            
     values = "\n".join(arreglo_final)
     archivo_seleccionado = open("Parser.py", "r+")
     archivo_seleccionado = archivo_seleccionado.read()

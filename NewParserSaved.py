@@ -112,17 +112,11 @@ class Parser( object ):
 
        while (get() =="+" or get() =="-"):
            if( get() =="+"):
-               Term(result2) 
-               result1-=result2
+               Term(result2)
+               result1+=result2
 
            if( get() =="-"):
-                               
-               Term(result2) 
-            
-                
-                
-                
-                
+               Term(result2)
                result1-=result2
 
    def Term(result):
@@ -131,13 +125,11 @@ class Parser( object ):
 
        while (get() =="*" or get() =="/"):
            if( get() =="*"):
-                               
-               Factor(result2) 
-               result1/=result2
+               Factor(result2)
+               result1*=result2
 
            if( get() =="/"):
-                               
-               Factor(result2) 
+               Factor(result2)
                result1/=result2
 
    def Factor (result):
