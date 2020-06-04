@@ -1,0 +1,6 @@
+reglas(0): 	1
+reglas(1): 	2
+reglas(2): 	33|3
+reglas(3): 	44|4
+reglas(4): 	5|2
+reglas(5): 	6

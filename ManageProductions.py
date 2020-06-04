@@ -203,6 +203,10 @@ with open("follows.txt", "w+") as wp:
     for k in follow_dict:
         wp.write("follow(%s): \t" % k)
         wp.write("%s\n" % follow_dict[k])
+with open("reglas.txt", "w+") as wp:
+    for k in reglas_dict:
+        wp.write("reglas(%s): \t" % k)
+        wp.write("%s\n" % reglas_dict[k])
 print("Firsts:" + " " + str(follow_dict))
 print("Follow:" + " " + str(firsts_dict))
 print("Reglas:" + " " + str(reglas_dict))
@@ -240,6 +244,8 @@ def CreateNewFunctions(all_array, array_with_values):
             next_values = next_values.replace(" ", "")
             # = i.split('=')[2]
             if "=" not in next_values:
+                next_values = next_values.replace("(.", "")
+                next_values = next_values.replace(".)", "")
                 next_values = next_values.replace(".int", "")
                 next_values = next_values.replace(";.", "=0")
                 next_values = next_values.replace(" ", "")
@@ -248,6 +254,8 @@ def CreateNewFunctions(all_array, array_with_values):
                 next_values = next_values.replace(")", "")
                
             if "=" in next_values:
+                next_values = next_values.replace("(.", "")
+                next_values = next_values.replace(".)", "")
                 next_values = next_values.replace(".int", "")
                 next_values = next_values.replace("int.Parse(lastToken.Value).", "=0")
                 next_values = next_values.replace(",", "=0 \n       ")
