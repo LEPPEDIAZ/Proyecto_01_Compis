@@ -110,35 +110,49 @@ class Parser( object ):
        result1=0 
        result2=0
 
-       while (get() =="+" or get() =="-"):
-           if( get() =="+"):
-               Term(result2) 
-               result1-=result2
-
-           if( get() =="-"):
+       while ( get() =="+" or get() =="-"):
+           if(get() == ' -'):
                                
                Term(result2) 
-            
+                
                 
                 
                 
                 
                result1-=result2
+
+           if(get() == ' +'):
+                               
+                
+                
+                
+               Term(result2) 
+                
+                
+                
+                
+                
+               result1+=result2 
+               
 
    def Term(result):
        result1=0 
        result2=0
 
-       while (get() =="*" or get() =="/"):
-           if( get() =="*"):
+       while ( get() =="*" or get() =="/"):
+           if(get() == ' /'):
                                
                Factor(result2) 
                result1/=result2
 
-           if( get() =="/"):
+           if(get() == ' *'):
                                
+                
+                
+                
                Factor(result2) 
-               result1/=result2
+               result1*=result2 
+               
 
    def Factor (result):
        signo=1

@@ -311,6 +311,11 @@ def CreateNewFunctions(all_array, array_with_values):
                 while_enter = while_enter.replace("{", "while (")
                 next_values_find = re.findall('"[^"]+"', while_enter)
                 arreglo_de_valores = []
+                arreglo_de_valores2 = []
+                for w in next_values_find:
+                    values_inside_whilew = w
+                    values_inside_whilew = values_inside_whilew.replace('"', "")
+                    arreglo_de_valores2.append(values_inside_whilew)
                 for i in next_values_find:
                     values_inside_while = "get() ==" + i 
                     print("*********------------**********",values_inside_while)
@@ -321,6 +326,7 @@ def CreateNewFunctions(all_array, array_with_values):
                 new_elementos = "\n           ".join(inside_while_if)
                 print("CHECK2 CHECK2 ", new_elementos)
                 x = new_elementos.split("|")
+                test_array = []
                 for w in next_values_find:
                     for xi in x:
                         if w in xi:
@@ -338,26 +344,30 @@ def CreateNewFunctions(all_array, array_with_values):
                             xi = "           " + xi
                             xi = re.sub('"[^"]+"', '',xi)
                             print("SEENCONTRO", xi)
-                            test_array = []
-                            test_array.append(xi)
                             new_elementos1 = "               " +  xi
-                            por_valor = []
-                            for elem in arreglo_de_valores:
-                                pass_variable_insides = "           " + "if( " + elem + "):" + "\n" + "    "+ new_elementos1 + "\n"
-                                print("---------------------PASO DE VARIABLES ---------------------------------")
-                                por_valor.append(pass_variable_insides)
-                                print(pass_variable_insides)
-                                ("---------------------FINAL ---------------------------------")
-                            print("VIEW0", test_array)
-                        print("VIEW1", test_array)
-                    print("VIEW2", test_array)
-                print("VIEW3", test_array)
+                            test_array.append(new_elementos1)
+                            
+                por_valor = []
+                print("test_array", test_array)
+                print("arreglo de valores 2 !!!", arreglo_de_valores2)
+                for elem in arreglo_de_valores2:
+                    for new_elementos1 in test_array:
+                        if elem in new_elementos1:
+                            pass_variable_insides = "           " + "if(get() == ' " + elem + "'"+  "):" + "\n" + "    "+ new_elementos1 + "\n"
+                            print("---------------------PASO DE VARIABLES ---------------------------------")
+                            por_valor.append(pass_variable_insides)
+                            print(pass_variable_insides)
+                            ("---------------------FINAL ---------------------------------")
+                           
                 #por_valor = [] 
                 #for elem in arreglo_de_valores:
                     #pass_variable_insides = "           " + "if( " + elem + "):" + "\n" + "    "+ new_elementos + "\n"
                     #por_valor.append(pass_variable_insides)
+              
+                por_valor = set(por_valor)
+               
                 nuevo_valor = "\n".join(por_valor)
-                next_values_03 = "       while (" + next_valuesjoin + "):" + "\n" + nuevo_valor
+                next_values_03 = "       while ( " + next_valuesjoin + "):" + "\n" + nuevo_valor
                 arreglo_final.append(next_values_03)    
             
     values = "\n".join(arreglo_final)
