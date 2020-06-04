@@ -376,7 +376,29 @@ def CreateNewFunctions(all_array, array_with_values):
                
                 nuevo_valor = "\n".join(por_valor)
                 next_values_03 = "       while ( " + next_valuesjoin + "):" + "\n" + nuevo_valor
-                arreglo_final.append(next_values_03)    
+                arreglo_final.append(next_values_03) 
+            else:
+                print("lo que quedo",i) 
+                parametros_medios = i
+                parametros_medios = re.sub('"[^"]+"', '',parametros_medios)
+                parametros_medios = parametros_medios.replace("<", "(") 
+                parametros_medios = parametros_medios.replace(">", ")")
+                parametros_medios = parametros_medios.replace("..)", "")
+                parametros_medios = parametros_medios.replace(";.)", ")")
+                parametros_medios = parametros_medios.replace("System.Console.WriteLn", "print")
+                parametros_medios = parametros_medios.replace("(.", "")
+                parametros_medios = parametros_medios.replace(".)", "")
+                parametros_medios = parametros_medios.replace("ref ", "")
+                parametros_medios = parametros_medios.replace("[(", "")
+                parametros_medios = parametros_medios.replace(")]", "")
+                parametros_medios = parametros_medios.replace("[", "")
+                parametros_medios = parametros_medios.replace("]", "")
+                parametros_medios = parametros_medios.replace("(print", "print")
+                parametros_medios = parametros_medios.replace(".", "")
+                parametros_medios = parametros_medios.replace(";", "")
+                parametros_medios = parametros_medios.replace("   ", "\n      ")
+                parametros_medios = "       " + parametros_medios
+                arreglo_final.append(parametros_medios)
             
     values = "\n".join(arreglo_final)
     archivo_seleccionado = open("Parser.py", "r+")

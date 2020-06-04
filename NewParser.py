@@ -106,10 +106,19 @@ class Parser( object ):
        intvalue;
  
 
+       
+       Expression( value)
+      
+      
+       print(value)
+       
+       
    def Expression (result):
        intresult1=0 
        result2;
 
+       
+       Term( result1)
        while ( get() =="+" or get() =="-"):
            if(get() == ' -'):
                                
@@ -135,10 +144,14 @@ class Parser( object ):
                result1+=result2 
                
 
+       
+       
    def Term(result):
        intresult1=0 
        result2;
 
+       
+       Factor(result1)
        while ( get() =="*" or get() =="/"):
            if(get() == ' /'):
                                
@@ -154,9 +167,16 @@ class Parser( object ):
                result1*=result2 
                
 
+       
+       
    def Factor (result):
        intsigno=1;
 
+       
+       signo = -1
+       
+       ( Number(result) | Expression( result))
+       result*=signo
    def Number (result):
        numberresult=0
 

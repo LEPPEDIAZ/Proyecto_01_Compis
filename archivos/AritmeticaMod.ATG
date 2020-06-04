@@ -23,7 +23,7 @@ PRODUCTIONS
 
 Expr= {Stat (";")}".".
 Stat =                          (.int value;.)
-    Expression< ref value>		(.System.Console.WriteLn(value.ToString());.)
+    Expression< ref value>          (.System.Console.WriteLn(value;.)
     .
 Expression<ref int result> =        (.int result1,result2;.)
     Term< ref result1>
@@ -36,7 +36,7 @@ Term<ref int result>=               (.int result1,result2;.)
 	
 Factor<ref int result> =    (.int signo=1;.)
     ["-"(.signo = -1;.)]
-    ( Number<ref result> | "("Expression< ref result>")") (.result*=signo;.).
+    ( Number<ref result> | "("Expression< ref result>")")    (.result*=signo.).
 	
 Number<ref int result> =  number (. result = int.Parse(lastToken.Value).).
 END Aritmetica
