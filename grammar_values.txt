@@ -1,1 +1,1 @@
-Expr ,Stat ,Expression ,Term ,Factor ,Number ,number ,
+Expr ,Stat ,Expression ,Term ,Factor ,Number ,number|decnumber ,

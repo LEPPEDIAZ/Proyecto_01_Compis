@@ -190,6 +190,7 @@ class Escaner(object):
 #!declaraciones
 #!tokens
 #!keywords
+#!newtokensfromproductions
 
    def __init__( self, s ):
       self.buffer = Buffer( unicode(s) ) 

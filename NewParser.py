@@ -53,7 +53,7 @@ class Parser( object ):
    def Get( self ):
       while True:
          self.token = self.lookahead_token
-         self.lookahead_token = self.escaner.Scan( )
+         self.lookahead_token = self.escaner.Escanear( )
          if self.lookahead_token.tipo_token <= Parser.maxT:
             self.error_de_distancia += 1
             break
@@ -161,6 +161,11 @@ class Parser( object ):
        
        Factor(result1)
        while ( get() =="*" or get() =="/"):
+           if(get() == ' /'):
+                               
+               Factor(result2) 
+               result1/=result2
+
            if(get() == ' *'):
                                
                 
@@ -169,11 +174,6 @@ class Parser( object ):
                Factor(result2) 
                result1*=result2 
                
-
-           if(get() == ' /'):
-                               
-               Factor(result2) 
-               result1/=result2
 
        
        
@@ -186,7 +186,7 @@ class Parser( object ):
        ( Number(result) | Expression( result))
        result*=signo
    def Number (result):
-       numberresult=0
+       number|decnumber
 
 
    set = [

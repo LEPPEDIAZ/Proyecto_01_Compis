@@ -53,7 +53,7 @@ class Parser( object ):
    def Get( self ):
       while True:
          self.token = self.lookahead_token
-         self.lookahead_token = self.escaner.Scan( )
+         self.lookahead_token = self.escaner.Escanear( )
          if self.lookahead_token.tipo_token <= Parser.maxT:
             self.error_de_distancia += 1
             break
