@@ -128,6 +128,16 @@ class Parser( object ):
        
        Term( result1)
        while ( get() =="+" or get() =="-"):
+           if(get() == ' -'):
+                               
+               Term(result2) 
+                
+                
+                
+                
+                
+               result1-=result2
+
            if(get() == ' +'):
                                
                 
@@ -141,16 +151,6 @@ class Parser( object ):
                 
                result1+=result2 
                
-
-           if(get() == ' -'):
-                               
-               Term(result2) 
-                
-                
-                
-                
-                
-               result1-=result2
 
        
        
@@ -186,7 +186,7 @@ class Parser( object ):
        ( Number(result) | Expression( result))
        result*=signo
    def Number (result):
-       number|decnumber
+       numberresult=0
 
 
    set = [
@@ -206,7 +206,7 @@ class Parser( object ):
    follows = follows.read()
    firsts = open("firsts.txt", "r+")
    firsts = firsts.read()
-   n = 0 
+   n = -1 
    for i in x:
       n = n + 1 
       #get_index = (archivo_seleccionado.index(i))

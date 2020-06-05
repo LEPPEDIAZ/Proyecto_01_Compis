@@ -119,7 +119,7 @@ class Parser( object ):
    follows = follows.read()
    firsts = open("firsts.txt", "r+")
    firsts = firsts.read()
-   n = 0 
+   n = -1 
    for i in x:
       n = n + 1 
       #get_index = (archivo_seleccionado.index(i))
