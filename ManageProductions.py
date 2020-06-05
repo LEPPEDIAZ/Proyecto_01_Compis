@@ -130,6 +130,11 @@ def Expression(array):
     with open('grammar.txt', 'w') as f:
         for item in pass_to_text:
             f.write("%s\n" % item)
+    print("UNIQUE WORDS", unique_words)
+    
+    with open('grammar_values.txt', 'w') as f:
+        for item in unique_words:
+            f.write(item + " ,")
 
 print("--------------my lines---------------------------")
 print(guardar_todo_arreglo)
@@ -406,7 +411,7 @@ def CreateNewFunctions(all_array, array_with_values):
     values = "\n".join(arreglo_final)
     archivo_seleccionado = open("Parser.py", "r+")
     archivo_seleccionado = archivo_seleccionado.read()
-    archivo_seleccionado = archivo_seleccionado.replace("#!productions", values)
+    archivo_seleccionado = archivo_seleccionado.replace("#!parseRoot", values)
     keypass_01 = open("NewParser.py", "w")
     keypass_01.write(archivo_seleccionado)
     keypass_01.close()

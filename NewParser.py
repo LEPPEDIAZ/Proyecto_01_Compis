@@ -92,6 +92,14 @@ class Parser( object ):
             self.Get( )
          return self.Marcar_inicio( syFollow )
 
+#!productions
+
+   def Parsear( self, escaner ):
+      self.escaner = escaner
+      self.lookahead_token = Token( )
+      self.lookahead_token.token_valor = u''
+      self.Get( )
+      
    def Expr():
         
        while (get() ==";" or get() =="."):
@@ -181,13 +189,6 @@ class Parser( object ):
        number|decnumber
 
 
-   def Parsear( self, escaner ):
-      self.escaner = escaner
-      self.lookahead_token = Token( )
-      self.lookahead_token.token_valor = u''
-      self.Get( )
-#!parseRoot
-
    set = [
 #!initialization
       ]
@@ -195,6 +196,38 @@ class Parser( object ):
    mensaje_de_error = {
 #!errors
       }
+   archivo_seleccionado = open("grammar_values.txt", "r+")
+   archivo_seleccionado = archivo_seleccionado.read()
+   x = archivo_seleccionado.split(",")
+   #print("Arreglo", x)
+   reglas = open("reglas.txt", "r+")
+   reglas = reglas.read()
+   follows = open("follows.txt", "r+")
+   follows = follows.read()
+   firsts = open("firsts.txt", "r+")
+   firsts = firsts.read()
+   n = 0 
+   for i in x:
+      n = n + 1 
+      #get_index = (archivo_seleccionado.index(i))
+      print("VALUE:   " + str(n) + "      " + i)
+      
+ 
+   print("-----------------------------------------")
+   reglas = reglas.replace("\n", " ")
+   reglas = reglas.replace("\t", " ")
+   print("REGLAS", reglas)
+   print("-----------------------------------------")
+   follows = follows.replace("\n", " ")
+   follows = follows.replace("\t", " ")
+   print("FOLLOW", follows)
+   print("-----------------------------------------")
+   firsts = firsts.replace("\n", " ")
+   firsts = firsts.replace("\t", " ")
+   print("FIRSTS", firsts)
+   
+   
+      
 
 
 
