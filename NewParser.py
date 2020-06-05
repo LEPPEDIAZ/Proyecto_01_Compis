@@ -120,16 +120,6 @@ class Parser( object ):
        
        Term( result1)
        while ( get() =="+" or get() =="-"):
-           if(get() == ' -'):
-                               
-               Term(result2) 
-                
-                
-                
-                
-                
-               result1-=result2
-
            if(get() == ' +'):
                                
                 
@@ -144,6 +134,16 @@ class Parser( object ):
                result1+=result2 
                
 
+           if(get() == ' -'):
+                               
+               Term(result2) 
+                
+                
+                
+                
+                
+               result1-=result2
+
        
        
    def Term(result):
@@ -153,11 +153,6 @@ class Parser( object ):
        
        Factor(result1)
        while ( get() =="*" or get() =="/"):
-           if(get() == ' /'):
-                               
-               Factor(result2) 
-               result1/=result2
-
            if(get() == ' *'):
                                
                 
@@ -166,6 +161,11 @@ class Parser( object ):
                Factor(result2) 
                result1*=result2 
                
+
+           if(get() == ' /'):
+                               
+               Factor(result2) 
+               result1/=result2
 
        
        
@@ -178,7 +178,7 @@ class Parser( object ):
        ( Number(result) | Expression( result))
        result*=signo
    def Number (result):
-       numberresult=0
+       number|decnumber
 
 
    def Parsear( self, escaner ):

@@ -9,8 +9,11 @@ sys.setrecursionlimit(10000)
 #atributos
 #any
 #ll1
-mylines = []                          
-with open ('archivos/AritmeticaMod.ATG', 'r') as myfile: 
+mylines = [] 
+archivo_seleccionado = open("seleccionar_archivo.txt", "r+")
+archivo_seleccionado = archivo_seleccionado.read()
+#archivo_para_scanner = open(archivo_seleccionado, 'r')                         
+with open (archivo_seleccionado, 'r') as myfile: 
     for myline in myfile:
         myline = myline.strip('\n')
         myline = myline.strip('\t\t')   

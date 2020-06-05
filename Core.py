@@ -7,6 +7,7 @@ from AFD_por_AFN import *
 import numpy as np
 import string
 import textwrap
+os.system("python3 ManageProductions.py")
 #tokenizar = Token()
 class Tabla_de_Simbolos( object ):
    terminales     = [ ]    
@@ -977,6 +978,8 @@ keywords_manager()
 por_caracter()
 print()
 print("+ analizador lexico generado")
+
+
 
 
 
